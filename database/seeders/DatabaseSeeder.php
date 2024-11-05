@@ -24,6 +24,8 @@ class DatabaseSeeder extends Seeder
             'name' => 'Admin User',
             'email' => 'admin@yaji.com',
             'password' => bcrypt('admin123'),
+            'contact_information' => '09123456789',
+            'address' => 'Manila, Philippines',
         ]);
         $adminUser->assignRole($adminRole);
 
@@ -32,6 +34,8 @@ class DatabaseSeeder extends Seeder
             'name' => 'Employee User',
             'email' => 'employee@yaji.com',
             'password' => bcrypt('admin123'),
+            'contact_information' => '09999999999',
+            'address' => 'Bulacan, Philippines',
         ]);
         $employeeUser->assignRole($employeeRole);
 
@@ -40,6 +44,8 @@ class DatabaseSeeder extends Seeder
             'name' => 'Member User',
             'email' => 'member@yaji.com',
             'password' => bcrypt('admin123'),
+            'contact_information' => '09888888888',
+            'address' => 'Makati, Philippines',
         ]);
         $memberUser->assignRole($memberRole);
     }
