@@ -4,6 +4,7 @@ use App\Http\Controllers\ProfileController;
 use App\Models\User;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\ViewTable;
 use Inertia\Inertia;
 use Illuminate\Support\Facades\Auth;
 
@@ -29,5 +30,7 @@ Route::middleware('auth')->group(function () {
         return User::with('roles')->get();
     });
 });
+
+Route :: get ('/loan', [ViewTable::class,'ViewTables']) ;
 
 require __DIR__.'/auth.php';

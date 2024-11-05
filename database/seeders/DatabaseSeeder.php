@@ -6,6 +6,9 @@ use App\Models\User;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Spatie\Permission\Models\Role;
+use App\Models\Loan_Model;
+use App\Models\payment_model;
+use App\Models\Loan;
 
 class DatabaseSeeder extends Seeder
 {
@@ -48,5 +51,110 @@ class DatabaseSeeder extends Seeder
             'address' => 'Makati, Philippines',
         ]);
         $memberUser->assignRole($memberRole);
+
+        // Create loan types
+        Loan_Model::create([
+            'loan_type_name' => 'Personal Loan',
+            'description' => 'A loan for personal use.',
+        ]);
+
+        Loan_Model::create([
+            'loan_type_name' => 'Home Loan',
+            'description' => 'A loan for home purchase.',
+        ]);
+
+        Loan_Model::create([
+            'loan_type_name' => 'Car Loan',
+            'description' => 'A loan for car purchase.',
+        ]);
+
+        Loan_Model::create([
+            'loan_type_name' => 'Education Loan',
+            'description' => 'A loan for education purposes.',
+        ]);
+
+        Loan_Model::create([
+            'loan_type_name' => 'Business Loan',
+            'description' => 'A loan for business purposes.',
+        ]);
+
+        // Create payments
+        payment_model::create([
+            'loan_id' => 1,
+            'payment_amount' => 5000,
+            'payment_date' => '2021-12-01',
+        ]);
+        payment_model::create([
+            'loan_id' => 2,
+            'payment_amount' => 6000,
+            'payment_date' => '2021-12-02',
+        ]);
+        payment_model::create([
+            'loan_id' => 3,
+            'payment_amount' => 7000,
+            'payment_date' => '2021-12-03',
+        ]);
+        payment_model::create([
+            'loan_id' => 4,
+            'payment_amount' => 8000,
+            'payment_date' => '2021-12-04',
+        ]);
+        payment_model::create([
+            'loan_id' => 5,
+            'payment_amount' => 9000,
+            'payment_date' => '2021-12-05',
+        ]);
+
+        // Create loans
+        Loan::create([
+            'borrower_id' => 1,
+            'loan_amount' => 10000,
+            'interest_rate' => 0.1,
+            'loan_term' => 12,
+            'date_applied' => '2021-11-01',
+            'date_approved' => '2021-11-05',
+            'date_disbursed' => '2021-11-10',
+            'outstanding_balance' => 9000,
+        ]);
+        Loan::create([
+            'borrower_id' => 2,
+            'loan_amount' => 20000,
+            'interest_rate' => 0.15,
+            'loan_term' => 24,
+            'date_applied' => '2021-11-02',
+            'date_approved' => '2021-11-06',
+            'date_disbursed' => '2021-11-11',
+            'outstanding_balance' => 18000,
+        ]);
+        Loan::create([
+            'borrower_id' => 3,
+            'loan_amount' => 30000,
+            'interest_rate' => 0.2,
+            'loan_term' => 36,
+            'date_applied' => '2021-11-03',
+            'date_approved' => '2021-11-07',
+            'date_disbursed' => '2021-11-12',
+            'outstanding_balance' => 27000,
+        ]);
+        Loan::create([
+            'borrower_id' => 4,
+            'loan_amount' => 40000,
+            'interest_rate' => 0.25,
+            'loan_term' => 48,
+            'date_applied' => '2021-11-04',
+            'date_approved' => '2021-11-08',
+            'date_disbursed' => '2021-11-13',
+            'outstanding_balance' => 36000,
+        ]);
+        Loan::create([
+            'borrower_id' => 5,
+            'loan_amount' => 50000,
+            'interest_rate' => 0.3,
+            'loan_term' => 60,
+            'date_applied' => '2021-11-05',
+            'date_approved' => '2021-11-09',
+            'date_disbursed' => '2021-11-14',
+            'outstanding_balance' => 45000,
+        ]);
     }
 }
