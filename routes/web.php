@@ -33,4 +33,7 @@ Route::middleware('auth')->group(function () {
 
 Route :: get ('/loan', [ViewTable::class,'ViewTables']) ;
 
+Route::get('/landing', [ViewTable::class, 'showLanding']);
+Route::get('/signUp', [ViewTable::class, 'register']);
+
 require __DIR__.'/auth.php';

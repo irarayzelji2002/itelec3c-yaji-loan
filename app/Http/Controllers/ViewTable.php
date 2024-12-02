@@ -7,6 +7,7 @@ use App\Models\Loan;
 use App\Models\payment_model;
 use App\Models\Loan_Model;
 use App\Models\Member;
+use Inertia\Inertia;
 
 class ViewTable extends Controller
 {
@@ -18,5 +19,12 @@ class ViewTable extends Controller
 
 
         return view('viewtables', compact('Loan', 'payment_model', 'Loan_Model'));
+    }
+
+    public function showLanding() {
+        return Inertia::render('Register/Landing');
+    }
+    public function register() {
+        return Inertia::render('Register/Register');
     }
 }
