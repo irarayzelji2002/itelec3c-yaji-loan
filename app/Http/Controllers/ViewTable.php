@@ -15,7 +15,16 @@ class ViewTable extends Controller
     public function ViewTables(Request $request){
         $search = $request->get('search');
         if($search){
-            $Loan = Loan::where('loan_id', 'like', '%'.$search.'%')->get();
+            $Loan = Loan::where('loan_id', 'like', '%'.$search.'%')
+                ->orWhere('borrower_id', 'like', '%'.$search.'%')
+                ->orWhere('loan_amount', 'like', '%'.$search.'%')
+                ->orWhere('interest_rate', 'like', '%'.$search.'%')
+                ->orWhere('loan_term', 'like', '%'.$search.'%')
+                ->orWhere('date_applied', 'like', '%'.$search.'%')
+                ->orWhere('date_approved', 'like', '%'.$search.'%')
+                ->orWhere('date_disbursed', 'like', '%'.$search.'%')
+                ->orWhere('outstanding_balance', 'like', '%'.$search.'%')
+                ->get();
         } else {
             $Loan = Loan::all();
         }
