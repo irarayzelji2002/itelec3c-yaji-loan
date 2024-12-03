@@ -82,6 +82,50 @@
 
     <div class="card mb-4">
       <div class="card-header card-header-green">
+        <h2>Create New Payment</h2>
+      </div>
+      <div class="card-body">
+        <form action="{{ route('payment.store') }}" method="POST" class="bg-white p-4 rounded shadow-sm">
+            @csrf
+            <div class="mb-3">
+                <label for="loan_id" class="form-label">Loan ID</label>
+                <input type="text" class="form-control" id="loan_id" name="loan_id" required>
+            </div>
+            <div class="mb-3">
+                <label for="payment_amount" class="form-label">Payment Amount</label>
+                <input type="number" class="form-control" id="payment_amount" name="payment_amount" required>
+            </div>
+            <div class="mb-3">
+                <label for="payment_date" class="form-label">Payment Date</label>
+                <input type="date" class="form-control" id="payment_date" name="payment_date" required>
+            </div>
+            <button type="submit" class="btn btn-green">Submit</button>
+        </form>
+      </div>
+    </div>
+
+    <div class="card mb-4">
+      <div class="card-header card-header-green">
+        <h2>Create New Loan Type</h2>
+      </div>
+      <div class="card-body">
+        <form action="{{ route('loan_type.store') }}" method="POST" class="bg-white p-4 rounded shadow-sm">
+            @csrf
+            <div class="mb-3">
+                <label for="loan_type_name" class="form-label">Loan Type Name</label>
+                <input type="text" class="form-control" id="loan_type_name" name="loan_type_name" required>
+            </div>
+            <div class="mb-3">
+                <label for="description" class="form-label">Description</label>
+                <textarea class="form-control" id="description" name="description" required></textarea>
+            </div>
+            <button type="submit" class="btn btn-green">Submit</button>
+        </form>
+      </div>
+    </div>
+
+    <div class="card mb-4">
+      <div class="card-header card-header-green">
         <h2>Loan Table</h2>
       </div>
       <div class="card-body">

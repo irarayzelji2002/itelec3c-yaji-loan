@@ -57,4 +57,27 @@ class ViewTable extends Controller
 
         return redirect()->route('view.loan')->with('success', 'Loan created successfully.');
     }
+
+    public function storePayment(Request $request) {
+        $request->validate([
+            'loan_id' => 'required|exists:main_loan_table,loan_id',
+            'payment_amount' => 'required|numeric',
+            'payment_date' => 'required|date',
+        ]);
+
+        payment_model::create($request->all());
+
+        return redirect()->route('view.loan')->with('success', 'Payment created successfully.');
+    }
+
+    public function storeLoanType(Request $request) {
+        $request->validate([
+            'loan_type_name' => 'required',
+            'description' => 'required',
+        ]);
+
+        Loan_Model::create($request->all());
+
+        return redirect()->route('view.loan')->with('success', 'Loan type created successfully.');
+    }
 }
