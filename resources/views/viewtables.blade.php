@@ -7,10 +7,10 @@
     <style>
         .bg-green { background-color: #d4edda; }
         .text-green { color: #155724; }
-        .btn-green { background-color: #28a745; border-color: #28a745; }
-        .btn-green:hover { background-color: #218838; border-color: #1e7e34; }
+        .btn-green { background-color: #57DF98; border-color: #57DF98; font-weight: bold}
+        .btn-green:hover { background-color: #043C3C; border-color: #043C3C; font-weight: bold; color: white;}
         .table-green { background-color: #c3e6cb; }
-        .card-header-green { background-color: #28a745; color: white; }
+        .card-header-green { background-color: #043C3C; color: white; }
         .form-control, .btn { border-radius: 0.25rem; }
         .table th, .table td { vertical-align: middle; }
     </style>
@@ -27,7 +27,7 @@
           <div class="col-auto flex-grow-1 me-2">
             <input class="form-control" type="search" placeholder="Search..." value="{{ request('search') }}" name="search">
           </div>
-          <button type="submit" class="btn btn-green text-white">Search</button>
+          <button type="submit" class="btn btn-green">Search</button>
         </form>
       </div>
     </div>
@@ -75,7 +75,7 @@
                 <label for="image" class="form-label">Product Image</label>
                 <input type="file" name="image" class="form-control" accept="image/*" required>
             </div>
-            <button type="submit" class="btn btn-green text-white">Submit</button>
+            <button type="submit" class="btn btn-green">Submit</button>
         </form>
       </div>
     </div>
