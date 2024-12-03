@@ -33,6 +33,8 @@ Route::middleware('auth')->group(function () {
 
 Route::get('/loan', [ViewTable::class, 'ViewTables'])->name('view.loan');
 Route::post('/loan', [ViewTable::class, 'store'])->name('loan.store');
+Route::post('/payment', [ViewTable::class, 'storePayment'])->name('payment.store');
+Route::post('/loan_type', [ViewTable::class, 'storeLoanType'])->name('loan_type.store');
 
 Route::get('/landing', [ViewTable::class, 'showLanding']);
 Route::get('/signUp', [ViewTable::class, 'register']);
