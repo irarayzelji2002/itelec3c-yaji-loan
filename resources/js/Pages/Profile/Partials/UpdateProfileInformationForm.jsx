@@ -12,6 +12,8 @@ export default function UpdateProfileInformation({ mustVerifyEmail, status, clas
     profile_picture: null,
     name: user.name,
     email: user.email,
+    contact_information: user.contact_information,
+    address: user.address,
   });
 
   const submit = (e) => {
@@ -44,18 +46,7 @@ export default function UpdateProfileInformation({ mustVerifyEmail, status, clas
       </header>
 
       <form onSubmit={submit} className="mt-6 space-y-6" encType="multipart/form-data">
-        {/* Add profile picture input */}
-        <div className="mb-6">
-          <label className="block text-sm font-medium text-gray-700">Profile Picture</label>
-          <input
-            type="file"
-            onChange={(e) => setData("profile_picture", e.target.files[0])}
-            className="mt-1 block w-full"
-            accept="image/*"
-          />
-          {errors.profile_picture && <div className="text-red-500">{errors.profile_picture}</div>}
-        </div>
-
+        {/* Name */}
         <div>
           <InputLabel htmlFor="name" value="Name" />
 
@@ -72,6 +63,7 @@ export default function UpdateProfileInformation({ mustVerifyEmail, status, clas
           <InputError className="mt-2" message={errors.name} />
         </div>
 
+        {/* Email */}
         <div>
           <InputLabel htmlFor="email" value="Email" />
 
@@ -110,6 +102,51 @@ export default function UpdateProfileInformation({ mustVerifyEmail, status, clas
           </div>
         )}
 
+        {/* Contact Info */}
+        <div>
+          <InputLabel htmlFor="contact_information" value="Contact Information" />
+
+          <TextInput
+            id="contact_information"
+            type="text"
+            className="mt-1 block w-full"
+            value={data.contact_information}
+            onChange={(e) => setData("contact_information", e.target.value)}
+            required
+          />
+
+          <InputError className="mt-2" message={errors.contact_information} />
+        </div>
+
+        {/* Address */}
+        <div>
+          <InputLabel htmlFor="address" value="Address" />
+
+          <TextInput
+            id="address"
+            type="text"
+            className="mt-1 block w-full"
+            value={data.address}
+            onChange={(e) => setData("address", e.target.value)}
+            required
+          />
+
+          <InputError className="mt-2" message={errors.address} />
+        </div>
+
+        {/* Profile picture */}
+        <div className="mb-6">
+          <label className="block text-sm font-medium text-gray-700">Profile Picture</label>
+          <input
+            type="file"
+            onChange={(e) => setData("profile_picture", e.target.files[0])}
+            className="mt-1 block w-full"
+            accept="image/*"
+          />
+          {errors.profile_picture && <div className="text-red-500">{errors.profile_picture}</div>}
+        </div>
+
+        {/* Save Button */}
         <div className="flex items-center gap-4">
           <PrimaryButton disabled={processing}>Save</PrimaryButton>
 

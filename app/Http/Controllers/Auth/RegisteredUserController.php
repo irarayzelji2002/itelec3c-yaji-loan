@@ -34,9 +34,16 @@ class RegisteredUserController extends Controller
             'name' => 'required|string|max:255',
             'email' => 'required|string|lowercase|email|max:255|unique:'.User::class,
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
-            'contact_information' => 'nullable|string|max:255',
-            'address' => 'nullable|string',
+            'contact_information' => 'required|string|max:255',
+            'address' => 'required|string',
+            'profile_picture' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
         ]);
+
+        // Handle profile picture upload if present
+        $profile_picture_path = null;
+        if ($request->hasFile('profile_picture')) {
+            $profile_picture_path = $request->file('profile_picture')->store('profile-pictures', 'public');
+        }
 
         $user = User::create([
             'name' => $request->name,
@@ -44,6 +51,7 @@ class RegisteredUserController extends Controller
             'password' => Hash::make($request->password),
             'contact_information' => $request->contact_information,
             'address' => $request->address,
+            'profile_picture' => $profile_picture_path,
         ]);
 
         // Assign default member role to new registrations

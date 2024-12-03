@@ -17,7 +17,10 @@ class ProfileUpdateRequest extends FormRequest
         $rules = [];
 
         // Only validate name and email if they are present in the request
-        if ($this->has('name') || $this->has('email')) {
+        if ($this->has('name') ||
+            $this->has('email')||
+            $this->has('contact_information')||
+            $this->has('address')) {
             $rules['name'] = ['required', 'string', 'max:255'];
             $rules['email'] = [
                 'required',
@@ -27,11 +30,13 @@ class ProfileUpdateRequest extends FormRequest
                 'max:255',
                 Rule::unique(User::class)->ignore($this->user()->id)
             ];
+            $rules['contact_information'] = ['required', 'string', 'max:255'];
+            $rules['address'] = ['required', 'string', 'max:255'];
         }
 
         // Add profile picture validation if it's present
         if ($this->hasFile('profile_picture')) {
-            $rules['profile_picture'] = ['nullable','image', 'max:2048']; // max 2MB
+            $rules['profile_picture'] = ['nullable','image', 'mimes:jpeg,png,jpg','max:2048']; // max 2MB
         }
 
         return $rules;
