@@ -17,9 +17,10 @@
   <div class="container mt-5">
     <form class="mb-3 d-flex justify-content-between" action="{{ route('view.loan') }}" method="GET">
       <div class="col-auto">
-        <input class="form-control" type="search" placeholder="Search...." value="{{ request('search') }}" name="search">
-      </div>
-      <button type="submit" class="btn btn-green text-white">Search</button>
+      <input class="form-control" type="search" placeholder="Search..." value="{{ request('search') }}" name="search" style="width: 1170px; padding: 10px; font-size: 16px;">
+
+</div>
+<button type="submit" class="btn btn-green text-white" style="width: 150px; font-size: 16px;">Search</button>
     </form>
 
     <h1 class="mb-4 text-green">Create New Loan</h1>
