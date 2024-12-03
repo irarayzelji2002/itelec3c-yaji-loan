@@ -85,7 +85,7 @@
         <h2>Create New Payment</h2>
       </div>
       <div class="card-body">
-        <form action="{{ route('payment.store') }}" method="POST" class="bg-white p-4 rounded shadow-sm">
+        <form action="{{ route('payment.store') }}" method="POST" class="bg-white p-4 rounded shadow-sm" enctype="multipart/form-data">
             @csrf
             <div class="mb-3">
                 <label for="loan_id" class="form-label">Loan ID</label>
@@ -99,6 +99,10 @@
                 <label for="payment_date" class="form-label">Payment Date</label>
                 <input type="date" class="form-control" id="payment_date" name="payment_date" required>
             </div>
+            <div class="mb-3">
+                <label for="image" class="form-label">Payment Image</label>
+                <input type="file" name="image" class="form-control" accept="image/*" required>
+            </div>
             <button type="submit" class="btn btn-green">Submit</button>
         </form>
       </div>
@@ -109,7 +113,7 @@
         <h2>Create New Loan Type</h2>
       </div>
       <div class="card-body">
-        <form action="{{ route('loan_type.store') }}" method="POST" class="bg-white p-4 rounded shadow-sm">
+        <form action="{{ route('loan_type.store') }}" method="POST" class="bg-white p-4 rounded shadow-sm" enctype="multipart/form-data">
             @csrf
             <div class="mb-3">
                 <label for="loan_type_name" class="form-label">Loan Type Name</label>
@@ -118,6 +122,10 @@
             <div class="mb-3">
                 <label for="description" class="form-label">Description</label>
                 <textarea class="form-control" id="description" name="description" required></textarea>
+            </div>
+            <div class="mb-3">
+                <label for="image" class="form-label">Loan Type Image</label>
+                <input type="file" name="image" class="form-control" accept="image/*" required>
             </div>
             <button type="submit" class="btn btn-green">Submit</button>
         </form>
@@ -175,6 +183,7 @@
               <th scope="col">Loan ID</th>
               <th scope="col">Payment Amount</th>
               <th scope="col">Payment Date</th>
+              <th scope="col">Image</th>
             </tr>
           </thead>
           <tbody>
@@ -183,6 +192,7 @@
               <td>{{ $payment->loan_id }}</td>
               <td>{{ $payment->payment_amount }}</td>
               <td>{{ $payment->payment_date }}</td>
+              <td><img src="{{ asset('storage/'.$payment->image_path) }}" alt="Payment Image" width="100"></td>
             </tr>
             @endforeach
           </tbody>
@@ -200,6 +210,7 @@
             <tr>
               <th scope="col">Loan Type Name</th>
               <th scope="col">Description</th>
+              <th scope="col">Image</th>
             </tr>
           </thead>
           <tbody>
@@ -207,6 +218,7 @@
             <tr>
               <td>{{ $loanType->loan_type_name }}</td>
               <td>{{ $loanType->description }}</td>
+              <td><img src="{{ asset('storage/'.$loanType->image_path) }}" alt="Loan Type Image" width="100"></td>
             </tr>
             @endforeach
           </tbody>

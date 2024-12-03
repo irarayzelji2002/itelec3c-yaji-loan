@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id('loan_type_id');
             $table->string('loan_type_name');
             $table->text('description')->nullable();
+            $table->string('image_path')->nullable(); // Add this line
             $table->timestamps();
         });
     }

@@ -76,9 +76,17 @@ class ViewTable extends Controller
             'loan_id' => 'required|exists:main_loan_table,loan_id',
             'payment_amount' => 'required|numeric',
             'payment_date' => 'required|date',
+            'image' => 'required|image', // Validate that the image is required and is an image file
         ]);
 
-        payment_model::create($request->all());
+        $imagePath = $request->file('image')->store('payments', 'public');
+
+        payment_model::create([
+            'loan_id' => $request->loan_id,
+            'payment_amount' => $request->payment_amount,
+            'payment_date' => $request->payment_date,
+            'image_path' => $imagePath, // Save the stored image path
+        ]);
 
         return redirect()->route('view.loan')->with('success', 'Payment created successfully.');
     }
@@ -87,9 +95,16 @@ class ViewTable extends Controller
         $request->validate([
             'loan_type_name' => 'required',
             'description' => 'required',
+            'image' => 'required|image', // Validate that the image is required and is an image file
         ]);
 
-        Loan_Model::create($request->all());
+        $imagePath = $request->file('image')->store('loan_types', 'public');
+
+        Loan_Model::create([
+            'loan_type_name' => $request->loan_type_name,
+            'description' => $request->description,
+            'image_path' => $imagePath, // Save the stored image path
+        ]);
 
         return redirect()->route('view.loan')->with('success', 'Loan type created successfully.');
     }

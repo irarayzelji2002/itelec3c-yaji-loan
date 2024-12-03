@@ -9,5 +9,5 @@ class Loan_Model extends Model
   
     
     protected $table = 'loan_table';
-    protected $fillable = ['loan_type_name', 'description'];
+    protected $fillable = ['loan_type_name', 'description', 'image_path'];
 }
