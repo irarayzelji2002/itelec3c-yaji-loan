@@ -16,6 +16,7 @@ return new class extends Migration
             $table->unsignedBigInteger('loan_id');
             $table->decimal('payment_amount', 8, 2);
             $table->date('payment_date');
+            $table->string('image_path')->nullable(); // Add this line
             $table->timestamps();
         });
     }

@@ -23,7 +23,6 @@ return new class extends Migration
             $table->decimal('outstanding_balance', 15, 2);
             $table->string('image_path')->nullable(); // Add this line
             $table->timestamps();
-
         });
     }
 
