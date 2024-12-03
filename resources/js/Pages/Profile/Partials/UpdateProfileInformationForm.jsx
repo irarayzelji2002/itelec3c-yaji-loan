@@ -1,113 +1,133 @@
-import InputError from '@/Components/InputError';
-import InputLabel from '@/Components/InputLabel';
-import PrimaryButton from '@/Components/PrimaryButton';
-import TextInput from '@/Components/TextInput';
-import { Transition } from '@headlessui/react';
-import { Link, useForm, usePage } from '@inertiajs/react';
+import InputError from "@/Components/InputError";
+import InputLabel from "@/Components/InputLabel";
+import PrimaryButton from "@/Components/PrimaryButton";
+import TextInput from "@/Components/TextInput";
+import { Transition } from "@headlessui/react";
+import { Link, useForm, usePage } from "@inertiajs/react";
 
-export default function UpdateProfileInformation({
-    mustVerifyEmail,
-    status,
-    className = '',
-}) {
-    const user = usePage().props.auth.user;
+export default function UpdateProfileInformation({ mustVerifyEmail, status, className = "" }) {
+  const user = usePage().props.auth.user;
 
-    const { data, setData, patch, errors, processing, recentlySuccessful } =
-        useForm({
-            name: user.name,
-            email: user.email,
-        });
+  const { data, setData, patch, errors, processing, recentlySuccessful } = useForm({
+    profile_picture: null,
+    name: user.name,
+    email: user.email,
+  });
 
-    const submit = (e) => {
-        e.preventDefault();
+  const submit = (e) => {
+    e.preventDefault();
+    // Create FormData object
+    const formData = new FormData();
+    // Only append profile_picture if it exists
+    if (data.profile_picture) {
+      formData.append("profile_picture", data.profile_picture);
+    }
+    // Only append name and email if they've been changed
+    if (data.name && data.name !== user.name) {
+      formData.append("name", data.name);
+    }
+    if (data.email && data.email !== user.email) {
+      formData.append("email", data.email);
+    }
 
-        patch(route('profile.update'));
-    };
+    console.log("formData:", formData);
+    patch(route("profile.update"), {
+      preserveScroll: true,
+      data: formData,
+    });
+  };
 
-    return (
-        <section className={className}>
-            <header>
-                <h2 className="text-lg font-medium text-gray-900">
-                    Profile Information
-                </h2>
+  return (
+    <section className={className}>
+      <header>
+        <h2 className="text-lg font-medium text-gray-900">Profile Information</h2>
 
-                <p className="mt-1 text-sm text-gray-600">
-                    Update your account's profile information and email address.
-                </p>
-            </header>
+        <p className="mt-1 text-sm text-gray-600">
+          Update your account's profile information and email address.
+        </p>
+      </header>
 
-            <form onSubmit={submit} className="mt-6 space-y-6">
-                <div>
-                    <InputLabel htmlFor="name" value="Name" />
+      <form onSubmit={submit} className="mt-6 space-y-6">
+        {/* Add profile picture input */}
+        <div className="mb-6">
+          <label className="block text-sm font-medium text-gray-700">Profile Picture</label>
+          <input
+            type="file"
+            onChange={(e) => setData("profile_picture", e.target.files[0])}
+            className="mt-1 block w-full"
+            accept="image/*"
+          />
+          {errors.profile_picture && <div className="text-red-500">{errors.profile_picture}</div>}
+        </div>
 
-                    <TextInput
-                        id="name"
-                        className="mt-1 block w-full"
-                        value={data.name}
-                        onChange={(e) => setData('name', e.target.value)}
-                        required
-                        isFocused
-                        autoComplete="name"
-                    />
+        <div>
+          <InputLabel htmlFor="name" value="Name" />
 
-                    <InputError className="mt-2" message={errors.name} />
-                </div>
+          <TextInput
+            id="name"
+            className="mt-1 block w-full"
+            value={data.name}
+            onChange={(e) => setData("name", e.target.value)}
+            required
+            isFocused
+            autoComplete="name"
+          />
 
-                <div>
-                    <InputLabel htmlFor="email" value="Email" />
+          <InputError className="mt-2" message={errors.name} />
+        </div>
 
-                    <TextInput
-                        id="email"
-                        type="email"
-                        className="mt-1 block w-full"
-                        value={data.email}
-                        onChange={(e) => setData('email', e.target.value)}
-                        required
-                        autoComplete="username"
-                    />
+        <div>
+          <InputLabel htmlFor="email" value="Email" />
 
-                    <InputError className="mt-2" message={errors.email} />
-                </div>
+          <TextInput
+            id="email"
+            type="email"
+            className="mt-1 block w-full"
+            value={data.email}
+            onChange={(e) => setData("email", e.target.value)}
+            required
+            autoComplete="username"
+          />
 
-                {mustVerifyEmail && user.email_verified_at === null && (
-                    <div>
-                        <p className="mt-2 text-sm text-gray-800">
-                            Your email address is unverified.
-                            <Link
-                                href={route('verification.send')}
-                                method="post"
-                                as="button"
-                                className="rounded-md text-sm text-gray-600 underline hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
-                            >
-                                Click here to re-send the verification email.
-                            </Link>
-                        </p>
+          <InputError className="mt-2" message={errors.email} />
+        </div>
 
-                        {status === 'verification-link-sent' && (
-                            <div className="mt-2 text-sm font-medium text-green-600">
-                                A new verification link has been sent to your
-                                email address.
-                            </div>
-                        )}
-                    </div>
-                )}
+        {mustVerifyEmail && user.email_verified_at === null && (
+          <div>
+            <p className="mt-2 text-sm text-gray-800">
+              Your email address is unverified.
+              <Link
+                href={route("verification.send")}
+                method="post"
+                as="button"
+                className="rounded-md text-sm text-gray-600 underline hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+              >
+                Click here to re-send the verification email.
+              </Link>
+            </p>
 
-                <div className="flex items-center gap-4">
-                    <PrimaryButton disabled={processing}>Save</PrimaryButton>
+            {status === "verification-link-sent" && (
+              <div className="mt-2 text-sm font-medium text-green-600">
+                A new verification link has been sent to your email address.
+              </div>
+            )}
+          </div>
+        )}
 
-                    <Transition
-                        show={recentlySuccessful}
-                        enter="transition ease-in-out"
-                        enterFrom="opacity-0"
-                        leave="transition ease-in-out"
-                        leaveTo="opacity-0"
-                    >
-                        <p className="text-sm text-gray-600">
-                            Saved.
-                        </p>
-                    </Transition>
-                </div>
-            </form>
-        </section>
-    );
+        <div className="flex items-center gap-4">
+          <PrimaryButton disabled={processing}>Save</PrimaryButton>
+
+          <Transition
+            show={recentlySuccessful}
+            enter="transition ease-in-out"
+            enterFrom="opacity-0"
+            leave="transition ease-in-out"
+            leaveTo="opacity-0"
+          >
+            <p className="text-sm text-gray-600">Saved.</p>
+          </Transition>
+        </div>
+      </form>
+    </section>
+  );
 }
