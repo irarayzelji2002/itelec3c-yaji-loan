@@ -14,6 +14,9 @@ class ViewTable extends Controller
     //
     public function ViewTables(Request $request){
         $search = $request->get('search');
+        $searchPayment = $request->get('search_payment');
+        $searchLoanType = $request->get('search_loan_type');
+
         if($search){
             $Loan = Loan::where('loan_id', 'like', '%'.$search.'%')
                 ->orWhere('borrower_id', 'like', '%'.$search.'%')
@@ -28,8 +31,23 @@ class ViewTable extends Controller
         } else {
             $Loan = Loan::all();
         }
-        $payment_model = payment_model::all();
-        $Loan_Model = Loan_Model::all();
+
+        if($searchPayment){
+            $payment_model = payment_model::where('loan_id', 'like', '%'.$searchPayment.'%')
+                ->orWhere('payment_amount', 'like', '%'.$searchPayment.'%')
+                ->orWhere('payment_date', 'like', '%'.$searchPayment.'%')
+                ->get();
+        } else {
+            $payment_model = payment_model::all();
+        }
+
+        if($searchLoanType){
+            $Loan_Model = Loan_Model::where('loan_type_name', 'like', '%'.$searchLoanType.'%')
+                ->orWhere('description', 'like', '%'.$searchLoanType.'%')
+                ->get();
+        } else {
+            $Loan_Model = Loan_Model::all();
+        }
 
         return view('viewtables', compact('Loan', 'payment_model', 'Loan_Model'));
     }
