@@ -8,7 +8,60 @@
     <title>Document</title>
 </head>
 <body>
+  <form class="mb-3 d-flex justify-content" action="{{ route('view.loan') }}" method="GET">
+  <div class="col-auto">
+  
+    <input class="form-control" type="search" placeholder="Search...." value="{{ request('search') }}" name="search">
+  </div>
+
+</form>
+
+<h1>Create New Loan</h1>
+<form action="{{ route('loan.store') }}" method="POST">
+    @csrf
+    <div class="mb-3">
+        <label for="borrower_id" class="form-label">Borrower ID</label>
+        <input type="text" class="form-control" id="borrower_id" name="borrower_id" required>
+    </div>
+    <div class="mb-3">
+        <label for="loan_amount" class="form-label">Loan Amount</label>
+        <input type="number" class="form-control" id="loan_amount" name="loan_amount" required>
+    </div>
+    <div class="mb-3">
+        <label for="interest_rate" class="form-label">Interest Rate</label>
+        <input type="number" step="0.01" class="form-control" id="interest_rate" name="interest_rate" required>
+    </div>
+    <div class="mb-3">
+        <label for="loan_term" class="form-label">Loan Term</label>
+        <input type="text" class="form-control" id="loan_term" name="loan_term" required>
+    </div>
+    <div class="mb-3">
+        <label for="date_applied" class="form-label">Date Applied</label>
+        <input type="date" class="form-control" id="date_applied" name="date_applied" required>
+    </div>
+    <div class="mb-3">
+        <label for="date_approved" class="form-label">Date Approved</label>
+        <input type="date" class="form-control" id="date_approved" name="date_approved">
+    </div>
+    <div class="mb-3">
+        <label for="date_disbursed" class="form-label">Date Disbursed</label>
+        <input type="date" class="form-control" id="date_disbursed" name="date_disbursed">
+    </div>
+    <div class="mb-3">
+        <label for="outstanding_balance" class="form-label">Outstanding Balance</label>
+        <input type="number" step="0.01" class="form-control" id="outstanding_balance" name="outstanding_balance" required>
+    </div>
+    <div class="row mb-3">
+            <div class="col-12">
+                <label for="image">Product Image</label>
+                <input type="file" name="image" class="form-control" accept="image/*" required>
+            </div>
+        </div>
+    <button type="submit" class="btn btn-primary">Submit</button>
+</form>
+
 <table class="table table-dark table-hover">
+
 <h1>Loan Table</h1>
   <thead>
     <tr>
