@@ -134,6 +134,20 @@
 
     <div class="card mb-4">
       <div class="card-header card-header-green">
+        <h2>Search Loans</h2>
+      </div>
+      <div class="card-body">
+        <form class="d-flex justify-content-between" action="{{ route('view.loan') }}" method="GET">
+          <div class="col-auto flex-grow-1 me-2">
+            <input class="form-control" type="search" placeholder="Search..." value="{{ request('search') }}" name="search">
+          </div>
+          <button type="submit" class="btn btn-green">Search</button>
+        </form>
+      </div>
+    </div>
+
+    <div class="card mb-4">
+      <div class="card-header card-header-green">
         <h2>Loan Table</h2>
       </div>
       <div class="card-body">
@@ -174,6 +188,20 @@
 
     <div class="card mb-4">
       <div class="card-header card-header-green">
+        <h2>Search Payments</h2>
+      </div>
+      <div class="card-body">
+        <form class="d-flex justify-content-between" action="{{ route('view.loan') }}" method="GET">
+          <div class="col-auto flex-grow-1 me-2">
+            <input class="form-control" type="search" placeholder="Search..." value="{{ request('search_payment') }}" name="search_payment">
+          </div>
+          <button type="submit" class="btn btn-green">Search</button>
+        </form>
+      </div>
+    </div>
+
+    <div class="card mb-4">
+      <div class="card-header card-header-green">
         <h2>Payment Table</h2>
       </div>
       <div class="card-body">
@@ -197,6 +225,20 @@
             @endforeach
           </tbody>
         </table>
+      </div>
+    </div>
+
+    <div class="card mb-4">
+      <div class="card-header card-header-green">
+        <h2>Search Loan Types</h2>
+      </div>
+      <div class="card-body">
+        <form class="d-flex justify-content-between" action="{{ route('view.loan') }}" method="GET">
+          <div class="col-auto flex-grow-1 me-2">
+            <input class="form-control" type="search" placeholder="Search..." value="{{ request('search_loan_type') }}" name="search_loan_type">
+          </div>
+          <button type="submit" class="btn btn-green">Search</button>
+        </form>
       </div>
     </div>
 
