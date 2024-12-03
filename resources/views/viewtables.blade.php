@@ -18,19 +18,7 @@
 </head>
 <body class="bg-green">
   <div class="container mt-5">
-    <div class="card mb-4">
-      <div class="card-header card-header-green">
-        <h2>Search Loans</h2>
-      </div>
-      <div class="card-body">
-        <form class="d-flex justify-content-between" action="{{ route('view.loan') }}" method="GET">
-          <div class="col-auto flex-grow-1 me-2">
-            <input class="form-control" type="search" placeholder="Search..." value="{{ request('search') }}" name="search">
-          </div>
-          <button type="submit" class="btn btn-green">Search</button>
-        </form>
-      </div>
-    </div>
+
 
     <div class="card mb-4">
       <div class="card-header card-header-green">
@@ -87,10 +75,6 @@
       <div class="card-body">
         <form action="{{ route('payment.store') }}" method="POST" class="bg-white p-4 rounded shadow-sm" enctype="multipart/form-data">
             @csrf
-            <div class="mb-3">
-                <label for="loan_id" class="form-label">Loan ID</label>
-                <input type="text" class="form-control" id="loan_id" name="loan_id" required>
-            </div>
             <div class="mb-3">
                 <label for="payment_amount" class="form-label">Payment Amount</label>
                 <input type="number" class="form-control" id="payment_amount" name="payment_amount" required>
