@@ -8,5 +8,5 @@ class payment_model extends Model
 {
     //
     protected $table = 'payment_table';
-    protected $fillable = ['loan_id', 'payment_amount', 'payment_date'];
+    protected $fillable = ['loan_id', 'payment_amount', 'payment_date', 'image_path'];
 }

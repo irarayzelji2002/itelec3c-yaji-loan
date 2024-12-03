@@ -14,6 +14,9 @@ class ViewTable extends Controller
     //
     public function ViewTables(Request $request){
         $search = $request->get('search');
+        $searchPayment = $request->get('search_payment');
+        $searchLoanType = $request->get('search_loan_type');
+
         if($search){
             $Loan = Loan::where('loan_id', 'like', '%'.$search.'%')
                 ->orWhere('borrower_id', 'like', '%'.$search.'%')
@@ -28,8 +31,23 @@ class ViewTable extends Controller
         } else {
             $Loan = Loan::all();
         }
-        $payment_model = payment_model::all();
-        $Loan_Model = Loan_Model::all();
+
+        if($searchPayment){
+            $payment_model = payment_model::where('loan_id', 'like', '%'.$searchPayment.'%')
+                ->orWhere('payment_amount', 'like', '%'.$searchPayment.'%')
+                ->orWhere('payment_date', 'like', '%'.$searchPayment.'%')
+                ->get();
+        } else {
+            $payment_model = payment_model::all();
+        }
+
+        if($searchLoanType){
+            $Loan_Model = Loan_Model::where('loan_type_name', 'like', '%'.$searchLoanType.'%')
+                ->orWhere('description', 'like', '%'.$searchLoanType.'%')
+                ->get();
+        } else {
+            $Loan_Model = Loan_Model::all();
+        }
 
         return view('viewtables', compact('Loan', 'payment_model', 'Loan_Model'));
     }
@@ -51,10 +69,61 @@ class ViewTable extends Controller
             'date_approved' => 'nullable|date',
             'date_disbursed' => 'nullable|date',
             'outstanding_balance' => 'required|numeric',
+            'image' => 'required|image', // Validate that the image is required and is an image file
+        ]);
+    
+        $imagePath = $request->file('image')->store('prod', 'public');
+    
+        Loan::create([
+            'borrower_id' => $request->borrower_id,
+            'loan_amount' => $request->loan_amount,
+            'interest_rate' => $request->interest_rate,
+            'loan_term' => $request->loan_term,
+            'date_applied' => $request->date_applied,
+            'date_approved' => $request->date_approved,
+            'date_disbursed' => $request->date_disbursed,
+            'outstanding_balance' => $request->outstanding_balance,
+            'image_path' => $imagePath, // Save the stored image path
+        ]);
+    
+        return redirect()->back()->with('success', 'Loan created successfully.');
+    }
+
+    public function storePayment(Request $request) {
+        $request->validate([
+            'loan_id' => 'required|exists:main_loan_table,loan_id',
+            'payment_amount' => 'required|numeric',
+            'payment_date' => 'required|date',
+            'image' => 'required|image', // Validate that the image is required and is an image file
         ]);
 
-        Loan::create($request->all());
+        $imagePath = $request->file('image')->store('payments', 'public');
 
-        return redirect()->route('view.loan')->with('success', 'Loan created successfully.');
+        payment_model::create([
+            'loan_id' => $request->loan_id,
+            'payment_amount' => $request->payment_amount,
+            'payment_date' => $request->payment_date,
+            'image_path' => $imagePath, // Save the stored image path
+        ]);
+
+        return redirect()->route('view.loan')->with('success', 'Payment created successfully.');
+    }
+
+    public function storeLoanType(Request $request) {
+        $request->validate([
+            'loan_type_name' => 'required',
+            'description' => 'required',
+            'image' => 'required|image', // Validate that the image is required and is an image file
+        ]);
+
+        $imagePath = $request->file('image')->store('loan_types', 'public');
+
+        Loan_Model::create([
+            'loan_type_name' => $request->loan_type_name,
+            'description' => $request->description,
+            'image_path' => $imagePath, // Save the stored image path
+        ]);
+
+        return redirect()->route('view.loan')->with('success', 'Loan type created successfully.');
     }
 }

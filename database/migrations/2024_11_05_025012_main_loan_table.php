@@ -21,8 +21,8 @@ return new class extends Migration
             $table->date('date_approved')->nullable();
             $table->date('date_disbursed')->nullable();
             $table->decimal('outstanding_balance', 15, 2);
+            $table->string('image_path')->nullable(); // Add this line
             $table->timestamps();
-
         });
     }
 
