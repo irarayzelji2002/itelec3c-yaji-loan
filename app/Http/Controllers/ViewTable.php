@@ -51,11 +51,24 @@ class ViewTable extends Controller
             'date_approved' => 'nullable|date',
             'date_disbursed' => 'nullable|date',
             'outstanding_balance' => 'required|numeric',
+            'image' => 'required|image', // Validate that the image is required and is an image file
         ]);
-
-        Loan::create($request->all());
-
-        return redirect()->route('view.loan')->with('success', 'Loan created successfully.');
+    
+        $imagePath = $request->file('image')->store('prod', 'public');
+    
+        Loan::create([
+            'borrower_id' => $request->borrower_id,
+            'loan_amount' => $request->loan_amount,
+            'interest_rate' => $request->interest_rate,
+            'loan_term' => $request->loan_term,
+            'date_applied' => $request->date_applied,
+            'date_approved' => $request->date_approved,
+            'date_disbursed' => $request->date_disbursed,
+            'outstanding_balance' => $request->outstanding_balance,
+            'image_path' => $imagePath, // Save the stored image path
+        ]);
+    
+        return redirect()->back()->with('success', 'Loan created successfully.');
     }
 
     public function storePayment(Request $request) {

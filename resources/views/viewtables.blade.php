@@ -37,7 +37,7 @@
         <h2>Create New Loan</h2>
       </div>
       <div class="card-body">
-        <form action="{{ route('loan.store') }}" method="POST" class="bg-white p-4 rounded shadow-sm">
+        <form action="{{ route('loan.store') }}" method="POST" class="bg-white p-4 rounded shadow-sm" enctype="multipart/form-data">
             @csrf
             <div class="mb-3">
                 <label for="borrower_id" class="form-label">Borrower ID</label>
