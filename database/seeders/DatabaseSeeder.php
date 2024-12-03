@@ -115,6 +115,7 @@ class DatabaseSeeder extends Seeder
             'date_approved' => '2021-11-05',
             'date_disbursed' => '2021-11-10',
             'outstanding_balance' => 9000,
+            'image_path' => 'images/loan1.jpg'
         ]);
         Loan::create([
             'borrower_id' => 2,
@@ -125,6 +126,7 @@ class DatabaseSeeder extends Seeder
             'date_approved' => '2021-11-06',
             'date_disbursed' => '2021-11-11',
             'outstanding_balance' => 18000,
+            'image_path' => 'images/loan2.jpg'
         ]);
         Loan::create([
             'borrower_id' => 3,
@@ -135,6 +137,7 @@ class DatabaseSeeder extends Seeder
             'date_approved' => '2021-11-07',
             'date_disbursed' => '2021-11-12',
             'outstanding_balance' => 27000,
+            'image_path' => 'images/loan3.jpg'
         ]);
         Loan::create([
             'borrower_id' => 4,
@@ -145,6 +148,7 @@ class DatabaseSeeder extends Seeder
             'date_approved' => '2021-11-08',
             'date_disbursed' => '2021-11-13',
             'outstanding_balance' => 36000,
+            'image_path' => 'images/loan4.jpg'
         ]);
         Loan::create([
             'borrower_id' => 5,
@@ -155,6 +159,7 @@ class DatabaseSeeder extends Seeder
             'date_approved' => '2021-11-09',
             'date_disbursed' => '2021-11-14',
             'outstanding_balance' => 45000,
+            'image_path' => 'images/loan5.jpg'
         ]);
     }
 }
