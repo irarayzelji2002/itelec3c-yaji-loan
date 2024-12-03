@@ -8,7 +8,7 @@ import { Link, useForm, usePage } from "@inertiajs/react";
 export default function UpdateProfileInformation({ mustVerifyEmail, status, className = "" }) {
   const user = usePage().props.auth.user;
 
-  const { data, setData, patch, errors, processing, recentlySuccessful } = useForm({
+  const { data, setData, post, errors, processing, recentlySuccessful } = useForm({
     profile_picture: null,
     name: user.name,
     email: user.email,
@@ -16,24 +16,20 @@ export default function UpdateProfileInformation({ mustVerifyEmail, status, clas
 
   const submit = (e) => {
     e.preventDefault();
-    // Create FormData object
     const formData = new FormData();
-    // Only append profile_picture if it exists
+
+    formData.append("name", data.name);
+    formData.append("email", data.email);
+    formData.append("_method", "PATCH");
+
     if (data.profile_picture) {
       formData.append("profile_picture", data.profile_picture);
     }
-    // Only append name and email if they've been changed
-    if (data.name && data.name !== user.name) {
-      formData.append("name", data.name);
-    }
-    if (data.email && data.email !== user.email) {
-      formData.append("email", data.email);
-    }
 
-    console.log("formData:", formData);
-    patch(route("profile.update"), {
+    post(route("profile.update"), {
       preserveScroll: true,
       data: formData,
+      forceFormData: true,
     });
   };
 
@@ -47,7 +43,7 @@ export default function UpdateProfileInformation({ mustVerifyEmail, status, clas
         </p>
       </header>
 
-      <form onSubmit={submit} className="mt-6 space-y-6">
+      <form onSubmit={submit} className="mt-6 space-y-6" encType="multipart/form-data">
         {/* Add profile picture input */}
         <div className="mb-6">
           <label className="block text-sm font-medium text-gray-700">Profile Picture</label>
