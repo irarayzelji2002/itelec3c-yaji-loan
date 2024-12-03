@@ -156,7 +156,7 @@
               <td>{{ $loan->date_approved }}</td>
               <td>{{ $loan->date_disbursed }}</td>
               <td>{{ $loan->outstanding_balance }}</td>
-              <td><img src="{{ asset($loan->image_path) }}" alt="Loan Image" width="100"></td>
+              <td><img src="{{ asset('storage/'.$loan->image_path) }}" alt="Loan Image" width="100"></td>
             </tr>
             @endforeach
           </tbody>
