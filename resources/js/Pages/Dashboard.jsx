@@ -1,3 +1,4 @@
+import TextInput from "@/Components/TextInput";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 import { Head, usePage } from "@inertiajs/react";
 import { useEffect, useState } from "react";
@@ -8,7 +9,17 @@ export default function Dashboard() {
   const roles = user?.roles || [];
   console.log("user?.roles:", user?.roles);
   const [users, setUsers] = useState([]);
+  const [filteredUsers, setFilteredUsers] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [isSearching, setIsSearching] = useState(false);
+  const [sort, setSort] = useState([
+    { id: "name", order: "asc" },
+    { id: "email", order: "asc" },
+    { id: "role", order: "asc" },
+    { id: "contact_information", order: "asc" },
+    { id: "address", order: "asc" },
+  ]);
+  const [searchQuery, setSearchQuery] = useState("");
 
   useEffect(() => {
     setLoading(true);
@@ -16,6 +27,7 @@ export default function Dashboard() {
       .then((res) => res.json())
       .then((data) => {
         setUsers(data);
+        setFilteredUsers(data);
         setLoading(false);
       })
       .catch((err) => {
@@ -23,6 +35,73 @@ export default function Dashboard() {
         setLoading(false);
       });
   }, []);
+
+  useEffect(() => {
+    if (!users.length) return;
+
+    setIsSearching(true);
+    const timeoutId = setTimeout(() => {
+      const filteredData = filterData(users, searchQuery);
+      setFilteredUsers(filteredData);
+      setIsSearching(false);
+    }, 300);
+
+    return () => clearTimeout(timeoutId);
+  }, [searchQuery, users]);
+
+  const getSortOrder = (id) => {
+    return sort.find((col) => col.id === id).order;
+  };
+
+  const handleChangeOrder = (id) => {
+    const newSort = sort.map((col) => {
+      if (col.id === id) {
+        const newOrder = col.order === "asc" ? "desc" : "asc";
+        const sortedData = sortData(filteredUsers, id, newOrder);
+        setFilteredUsers(sortedData);
+        return { ...col, order: newOrder };
+      }
+      return col;
+    });
+    setSort(newSort);
+  };
+
+  // Sorting
+  const sortData = (data, columnId, order) => {
+    return [...data].sort((a, b) => {
+      let aValue = columnId === "role" ? a.roles.map((role) => role.name).join(", ") : a[columnId];
+      let bValue = columnId === "role" ? b.roles.map((role) => role.name).join(", ") : b[columnId];
+
+      // Handle null/undefined values
+      aValue = aValue || "";
+      bValue = bValue || "";
+
+      if (order === "asc") {
+        return aValue.toString().localeCompare(bValue.toString());
+      } else {
+        return bValue.toString().localeCompare(aValue.toString());
+      }
+    });
+  };
+
+  // Searching
+  const filterData = (data, query) => {
+    if (!query) return data;
+
+    return data.filter((item) => {
+      const searchStr = [
+        item.name,
+        item.email,
+        item.roles.map((role) => role.name).join(", "),
+        item.contact_information,
+        item.address,
+      ]
+        .join(" ")
+        .toLowerCase();
+
+      return searchStr.includes(query.toLowerCase());
+    });
+  };
 
   return (
     <AuthenticatedLayout
@@ -34,43 +113,123 @@ export default function Dashboard() {
         <div className="mx-auto max-w-7xl sm:px-6 lg:px-8">
           <div className="overflow-hidden bg-white shadow-sm sm:rounded-lg">
             <div className="p-6 text-gray-900">
-              <h1>Welcome, {user.name}</h1>
+              <div className="py-3">
+                <div
+                  style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}
+                >
+                  <h1>Welcome, {user.name}</h1>
+                  <TextInput
+                    type="text"
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    placeholder="Search here..."
+                  />
+                </div>
+                {isSearching && <h1>Searching {searchQuery}...</h1>}
+              </div>
 
               <div className="overflow-x-auto">
                 <table className="min-w-full divide-y divide-gray-200">
                   <thead className="bg-gray-50">
                     <tr>
-                      <th className="px-6 py-3 text-left text-xs font-medium uppercase text-gray-500">
-                        Name
+                      <th id="name" className="px-6 py-3 text-xs font-medium uppercase">
+                        <div style={{ display: "flex", justifyContent: "space-between" }}>
+                          <span className="text-dark">Name</span>
+                          <button
+                            className="uppercase text-gray-500"
+                            onClick={() => handleChangeOrder("name")}
+                          >
+                            {getSortOrder("name")}
+                          </button>
+                        </div>
                       </th>
-                      <th className="px-6 py-3 text-left text-xs font-medium uppercase text-gray-500">
-                        Email
+                      <th
+                        id="email"
+                        className="d-flex justify-content-between px-6 py-3 text-xs font-medium uppercase"
+                      >
+                        <div style={{ display: "flex", justifyContent: "space-between" }}>
+                          <span className="text-dark">Email</span>
+                          <button
+                            className="uppercase text-gray-500"
+                            onClick={() => handleChangeOrder("email")}
+                          >
+                            {getSortOrder("email")}
+                          </button>
+                        </div>
                       </th>
-                      <th className="px-6 py-3 text-left text-xs font-medium uppercase text-gray-500">
-                        Role
+                      <th
+                        id="role"
+                        className="d-flex justify-content-between px-6 py-3 text-xs font-medium uppercase"
+                      >
+                        <div style={{ display: "flex", justifyContent: "space-between" }}>
+                          <span className="text-dark">Role</span>
+                          <button
+                            className="uppercase text-gray-500"
+                            onClick={() => handleChangeOrder("role")}
+                          >
+                            {getSortOrder("role")}
+                          </button>
+                        </div>
                       </th>
-                      <th className="px-6 py-3 text-left text-xs font-medium uppercase text-gray-500">
-                        Contact
+                      <th
+                        id="contact_information"
+                        className="d-flex justify-content-between px-6 py-3 text-xs font-medium uppercase"
+                      >
+                        <div style={{ display: "flex", justifyContent: "space-between" }}>
+                          <span className="text-dark">Contact</span>
+                          <button
+                            className="uppercase text-gray-500"
+                            onClick={() => handleChangeOrder("contact_information")}
+                          >
+                            {getSortOrder("contact_information")}
+                          </button>
+                        </div>
                       </th>
-                      <th className="px-6 py-3 text-left text-xs font-medium uppercase text-gray-500">
-                        Address
+                      <th
+                        id="address"
+                        className="d-flex justify-content-between px-6 py-3 text-xs font-medium uppercase"
+                      >
+                        <div style={{ display: "flex", justifyContent: "space-between" }}>
+                          <span className="text-dark">Address</span>
+                          <button
+                            className="uppercase text-gray-500"
+                            onClick={() => handleChangeOrder("address")}
+                          >
+                            {getSortOrder("address")}
+                          </button>
+                        </div>
                       </th>
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-gray-200 bg-white">
-                    {users.map((user) => (
-                      <tr key={user.id}>
-                        <td className="whitespace-nowrap px-6 py-4">{user.name}</td>
-                        <td className="whitespace-nowrap px-6 py-4">{user.email}</td>
-                        <td className="whitespace-nowrap px-6 py-4">
-                          {user.roles.map((role) => role.name).join(", ")}
+                    {loading && (
+                      <tr>
+                        <td colSpan="5" className="whitespace-nowrap px-6 py-4 text-center">
+                          Loading...
                         </td>
-                        <td className="whitespace-nowrap px-6 py-4">
-                          {user.contact_information || "-"}
-                        </td>
-                        <td className="whitespace-nowrap px-6 py-4">{user.address || "-"}</td>
                       </tr>
-                    ))}
+                    )}
+                    {!loading && filteredUsers.length === 0 ? (
+                      <tr>
+                        <td colSpan="5" className="py-4 text-center">
+                          No results found
+                        </td>
+                      </tr>
+                    ) : (
+                      filteredUsers.map((user) => (
+                        <tr key={user.id}>
+                          <td className="whitespace-nowrap px-6 py-4">{user.name}</td>
+                          <td className="whitespace-nowrap px-6 py-4">{user.email}</td>
+                          <td className="whitespace-nowrap px-6 py-4">
+                            {user.roles.map((role) => role.name).join(", ")}
+                          </td>
+                          <td className="whitespace-nowrap px-6 py-4">
+                            {user.contact_information || "-"}
+                          </td>
+                          <td className="whitespace-nowrap px-6 py-4">{user.address || "-"}</td>
+                        </tr>
+                      ))
+                    )}
                   </tbody>
                 </table>
               </div>
