@@ -132,6 +132,11 @@ export default function Dashboard() {
                 <table className="min-w-full divide-y divide-gray-200">
                   <thead className="bg-gray-50">
                     <tr>
+                      <th id="profile" className="px-6 py-3 text-xs font-medium uppercase">
+                        <div style={{ display: "flex", justifyContent: "space-between" }}>
+                          <span className="text-dark">Profile</span>
+                        </div>
+                      </th>
                       <th id="name" className="px-6 py-3 text-xs font-medium uppercase">
                         <div style={{ display: "flex", justifyContent: "space-between" }}>
                           <span className="text-dark">Name</span>
@@ -218,6 +223,25 @@ export default function Dashboard() {
                     ) : (
                       filteredUsers.map((user) => (
                         <tr key={user.id}>
+                          <td className="whitespace-nowrap p-1">
+                            <div className="flex justify-center">
+                              <div
+                                className="relative h-10 w-10"
+                                style={{ border: "2px solid gray", borderRadius: "50%" }}
+                              >
+                                <img
+                                  src={
+                                    user.profile_picture
+                                      ? `/storage/${user.profile_picture}`
+                                      : "/img/transparent-image.png"
+                                  }
+                                  alt="Profile"
+                                  className="h-full w-full rounded-full object-cover"
+                                  style={{ backgroundColor: "gainsboro" }}
+                                />
+                              </div>
+                            </div>
+                          </td>
                           <td className="whitespace-nowrap px-6 py-4">{user.name}</td>
                           <td className="whitespace-nowrap px-6 py-4">{user.email}</td>
                           <td className="whitespace-nowrap px-6 py-4">
