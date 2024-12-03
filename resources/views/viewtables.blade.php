@@ -78,6 +78,7 @@
           <th scope="col">Date Approved</th>
           <th scope="col">Date Disbursed</th>
           <th scope="col">Outstanding Balance</th>
+          <th scope="col">Image</th> <!-- Add this line -->
         </tr>
       </thead>
       <tbody>
@@ -92,6 +93,7 @@
           <td>{{ $loan->date_approved }}</td>
           <td>{{ $loan->date_disbursed }}</td>
           <td>{{ $loan->outstanding_balance }}</td>
+          <td><img src="{{ asset($loan->image_path) }}" alt="Loan Image" width="100"></td> <!-- Add this line -->
         </tr>
         @endforeach
       </tbody>
