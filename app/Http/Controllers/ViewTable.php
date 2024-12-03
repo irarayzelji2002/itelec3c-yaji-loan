@@ -12,11 +12,15 @@ use Inertia\Inertia;
 class ViewTable extends Controller
 {
     //
-    public function ViewTables(){
-        $Loan = Loan::all();
+    public function ViewTables(Request $request){
+        $search = $request->get('search');
+        if($search){
+            $Loan = Loan::where('loan_id', 'like', '%'.$search.'%')->get();
+        } else {
+            $Loan = Loan::all();
+        }
         $payment_model = payment_model::all();
         $Loan_Model = Loan_Model::all();
-
 
         return view('viewtables', compact('Loan', 'payment_model', 'Loan_Model'));
     }
@@ -26,5 +30,22 @@ class ViewTable extends Controller
     }
     public function register() {
         return Inertia::render('Register/Register');
+    }
+
+    public function store(Request $request) {
+        $request->validate([
+            'borrower_id' => 'required',
+            'loan_amount' => 'required|numeric',
+            'interest_rate' => 'required|numeric',
+            'loan_term' => 'required',
+            'date_applied' => 'required|date',
+            'date_approved' => 'nullable|date',
+            'date_disbursed' => 'nullable|date',
+            'outstanding_balance' => 'required|numeric',
+        ]);
+
+        Loan::create($request->all());
+
+        return redirect()->route('view.loan')->with('success', 'Loan created successfully.');
     }
 }

@@ -31,7 +31,8 @@ Route::middleware('auth')->group(function () {
     });
 });
 
-Route :: get ('/loan', [ViewTable::class,'ViewTables']) ;
+Route::get('/loan', [ViewTable::class, 'ViewTables'])->name('view.loan');
+Route::post('/loan', [ViewTable::class, 'store'])->name('loan.store');
 
 Route::get('/landing', [ViewTable::class, 'showLanding']);
 Route::get('/signUp', [ViewTable::class, 'register']);
