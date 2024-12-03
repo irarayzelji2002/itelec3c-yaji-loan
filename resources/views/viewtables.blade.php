@@ -4,18 +4,25 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <style>
+        .bg-green { background-color: #d4edda; }
+        .text-green { color: #155724; }
+        .btn-green { background-color: #28a745; border-color: #28a745; }
+        .btn-green:hover { background-color: #218838; border-color: #1e7e34; }
+        .table-green { background-color: #c3e6cb; }
+    </style>
     <title>Document</title>
 </head>
-<body class="bg-light">
+<body class="bg-green">
   <div class="container mt-5">
     <form class="mb-3 d-flex justify-content-between" action="{{ route('view.loan') }}" method="GET">
       <div class="col-auto">
         <input class="form-control" type="search" placeholder="Search...." value="{{ request('search') }}" name="search">
       </div>
-      <button type="submit" class="btn btn-primary">Search</button>
+      <button type="submit" class="btn btn-green text-white">Search</button>
     </form>
 
-    <h1 class="mb-4">Create New Loan</h1>
+    <h1 class="mb-4 text-green">Create New Loan</h1>
     <form action="{{ route('loan.store') }}" method="POST" class="bg-white p-4 rounded shadow-sm">
         @csrf
         <div class="mb-3">
@@ -54,11 +61,11 @@
             <label for="image" class="form-label">Product Image</label>
             <input type="file" name="image" class="form-control" accept="image/*" required>
         </div>
-        <button type="submit" class="btn btn-primary">Submit</button>
+        <button type="submit" class="btn btn-green text-white">Submit</button>
     </form>
 
-    <h1 class="mt-5 mb-4">Loan Table</h1>
-    <table class="table table-dark table-hover">
+    <h1 class="mt-5 mb-4 text-green">Loan Table</h1>
+    <table class="table table-green table-hover">
       <thead>
         <tr>
           <th scope="col">Loan ID</th>
@@ -89,8 +96,8 @@
       </tbody>
     </table>
 
-    <h1 class="mt-5 mb-4">Payment Table</h1>
-    <table class="table table-dark table-hover">
+    <h1 class="mt-5 mb-4 text-green">Payment Table</h1>
+    <table class="table table-green table-hover">
       <thead>
         <tr>
           <th scope="col">Loan ID</th>
@@ -109,8 +116,8 @@
       </tbody>
     </table>
 
-    <h1 class="mt-5 mb-4">Loan Type Table</h1>
-    <table class="table table-dark table-hover">
+    <h1 class="mt-5 mb-4 text-green">Loan Type Table</h1>
+    <table class="table table-green table-hover">
       <thead>
         <tr>
           <th scope="col">Loan Type Name</th>
