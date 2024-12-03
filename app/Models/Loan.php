@@ -17,6 +17,7 @@ class Loan extends Model
         'date_applied',
         'date_approved',
         'date_disbursed',
-        'outstanding_balance'
+        'outstanding_balance',
+        'image_path' // Add this line
     ];
 }
