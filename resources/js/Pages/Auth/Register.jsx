@@ -1,6 +1,5 @@
 import InputError from "@/Components/InputError";
 import InputLabel from "@/Components/InputLabel";
-
 import PrimaryButton from "@/Components/PrimaryButton";
 import TextInput from "@/Components/TextInput";
 import GuestLayout from "@/Layouts/GuestLayout";
@@ -24,6 +23,7 @@ export default function Register() {
   });
 
   const [step, setStep] = useState(1);
+  const [validationErrors, setValidationErrors] = useState([]);
 
   const handleImageChange = (e) => {
     const file = e.target.files[0];
@@ -41,11 +41,30 @@ export default function Register() {
     }
   };
 
+  const validateFields = () => {
+    const errors = [];
+    if (!data.name) errors.push("Name is required");
+    if (!data.email) errors.push("Email is required");
+    if (!data.password) errors.push("Password is required");
+    if (data.password !== data.password_confirmation) errors.push("Passwords do not match");
+    if (!data.contact_information) errors.push("Contact Information is required");
+    if (!data.address) errors.push("Address is required");
+    if (!data.date_of_birth) errors.push("Date of Birth is required");
+    if (!data.nationality) errors.push("Nationality is required");
+    if (!data.profile_picture) errors.push("Profile Picture is required");
+    if (!data.id_upload) errors.push("ID Upload is required");
+    return errors;
+  };
+
   const submit = (e) => {
     e.preventDefault();
-    const formData = new FormData();
+    const errors = validateFields();
+    if (errors.length > 0) {
+      setValidationErrors(errors);
+      return;
+    }
 
-    // Exclude preview_image and id_preview_image
+    const formData = new FormData();
     Object.keys(data).forEach((key) => {
       if (key !== "preview_image" && key !== "id_preview_image" && data[key]) {
         formData.append(key, data[key]);
@@ -84,6 +103,15 @@ export default function Register() {
           Creation
         </span>
       </div>
+      {validationErrors.length > 0 && (
+        <div className="mb-4 text-red-600">
+          <ul>
+            {validationErrors.map((error, index) => (
+              <li key={index}>*{error}</li>
+            ))}
+          </ul>
+        </div>
+      )}
       <form onSubmit={submit} encType="multipart/form-data">
         {step === 1 && (
           <>
