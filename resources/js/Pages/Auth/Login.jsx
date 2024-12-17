@@ -1,7 +1,6 @@
 import Checkbox from "@/Components/Checkbox";
 import InputError from "@/Components/InputError";
 import InputLabel from "@/Components/InputLabel";
-import PrimaryButton from "@/Components/PrimaryButton";
 import TextInput from "@/Components/TextInput";
 import GuestLayout from "@/Layouts/GuestLayout";
 import { Head, Link, useForm } from "@inertiajs/react";
@@ -40,6 +39,7 @@ export default function Login({ status, canResetPassword }) {
             autoComplete="username"
             isFocused={true}
             onChange={(e) => setData("email", e.target.value)}
+            style={{ border: "1px solid #043C3C" }}
           />
 
           <InputError message={errors.email} className="mt-2" />
@@ -56,12 +56,13 @@ export default function Login({ status, canResetPassword }) {
             className="mt-1 block w-full"
             autoComplete="current-password"
             onChange={(e) => setData("password", e.target.value)}
+            style={{ border: "1px solid #043C3C" }}
           />
 
           <InputError message={errors.password} className="mt-2" />
         </div>
 
-        <div className="mt-4 block">
+        <div className="mt-4 block" style={{ display: "flex", justifyContent: "space-between" }}>
           <label className="flex items-center">
             <Checkbox
               name="remember"
@@ -69,10 +70,7 @@ export default function Login({ status, canResetPassword }) {
               onChange={(e) => setData("remember", e.target.checked)}
             />
             <span className="ms-2 text-sm text-gray-600">Remember me</span>
-          </label>
-        </div>
-
-        <div className="mt-4 flex items-center justify-end">
+          </label>{" "}
           {canResetPassword && (
             <Link
               href={route("password.request")}
@@ -81,10 +79,31 @@ export default function Login({ status, canResetPassword }) {
               Forgot your password?
             </Link>
           )}
+        </div>
 
-          <PrimaryButton className="ms-4" disabled={processing}>
-            Log in
-          </PrimaryButton>
+        <div className="center-column">
+          <button
+            style={{
+              backgroundColor: "#57DF98",
+              color: "black",
+              padding: "10px 20px",
+              borderRadius: "5px",
+              width: "100%",
+              marginLeft: "0px",
+              marginTop: "20px",
+            }}
+            className="ms-4"
+            disabled={processing}
+          >
+            Login
+          </button>
+
+          <span className="ms-2 text-sm text-gray-600" style={{ marginTop: "20px" }}>
+            Don't have an account?{" "}
+            <Link href={route("register")} className="underline">
+              Sign Up Here
+            </Link>
+          </span>
         </div>
       </form>
     </GuestLayout>

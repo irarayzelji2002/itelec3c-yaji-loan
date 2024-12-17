@@ -1,17 +1,17 @@
-import ApplicationLogo from "@/Components/ApplicationLogo";
-import { Link } from "@inertiajs/react";
+import logosDark from "/public/img/logosDark.png";
 
 export default function GuestLayout({ children }) {
   return (
-    <div className="flex min-h-screen flex-col items-center bg-gray-100 pt-6 sm:justify-center sm:pt-0">
-      <div>
-        <Link href="/">
-          <ApplicationLogo className="h-20 w-20 fill-current text-gray-500" />
-        </Link>
-      </div>
+    <div style={{ paddingBottom: "10%" }}>
+      <div className="guest flex items-center justify-center">
+        <img src={logosDark} alt="YAJI Corp Logo" className="logo" />
 
-      <div className="mt-6 w-full overflow-hidden bg-white px-6 py-4 shadow-md sm:max-w-md sm:rounded-lg">
-        {children}
+        <div
+          style={{ border: "1px solid #043C3C" }}
+          className="mt-6 w-full bg-white px-6 py-4 shadow-md sm:max-w-md sm:rounded-lg"
+        >
+          {children}
+        </div>
       </div>
     </div>
   );
