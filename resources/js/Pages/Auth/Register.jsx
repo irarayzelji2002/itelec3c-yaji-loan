@@ -20,6 +20,7 @@ export default function Register() {
     profile_picture: null,
     preview_image: null,
     id_upload: null,
+    id_preview_image: null,
   });
 
   const [step, setStep] = useState(1);
@@ -36,6 +37,7 @@ export default function Register() {
     const file = e.target.files[0];
     if (file) {
       setData("id_upload", file);
+      setData("id_preview_image", URL.createObjectURL(file));
     }
   };
 
@@ -43,9 +45,9 @@ export default function Register() {
     e.preventDefault();
     const formData = new FormData();
 
-    // Exclude preview_image
+    // Exclude preview_image and id_preview_image
     Object.keys(data).forEach((key) => {
-      if (key !== "preview_image" && data[key]) {
+      if (key !== "preview_image" && key !== "id_preview_image" && data[key]) {
         formData.append(key, data[key]);
       }
     });
@@ -223,14 +225,33 @@ export default function Register() {
             {/* ID Upload */}
             <div className="mt-4">
               <InputLabel htmlFor="id_upload" value="ID Upload" required={true} />
-              <input
-                type="file"
-                id="id_upload"
-                className="mt-1 block w-full"
-                onChange={handleIdChange}
-                accept="image/*"
-                required
-              />
+              <div className="mt-2 flex items-center justify-center">
+                <div className="relative">
+                  <div
+                    className="h-212 w-337 overflow-hidden bg-gray-100"
+                    style={{ padding: "20px" }}
+                  >
+                    {data.id_preview_image ? (
+                      <img
+                        src={data.id_preview_image}
+                        alt="ID Preview"
+                        className="h-full w-full object-cover"
+                      />
+                    ) : (
+                      <div className="flex h-full w-full items-center justify-center">
+                        <span className="text-center text-gray-400">Upload ID</span>
+                      </div>
+                    )}
+                  </div>
+                  <input
+                    type="file"
+                    id="id_upload"
+                    className="absolute inset-0 h-full w-full cursor-pointer opacity-0"
+                    onChange={handleIdChange}
+                    accept="image/*"
+                  />
+                </div>
+              </div>
               <InputError message={errors.id_upload} className="mt-2" />
             </div>
             <div className="mt-4 flex items-center justify-between">

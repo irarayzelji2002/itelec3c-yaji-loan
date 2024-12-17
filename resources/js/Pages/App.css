@@ -243,8 +243,8 @@
   flex-direction: column !important;
   margin: 0;
   padding: 0;
-  height: 100%;
-  background-image: url("your-image-path.jpg"); /* Replace with your image URL */
+  height: 100vh;
+  background-image: url("/img/bg.png"); /* Replace with your image URL */
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
@@ -255,6 +255,7 @@
   color: #000;
   position: relative;
   margin-bottom: 20%;
+  background-attachment: fixed;
 }
 
 /* Fading Overlay Effect */
@@ -265,7 +266,7 @@
   left: 0;
   width: 100%;
   height: 100%;
-  background: linear-gradient(to bottom, rgba(255, 255, 255, 0.8), rgba(104, 211, 145, 0.8));
+
   z-index: -1;
 }
 
