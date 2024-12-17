@@ -61,10 +61,25 @@ export default function Register() {
     <GuestLayout>
       <Head title="Register" />
       <div className="mb-4 flex items-center justify-center">
-        <span className={`mr-4 ${step === 1 ? "highlight font-bold" : "out-focus"}`}>Details</span>
-        <div className="w-8 border-t border-gray-400"></div>
-        <span className={`ml-4 ${step === 2 ? "highlight font-bold" : "out-focus"}`}>
+        <span
+          className={`mr-4 cursor-pointer ${step === 1 ? "highlight font-bold" : "out-focus"}`}
+          onClick={() => setStep(1)}
+        >
           Identification
+        </span>
+        <div className="w-8 border-t border-gray-400"></div>
+        <span
+          className={`mr-4 cursor-pointer ${step === 2 ? "highlight font-bold" : "out-focus"}`}
+          onClick={() => setStep(2)}
+        >
+          Verification
+        </span>
+        <div className="w-8 border-t border-gray-400"></div>
+        <span
+          className={`ml-4 cursor-pointer ${step === 3 ? "highlight font-bold" : "out-focus"}`}
+          onClick={() => setStep(3)}
+        >
+          Creation
         </span>
       </div>
       <form onSubmit={submit} encType="multipart/form-data">
@@ -100,42 +115,6 @@ export default function Register() {
                 required
               />
               <InputError message={errors.email} className="mt-2" />
-            </div>
-
-            {/* Password */}
-            <div className="mt-4">
-              <InputLabel htmlFor="password" value="Password" required={true} />
-              <TextInput
-                id="password"
-                type="password"
-                name="password"
-                value={data.password}
-                className="mt-1 block w-full"
-                autoComplete="new-password"
-                onChange={(e) => setData("password", e.target.value)}
-                required
-              />
-              <InputError message={errors.password} className="mt-2" />
-            </div>
-
-            {/* Password Confirmation */}
-            <div className="mt-4">
-              <InputLabel
-                htmlFor="password_confirmation"
-                value="Confirm Password"
-                required={true}
-              />
-              <TextInput
-                id="password_confirmation"
-                type="password"
-                name="password_confirmation"
-                value={data.password_confirmation}
-                className="mt-1 block w-full"
-                autoComplete="new-password"
-                onChange={(e) => setData("password_confirmation", e.target.value)}
-                required
-              />
-              <InputError message={errors.password_confirmation} className="mt-2" />
             </div>
 
             {/* Contact Information */}
@@ -256,6 +235,54 @@ export default function Register() {
             </div>
             <div className="mt-4 flex items-center justify-between">
               <PrimaryButton className="ms-4" onClick={() => setStep(1)}>
+                Back
+              </PrimaryButton>
+              <PrimaryButton className="ms-4" onClick={() => setStep(3)}>
+                Next
+              </PrimaryButton>
+            </div>
+          </>
+        )}
+        {step === 3 && (
+          <>
+            {/* Password */}
+            <div className="mt-4">
+              <InputLabel htmlFor="password" value="Password" required={true} />
+              <TextInput
+                id="password"
+                type="password"
+                name="password"
+                value={data.password}
+                className="mt-1 block w-full"
+                autoComplete="new-password"
+                onChange={(e) => setData("password", e.target.value)}
+                required
+              />
+              <InputError message={errors.password} className="mt-2" />
+            </div>
+
+            {/* Password Confirmation */}
+            <div className="mt-4">
+              <InputLabel
+                htmlFor="password_confirmation"
+                value="Confirm Password"
+                required={true}
+              />
+              <TextInput
+                id="password_confirmation"
+                type="password"
+                name="password_confirmation"
+                value={data.password_confirmation}
+                className="mt-1 block w-full"
+                autoComplete="new-password"
+                onChange={(e) => setData("password_confirmation", e.target.value)}
+                required
+              />
+              <InputError message={errors.password_confirmation} className="mt-2" />
+            </div>
+
+            <div className="mt-4 flex items-center justify-between">
+              <PrimaryButton className="ms-4" onClick={() => setStep(2)}>
                 Back
               </PrimaryButton>
               <PrimaryButton className="ms-4" disabled={processing}>
