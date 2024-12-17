@@ -1,3 +1,4 @@
+import TableContainer from "@/Components/TableContainer";
 import TextInput from "@/Components/TextInput";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 import { Head, usePage } from "@inertiajs/react";
@@ -105,20 +106,34 @@ export default function Dashboard() {
   };
 
   return (
-    <AuthenticatedLayout
-      header={<h2 className="text-xl font-semibold leading-tight text-gray-800">Dashboard</h2>}
-    >
+    <AuthenticatedLayout>
       <Head title="Dashboard" />
-
       <div className="py-12">
         <div className="mx-auto max-w-7xl sm:px-6 lg:px-8">
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+            <h1 className="welcome-text">
+              Welcome, <span className="highlighted-name">{user.name}</span>
+            </h1>
+            <button className="add-table-button">
+              <span className="plus-icon">+</span> Add Employee
+            </button>
+          </div>
+          <div className="center-column">
+            <TableContainer table={"Loan Table"} />
+            <TableContainer table={"Member Table"} />
+            <TableContainer table={"Payment Table"} />
+            <TableContainer table={"Loan Type Table"} />
+          </div>
+
           <div className="overflow-hidden bg-white shadow-sm sm:rounded-lg">
             <div className="p-6 text-gray-900">
               <div className="py-3">
                 <div
                   style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}
                 >
-                  <h1>Welcome, {user.name}</h1>
+                  <h1>
+                    Welcome, <span className="highlighted-name">{user.name}</span>
+                  </h1>
                   <TextInput
                     type="text"
                     value={searchQuery}

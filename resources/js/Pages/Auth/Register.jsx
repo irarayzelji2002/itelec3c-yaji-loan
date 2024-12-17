@@ -1,6 +1,5 @@
 import InputError from "@/Components/InputError";
 import InputLabel from "@/Components/InputLabel";
-
 import PrimaryButton from "@/Components/PrimaryButton";
 import TextInput from "@/Components/TextInput";
 import GuestLayout from "@/Layouts/GuestLayout";
@@ -20,9 +19,11 @@ export default function Register() {
     profile_picture: null,
     preview_image: null,
     id_upload: null,
+    id_preview_image: null,
   });
 
   const [step, setStep] = useState(1);
+  const [validationErrors, setValidationErrors] = useState([]);
 
   const handleImageChange = (e) => {
     const file = e.target.files[0];
@@ -36,16 +37,36 @@ export default function Register() {
     const file = e.target.files[0];
     if (file) {
       setData("id_upload", file);
+      setData("id_preview_image", URL.createObjectURL(file));
     }
+  };
+
+  const validateFields = () => {
+    const errors = [];
+    if (!data.name) errors.push("Name is required");
+    if (!data.email) errors.push("Email is required");
+    if (!data.password) errors.push("Password is required");
+    if (data.password !== data.password_confirmation) errors.push("Passwords do not match");
+    if (!data.contact_information) errors.push("Contact Information is required");
+    if (!data.address) errors.push("Address is required");
+    if (!data.date_of_birth) errors.push("Date of Birth is required");
+    if (!data.nationality) errors.push("Nationality is required");
+    if (!data.profile_picture) errors.push("Profile Picture is required");
+    if (!data.id_upload) errors.push("ID Upload is required");
+    return errors;
   };
 
   const submit = (e) => {
     e.preventDefault();
-    const formData = new FormData();
+    const errors = validateFields();
+    if (errors.length > 0) {
+      setValidationErrors(errors);
+      return;
+    }
 
-    // Exclude preview_image
+    const formData = new FormData();
     Object.keys(data).forEach((key) => {
-      if (key !== "preview_image" && data[key]) {
+      if (key !== "preview_image" && key !== "id_preview_image" && data[key]) {
         formData.append(key, data[key]);
       }
     });
@@ -61,12 +82,36 @@ export default function Register() {
     <GuestLayout>
       <Head title="Register" />
       <div className="mb-4 flex items-center justify-center">
-        <span className={`mr-4 ${step === 1 ? "highlight font-bold" : "out-focus"}`}>Details</span>
-        <div className="w-8 border-t border-gray-400"></div>
-        <span className={`ml-4 ${step === 2 ? "highlight font-bold" : "out-focus"}`}>
+        <span
+          className={`mr-4 cursor-pointer ${step === 1 ? "highlight font-bold" : "out-focus"}`}
+          onClick={() => setStep(1)}
+        >
           Identification
         </span>
+        <div className="w-8 border-t border-gray-400"></div>
+        <span
+          className={`mr-4 cursor-pointer ${step === 2 ? "highlight font-bold" : "out-focus"}`}
+          onClick={() => setStep(2)}
+        >
+          Verification
+        </span>
+        <div className="w-8 border-t border-gray-400"></div>
+        <span
+          className={`ml-4 cursor-pointer ${step === 3 ? "highlight font-bold" : "out-focus"}`}
+          onClick={() => setStep(3)}
+        >
+          Creation
+        </span>
       </div>
+      {validationErrors.length > 0 && (
+        <div className="mb-4 text-red-600">
+          <ul>
+            {validationErrors.map((error, index) => (
+              <li key={index}>*{error}</li>
+            ))}
+          </ul>
+        </div>
+      )}
       <form onSubmit={submit} encType="multipart/form-data">
         {step === 1 && (
           <>
@@ -100,42 +145,6 @@ export default function Register() {
                 required
               />
               <InputError message={errors.email} className="mt-2" />
-            </div>
-
-            {/* Password */}
-            <div className="mt-4">
-              <InputLabel htmlFor="password" value="Password" required={true} />
-              <TextInput
-                id="password"
-                type="password"
-                name="password"
-                value={data.password}
-                className="mt-1 block w-full"
-                autoComplete="new-password"
-                onChange={(e) => setData("password", e.target.value)}
-                required
-              />
-              <InputError message={errors.password} className="mt-2" />
-            </div>
-
-            {/* Password Confirmation */}
-            <div className="mt-4">
-              <InputLabel
-                htmlFor="password_confirmation"
-                value="Confirm Password"
-                required={true}
-              />
-              <TextInput
-                id="password_confirmation"
-                type="password"
-                name="password_confirmation"
-                value={data.password_confirmation}
-                className="mt-1 block w-full"
-                autoComplete="new-password"
-                onChange={(e) => setData("password_confirmation", e.target.value)}
-                required
-              />
-              <InputError message={errors.password_confirmation} className="mt-2" />
             </div>
 
             {/* Contact Information */}
@@ -244,18 +253,85 @@ export default function Register() {
             {/* ID Upload */}
             <div className="mt-4">
               <InputLabel htmlFor="id_upload" value="ID Upload" required={true} />
-              <input
-                type="file"
-                id="id_upload"
-                className="mt-1 block w-full"
-                onChange={handleIdChange}
-                accept="image/*"
-                required
-              />
+              <div className="mt-2 flex items-center justify-center">
+                <div className="relative">
+                  <div
+                    className="h-212 w-337 overflow-hidden bg-gray-100"
+                    style={{ padding: "20px" }}
+                  >
+                    {data.id_preview_image ? (
+                      <img
+                        src={data.id_preview_image}
+                        alt="ID Preview"
+                        className="h-full w-full object-cover"
+                      />
+                    ) : (
+                      <div className="flex h-full w-full items-center justify-center">
+                        <span className="text-center text-gray-400">Upload ID</span>
+                      </div>
+                    )}
+                  </div>
+                  <input
+                    type="file"
+                    id="id_upload"
+                    className="absolute inset-0 h-full w-full cursor-pointer opacity-0"
+                    onChange={handleIdChange}
+                    accept="image/*"
+                  />
+                </div>
+              </div>
               <InputError message={errors.id_upload} className="mt-2" />
             </div>
             <div className="mt-4 flex items-center justify-between">
               <PrimaryButton className="ms-4" onClick={() => setStep(1)}>
+                Back
+              </PrimaryButton>
+              <PrimaryButton className="ms-4" onClick={() => setStep(3)}>
+                Next
+              </PrimaryButton>
+            </div>
+          </>
+        )}
+        {step === 3 && (
+          <>
+            {/* Password */}
+            <div className="mt-4">
+              <InputLabel htmlFor="password" value="Password" required={true} />
+              <TextInput
+                id="password"
+                type="password"
+                name="password"
+                value={data.password}
+                className="mt-1 block w-full"
+                autoComplete="new-password"
+                onChange={(e) => setData("password", e.target.value)}
+                required
+              />
+              <InputError message={errors.password} className="mt-2" />
+            </div>
+
+            {/* Password Confirmation */}
+            <div className="mt-4">
+              <InputLabel
+                htmlFor="password_confirmation"
+                value="Confirm Password"
+                required={true}
+              />
+              <TextInput
+                id="password_confirmation"
+                type="password"
+                name="password_confirmation"
+                value={data.password_confirmation}
+                className="mt-1 block w-full"
+                autoComplete="new-password"
+                onChange={(e) => setData("password_confirmation", e.target.value)}
+                required
+              />
+              <InputError message={errors.password_confirmation} className="mt-2" />
+            </div>
+
+            <div className="mt-4 flex items-center justify-between">
+              <PrimaryButton className="ms-4" onClick={() => setStep(2)}>
                 Back
               </PrimaryButton>
               <PrimaryButton className="ms-4" disabled={processing}>

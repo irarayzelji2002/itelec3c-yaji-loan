@@ -1,8 +1,9 @@
 import "@/Pages/App.css";
 import logo from "/public/img/logosText.png";
 
-const Navbar = ({ auth }) => {
+const Navbar = () => {
   return (
+    // { auth }
     <nav className="navbar">
       <div className="logo-container">
         <img src={logo} alt="YAJI Corp Logo" className="logo" />
@@ -19,7 +20,7 @@ const Navbar = ({ auth }) => {
           About Us
         </a>
 
-        <div>
+        {/* <div>
           {auth.user ? (
             <a href={route("dashboard")} className="apply-button">
               Dashboard
@@ -27,7 +28,7 @@ const Navbar = ({ auth }) => {
           ) : (
             <button className="apply-button">Apply for Loan</button>
           )}
-        </div>
+        </div> */}
       </div>
     </nav>
   );
