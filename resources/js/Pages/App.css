@@ -285,6 +285,74 @@
   opacity: 0.5;
 }
 
+.highlighted-name {
+  color: #00a878; /* Change to your desired color */
+}
+
+.nav-bar-logged {
+  color: aliceblue;
+  background-color: #043c3c !important;
+}
+.table-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  background-color: #043c3c;
+  border-radius: 20px;
+  margin-top: 20px;
+  padding: 12px;
+  padding-bottom: 4px;
+  max-width: 1000px;
+}
+.placeholder-table {
+  border-radius: 8px;
+}
+.view-button {
+  width: 100%;
+  background-color: #f0f0f0;
+  padding: 12px;
+  margin: 12px;
+  border-radius: 6px;
+  border: 2px solid transparent;
+}
+.view-button:hover {
+  border: 2px solid #57df98;
+}
+
+.welcome-text {
+  font-size: 30px;
+}
+
+/* ...existing code... */
+
+.add-table-button {
+  display: flex;
+  align-items: center;
+  background-color: #043c3c;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 50px;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.add-table-button .plus-icon {
+  display: inline-block;
+  width: 24px;
+  height: 24px;
+  margin-right: 8px;
+  background-color: white;
+  color: #043c3c;
+  border-radius: 50%;
+  text-align: center;
+  line-height: 24px;
+  font-weight: bold;
+}
+
+/* ...existing code... */
+
 /* Mobile Responsiveness */
 @media screen and (max-width: 768px) {
   .container {
