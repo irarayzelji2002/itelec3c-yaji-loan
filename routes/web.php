@@ -30,6 +30,9 @@ Route::middleware('auth')->group(function () {
         // abort_if(!Auth::user()->hasRole('admin'), 403);
         return User::with('roles')->get();
     });
+    Route::get('/loan-requests', function () {
+        return Inertia::render('LoanRequests');
+    })->name('loan.requests');
 });
 
 Route::get('/loan', [ViewTable::class, 'ViewTables'])->name('view.loan');
@@ -39,5 +42,10 @@ Route::post('/loan_type', [ViewTable::class, 'storeLoanType'])->name('loan_type.
 
 Route::get('/landing', [ViewTable::class, 'showLanding']);
 Route::get('/signUp', [ViewTable::class, 'register']);
+
+// Add the new route for TableView
+Route::get('/table-view', function () {
+    return Inertia::render('TableView');
+})->middleware(['auth', 'verified'])->name('table.view');
 
 require __DIR__.'/auth.php';

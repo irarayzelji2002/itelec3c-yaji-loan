@@ -1,4 +1,4 @@
-import TableContainer from "@/Components/TableContainer";
+import RequestPopUp from "@/Components/RequestPopUp";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 import { Head, usePage } from "@inertiajs/react";
 
@@ -16,15 +16,11 @@ export default function Dashboard() {
             <h1 className="welcome-text">
               Welcome, <span className="highlighted-name">{user.name}</span>
             </h1>
-            <button className="add-table-button">
-              <span className="plus-icon">+</span> Add Employee
-            </button>
           </div>
           <div className="center-column">
-            <TableContainer table={"Loan Table"} />
-            <TableContainer table={"Member Table"} />
-            <TableContainer table={"Payment Table"} />
-            <TableContainer table={"Loan Type Table"} />
+            <RequestPopUp loanNo={12} />
+            <RequestPopUp loanNo={23} />
+            <RequestPopUp loanNo={87} />
           </div>
         </div>
       </div>
