@@ -386,6 +386,7 @@
 .accept-button:hover {
   background-color: #46bd7f;
 }
+
 .decline-button {
   background-color: #fafafa;
   color: black;
@@ -412,6 +413,17 @@
   border-top-right-radius: 0%;
   flex-direction: column;
 }
+.request-body-2 {
+  width: 100%;
+  display: flex;
+  border: 1px solid #043c3c;
+  background-color: #f0f0f0;
+  padding: 20px;
+
+  margin-bottom: 20px;
+
+  flex-direction: column;
+}
 
 .request-row {
   display: flex;
@@ -426,6 +438,160 @@
   margin-left: 10px;
   opacity: 0.8;
 }
+
+.loan-wallet-tabs {
+  width: 100%;
+  margin-top: 12px;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.tabs {
+  display: flex;
+  cursor: pointer;
+}
+
+.tab {
+  flex: 1;
+  padding: 10px;
+  text-align: center;
+  background-color: #c3efc1;
+  color: #183d36;
+  transition:
+    background-color 0.3s,
+    color 0.3s;
+}
+
+.tab.active {
+  background-color: #183d36;
+  color: #c3efc1;
+}
+
+.content-container {
+  background-color: #183d36;
+  min-height: 100px;
+  display: flex;
+  padding: 20px;
+  width: 100%;
+}
+
+.tab-content {
+  padding: 20px;
+  color: white;
+  width: 100%;
+}
+
+.tab-content h1 {
+  font-size: 50px;
+}
+.tab-content h3 {
+  color: #57df98;
+}
+.tab-content h2 {
+  text-align: end;
+}
+.column-down {
+  display: flex;
+  flex-direction: column;
+  font-weight: bold;
+}
+
+.column-down h2 {
+  font-size: 40px;
+  margin-bottom: 10px;
+}
+
+/* Container */
+.progress-bar-container {
+  width: 100%;
+  margin: 10px 0;
+}
+
+/* Header Section */
+.progress-bar-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 5px;
+}
+
+.label {
+  font-size: 0.9rem;
+  color: #4a4a4a;
+  font-weight: 500;
+}
+
+.used-amount {
+  font-size: 1rem;
+  font-weight: bold;
+  color: #000;
+}
+
+/* Progress Bar Background */
+.progress-bar-background {
+  width: 100%;
+  height: 12px;
+  background-color: #e5e5e5;
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+/* Progress Bar Fill */
+.progress-bar-fill {
+  height: 100%;
+  background: linear-gradient(to right, #80d8a9, #004d40);
+  transition: width 0.3s ease-in-out;
+}
+
+/* Dropdown Wrapper */
+.dropdown {
+  margin: 15px 0;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  background-color: #f9f9f9;
+}
+
+/* Dropdown Header */
+.dropdown-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 16px;
+  cursor: pointer;
+  font-weight: bold;
+  color: #004d40;
+  background-color: #d7f0e9;
+}
+
+.dropdown-header:hover {
+  background-color: #c0e5dc;
+}
+
+/* Dropdown Icon */
+.dropdown-icon {
+  transition: transform 0.3s ease;
+}
+
+.dropdown-icon.open {
+  transform: rotate(180deg);
+}
+
+/* Dropdown Content */
+.dropdown-content {
+  padding: 16px;
+  background-color: #fff;
+  border-top: 1px solid #e0e0e0;
+}
+
+.amount-input {
+  width: 100%;
+  padding: 10px;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+  color: #333;
+}
+
 /* ...existing code... */
 
 /* Mobile Responsiveness */

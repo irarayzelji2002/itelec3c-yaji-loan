@@ -51,8 +51,8 @@ export default function Register() {
     if (!data.address) errors.push("Address is required");
     if (!data.date_of_birth) errors.push("Date of Birth is required");
     if (!data.nationality) errors.push("Nationality is required");
-    if (!data.profile_picture) errors.push("Profile Picture is required");
-    if (!data.id_upload) errors.push("ID Upload is required");
+    // if (!data.profile_picture) errors.push("Profile Picture is required");
+    // if (!data.id_upload) errors.push("ID Upload is required");
     return errors;
   };
 

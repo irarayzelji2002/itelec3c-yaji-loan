@@ -33,6 +33,15 @@ Route::middleware('auth')->group(function () {
     Route::get('/loan-requests', function () {
         return Inertia::render('LoanRequests');
     })->name('loan.requests');
+    Route::get('/member-view', function () {
+        return Inertia::render('MemberView');
+    })->name('member.view');
+    Route::get('/loan-breakdown', function () {
+        return Inertia::render('LoanBreakdown');
+    })->name('loan.breakdown');
+    Route::get('/payment', function () {
+        return Inertia::render('PaymentPage');
+    })->name('payment.page');
 });
 
 Route::get('/loan', [ViewTable::class, 'ViewTables'])->name('view.loan');
