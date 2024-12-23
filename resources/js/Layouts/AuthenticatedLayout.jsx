@@ -37,6 +37,13 @@ export default function AuthenticatedLayout({ header, children }) {
                 >
                   Loan Requests
                 </NavLink>
+                <NavLink
+                  style={{ fontWeight: "aliceblue" }}
+                  href={route("member.view")}
+                  active={route().current("member.view")}
+                >
+                  Member View
+                </NavLink>
               </div>
             </div>
 
@@ -113,6 +120,9 @@ export default function AuthenticatedLayout({ header, children }) {
               active={route().current("loan.requests")}
             >
               Loan Requests
+            </ResponsiveNavLink>
+            <ResponsiveNavLink href={route("member.view")} active={route().current("member.view")}>
+              Member View
             </ResponsiveNavLink>
           </div>
 

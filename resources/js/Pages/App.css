@@ -426,6 +426,111 @@
   margin-left: 10px;
   opacity: 0.8;
 }
+
+.loan-wallet-tabs {
+  width: 100%;
+  margin-top: 12px;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.tabs {
+  display: flex;
+  cursor: pointer;
+}
+
+.tab {
+  flex: 1;
+  padding: 10px;
+  text-align: center;
+  background-color: #c3efc1;
+  color: #183d36;
+  transition:
+    background-color 0.3s,
+    color 0.3s;
+}
+
+.tab.active {
+  background-color: #183d36;
+  color: #c3efc1;
+}
+
+.content-container {
+  background-color: #183d36;
+  min-height: 100px;
+  display: flex;
+  padding: 20px;
+}
+
+.tab-content {
+  padding: 20px;
+  color: white;
+  width: 100%;
+}
+
+.tab-content h1 {
+  font-size: 50px;
+}
+.tab-content h3 {
+  color: #57df98;
+}
+.tab-content h2 {
+  text-align: end;
+}
+.column-down {
+  display: flex;
+  flex-direction: column;
+  font-weight: bold;
+}
+
+.column-down h2 {
+  font-size: 40px;
+  margin-bottom: 10px;
+}
+
+/* Container */
+.progress-bar-container {
+  width: 100%;
+  margin: 10px 0;
+}
+
+/* Header Section */
+.progress-bar-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 5px;
+}
+
+.label {
+  font-size: 0.9rem;
+  color: #4a4a4a;
+  font-weight: 500;
+}
+
+.used-amount {
+  font-size: 1rem;
+  font-weight: bold;
+  color: #000;
+}
+
+/* Progress Bar Background */
+.progress-bar-background {
+  width: 100%;
+  height: 12px;
+  background-color: #e5e5e5;
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+/* Progress Bar Fill */
+.progress-bar-fill {
+  height: 100%;
+  background: linear-gradient(to right, #80d8a9, #004d40);
+  transition: width 0.3s ease-in-out;
+}
+
 /* ...existing code... */
 
 /* Mobile Responsiveness */
