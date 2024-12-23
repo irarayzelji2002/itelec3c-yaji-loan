@@ -1,5 +1,5 @@
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
-import { Head, usePage } from "@inertiajs/react";
+import { Head, Link, usePage } from "@inertiajs/react";
 
 export default function PaymentPage() {
   const user = usePage().props.auth.user;
@@ -41,9 +41,9 @@ export default function PaymentPage() {
               <span style={{ color: "#57df98" }}>Wallet Balance: ₱ 0.00</span>
 
               <div style={{ display: "flex", gap: "1rem" }}>
-                <button className="accept-button" style={{ marginLeft: "auto" }}>
+                <Link href="/success" className="accept-button" style={{ marginLeft: "auto" }}>
                   Pay Now
-                </button>
+                </Link>
               </div>
             </div>
           </div>
