@@ -1,10 +1,14 @@
+import { Link } from "@inertiajs/react";
+
 function MyLoan({ loanNo }) {
   return (
     <>
       <div className="request-header">
         Loan Request #{loanNo}
         <div style={{ gap: "1rem", display: "flex" }}>
-          <button className="accept-button">Pay Now</button>
+          <Link href="/loan-breakdown" className="accept-button">
+            Pay Now
+          </Link>
         </div>
       </div>
       <div className="request-body">
