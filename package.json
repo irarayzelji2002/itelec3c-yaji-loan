@@ -5,7 +5,8 @@
     "build": "vite build",
     "dev": "vite",
     "lint": "eslint resources/js --ext .js,.jsx --ignore-path .gitignore --fix",
-    "format": "prettier --write ."
+    "format": "prettier --write .",
+    "dev:all": "concurrently \"npm run dev\" \"php artisan serve\""
   },
   "devDependencies": {
     "@headlessui/react": "^2.0.0",
