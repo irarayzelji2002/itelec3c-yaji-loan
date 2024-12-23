@@ -1,5 +1,6 @@
 import MyLoan from "@/Components/MyLoan";
 import ProgressBar from "@/Components/ProgressBar";
+import Reminders from "@/Components/Reminders";
 import WalletTabs from "@/Components/WalletTabs";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 import { Head, usePage } from "@inertiajs/react";
@@ -29,6 +30,11 @@ export default function MemberView() {
           <MyLoan loanNo={1} />
           <MyLoan loanNo={2} />
           <MyLoan loanNo={3} />
+          <div className="column-down">
+            <h2>Reminders</h2>
+            <Reminders reminder={"Please update your email."} title={"Account Setup"} />
+            <Reminders reminder={"Please settle your loan now."} title={"Loan Reminder"} />
+          </div>
         </div>
       </div>
     </AuthenticatedLayout>
