@@ -6,7 +6,8 @@
     "dev": "vite",
     "lint": "eslint resources/js --ext .js,.jsx --ignore-path .gitignore --fix",
     "format": "prettier --write .",
-    "dev:all": "concurrently \"npm run dev\" \"php artisan serve\""
+    "dev:all": "concurrently \"npm run dev\" \"php artisan serve --host=localhost --port=8080\" \"start http://localhost:8080\"",
+    "start": "npm run dev:all"
   },
   "devDependencies": {
     "@headlessui/react": "^2.0.0",
