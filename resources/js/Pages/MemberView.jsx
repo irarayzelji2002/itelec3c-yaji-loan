@@ -3,7 +3,7 @@ import ProgressBar from "@/Components/ProgressBar";
 import Reminders from "@/Components/Reminders";
 import WalletTabs from "@/Components/WalletTabs";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
-import { Head, usePage } from "@inertiajs/react";
+import { Head, Link, usePage } from "@inertiajs/react";
 
 export default function MemberView() {
   const user = usePage().props.auth.user;
@@ -19,9 +19,9 @@ export default function MemberView() {
             <h1 className="welcome-text">
               Welcome, <span className="highlighted-name">{user.name}</span>
             </h1>
-            <button className="add-table-button">
+            <Link href="/application-form" className="add-table-button">
               <span className="plus-icon">+</span> Apply for a Loan
-            </button>
+            </Link>
           </div>
           <div className="center-column">
             <WalletTabs />

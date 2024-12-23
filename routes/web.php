@@ -42,6 +42,12 @@ Route::middleware('auth')->group(function () {
     Route::get('/payment', function () {
         return Inertia::render('PaymentPage');
     })->name('payment.page');
+    Route::get('/application-form', function () {
+        return Inertia::render('ApplicationForm');
+    })->name('application.form');
+    Route::get('/success', function () {
+        return Inertia::render('SuccessPage');
+    })->name('success.page');
 });
 
 Route::get('/loan', [ViewTable::class, 'ViewTables'])->name('view.loan');
