@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class LoanType extends Model
 {
 
-    protected $table = 'loan_table';
+    protected $table = 'loan_types';
     protected $fillable = [
         'loan_type_name',
         'description',
