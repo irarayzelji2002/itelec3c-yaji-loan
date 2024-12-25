@@ -24,31 +24,52 @@ class DatabaseSeeder extends Seeder
 
         // Create an admin user
         $adminUser = User::factory()->create([
-            'name' => 'Admin User',
+            'first_name' => 'Admin',
+            'last_name' => 'User',
             'email' => 'admin@yaji.com',
             'password' => bcrypt('admin123'),
-            'contact_information' => '09123456789',
-            'address' => 'Manila, Philippines',
+            'gender' => 'Male',
+            'birth_date' => '1990-01-01',
+            'nationality' => 'Filipino',
+            'phone_number' => '09123456789',
+            'street' => 'Sample Street',
+            'barangay' => 'Sample Barangay',
+            'city' => 'Manila',
+            'province' => 'Metro Manila',
         ]);
         $adminUser->assignRole($adminRole);
 
         // Create an employee user
         $employeeUser = User::factory()->create([
-            'name' => 'Employee User',
+            'first_name' => 'Employee',
+            'last_name' => 'User',
             'email' => 'employee@yaji.com',
             'password' => bcrypt('admin123'),
-            'contact_information' => '09999999999',
-            'address' => 'Bulacan, Philippines',
+            'gender' => 'Male',
+            'birth_date' => '1990-01-01',
+            'nationality' => 'Filipino',
+            'phone_number' => '09999999999',
+            'street' => 'Sample Street',
+            'barangay' => 'Sample Barangay',
+            'city' => 'Meycauayan',
+            'province' => 'Bulacan',
         ]);
         $employeeUser->assignRole($employeeRole);
 
         // Create a member user
         $memberUser = User::factory()->create([
-            'name' => 'Member User',
+            'first_name' => 'Member',
+            'last_name' => 'User',
             'email' => 'member@yaji.com',
             'password' => bcrypt('admin123'),
-            'contact_information' => '09888888888',
-            'address' => 'Makati, Philippines',
+            'gender' => 'Male',
+            'birth_date' => '1990-01-01',
+            'nationality' => 'Filipino',
+            'phone_number' => '09888888888',
+            'street' => 'Sample Street',
+            'barangay' => 'Sample Barangay',
+            'city' => 'Makati',
+            'province' => 'Metro Manila',
         ]);
         $memberUser->assignRole($memberRole);
 
