@@ -6,8 +6,8 @@ use App\Models\User;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Spatie\Permission\Models\Role;
-use App\Models\Loan_Model;
-use App\Models\payment_model;
+use App\Models\LoanType;
+use App\Models\Payment;
 use App\Models\Loan;
 
 class DatabaseSeeder extends Seeder
@@ -53,62 +53,62 @@ class DatabaseSeeder extends Seeder
         $memberUser->assignRole($memberRole);
 
         // Create loan types
-        Loan_Model::create([
+        LoanType::create([
             'loan_type_name' => 'Personal Loan',
             'description' => 'A loan for personal use.',
             'image_path' => 'images/loan_type1.jpg'
         ]);
 
-        Loan_Model::create([
+        LoanType::create([
             'loan_type_name' => 'Home Loan',
             'description' => 'A loan for home purchase.',
             'image_path' => 'images/loan_type2.jpg'
         ]);
 
-        Loan_Model::create([
+        LoanType::create([
             'loan_type_name' => 'Car Loan',
             'description' => 'A loan for car purchase.',
             'image_path' => 'images/loan_type3.jpg'
         ]);
 
-        Loan_Model::create([
+        LoanType::create([
             'loan_type_name' => 'Education Loan',
             'description' => 'A loan for education purposes.',
             'image_path' => 'images/loan_type4.jpg'
         ]);
 
-        Loan_Model::create([
+        LoanType::create([
             'loan_type_name' => 'Business Loan',
             'description' => 'A loan for business purposes.',
             'image_path' => 'images/loan_type5.jpg'
         ]);
 
         // Create payments
-        payment_model::create([
+        Payment::create([
             'loan_id' => 1,
             'payment_amount' => 5000,
             'payment_date' => '2021-12-01',
             'image_path' => 'images/payment1.jpg'
         ]);
-        payment_model::create([
+        Payment::create([
             'loan_id' => 2,
             'payment_amount' => 6000,
             'payment_date' => '2021-12-02',
             'image_path' => 'images/payment2.jpg'
         ]);
-        payment_model::create([
+        Payment::create([
             'loan_id' => 3,
             'payment_amount' => 7000,
             'payment_date' => '2021-12-03',
             'image_path' => 'images/payment3.jpg'
         ]);
-        payment_model::create([
+        Payment::create([
             'loan_id' => 4,
             'payment_amount' => 8000,
             'payment_date' => '2021-12-04',
             'image_path' => 'images/payment4.jpg'
         ]);
-        payment_model::create([
+        Payment::create([
             'loan_id' => 5,
             'payment_amount' => 9000,
             'payment_date' => '2021-12-05',

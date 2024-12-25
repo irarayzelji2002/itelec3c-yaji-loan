@@ -4,8 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Loan;
-use App\Models\payment_model;
-use App\Models\Loan_Model;
+use App\Models\Payment;
+use App\Models\LoanType;
 use App\Models\Member;
 use Inertia\Inertia;
 
@@ -33,23 +33,23 @@ class ViewTable extends Controller
         }
 
         if($searchPayment){
-            $payment_model = payment_model::where('loan_id', 'like', '%'.$searchPayment.'%')
+            $Payment = Payment::where('loan_id', 'like', '%'.$searchPayment.'%')
                 ->orWhere('payment_amount', 'like', '%'.$searchPayment.'%')
                 ->orWhere('payment_date', 'like', '%'.$searchPayment.'%')
                 ->get();
         } else {
-            $payment_model = payment_model::all();
+            $Payment = Payment::all();
         }
 
         if($searchLoanType){
-            $Loan_Model = Loan_Model::where('loan_type_name', 'like', '%'.$searchLoanType.'%')
+            $LoanType = LoanType::where('loan_type_name', 'like', '%'.$searchLoanType.'%')
                 ->orWhere('description', 'like', '%'.$searchLoanType.'%')
                 ->get();
         } else {
-            $Loan_Model = Loan_Model::all();
+            $LoanType = LoanType::all();
         }
 
-        return view('viewtables', compact('Loan', 'payment_model', 'Loan_Model'));
+        return view('viewtables', compact('Loan', 'Payment', 'LoanType'));
     }
 
     public function showLanding() {
@@ -71,9 +71,9 @@ class ViewTable extends Controller
             'outstanding_balance' => 'required|numeric',
             'image' => 'required|image', // Validate that the image is required and is an image file
         ]);
-    
+
         $imagePath = $request->file('image')->store('prod', 'public');
-    
+
         Loan::create([
             'borrower_id' => $request->borrower_id,
             'loan_amount' => $request->loan_amount,
@@ -85,7 +85,7 @@ class ViewTable extends Controller
             'outstanding_balance' => $request->outstanding_balance,
             'image_path' => $imagePath, // Save the stored image path
         ]);
-    
+
         return redirect()->back()->with('success', 'Loan created successfully.');
     }
 
@@ -99,7 +99,7 @@ class ViewTable extends Controller
 
         $imagePath = $request->file('image')->store('payments', 'public');
 
-        payment_model::create([
+        Payment::create([
             'loan_id' => $request->loan_id,
             'payment_amount' => $request->payment_amount,
             'payment_date' => $request->payment_date,
@@ -118,7 +118,7 @@ class ViewTable extends Controller
 
         $imagePath = $request->file('image')->store('loan_types', 'public');
 
-        Loan_Model::create([
+        LoanType::create([
             'loan_type_name' => $request->loan_type_name,
             'description' => $request->description,
             'image_path' => $imagePath, // Save the stored image path

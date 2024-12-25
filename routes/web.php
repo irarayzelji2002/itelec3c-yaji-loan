@@ -1,10 +1,15 @@
 <?php
 
-use App\Http\Controllers\ProfileController;
-use App\Models\User;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
+use App\Models\User;
+use App\Models\LoanType;
+use App\Models\Payment;
 use App\Http\Controllers\ViewTable;
+use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\LoanController;
+use App\Http\Controllers\PaymentController;
+use App\Http\Controllers\LoanTypeController;
 use Inertia\Inertia;
 use Illuminate\Support\Facades\Auth;
 
@@ -51,9 +56,9 @@ Route::middleware('auth')->group(function () {
 });
 
 Route::get('/loan', [ViewTable::class, 'ViewTables'])->name('view.loan');
-Route::post('/loan', [ViewTable::class, 'store'])->name('loan.store');
-Route::post('/payment', [ViewTable::class, 'storePayment'])->name('payment.store');
-Route::post('/loan_type', [ViewTable::class, 'storeLoanType'])->name('loan_type.store');
+Route::get('/loans', [LoanController::class, 'index'])->name('loans.index');
+Route::get('/payments', [PaymentController::class, 'index'])->name('payments.index');
+Route::get('/loan-types', [LoanTypeController::class, 'index'])->name('loan-types.index');
 
 Route::get('/landing', [ViewTable::class, 'showLanding']);
 Route::get('/signUp', [ViewTable::class, 'register']);
