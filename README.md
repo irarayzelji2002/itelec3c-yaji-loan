@@ -1,66 +1,139 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+<div align="center">
+  <img src="https://i.ibb.co/jrRjWWD/logo-with-text-green-bg.png">
+</div>
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+# YAJI Loan: A Modern Loan Management System
 
-## About Laravel
+**YAJI Loan** is a comprehensive web-based loan management system that streamlines the process of loan applications, payments, and tracking. It provides an intuitive interface for both borrowers and administrators to manage loan transactions efficiently.
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+## 📚 Table of Contents
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+1. [Introduction](#-introduction)
+2. [Features](#-features)
+3. [Installation and Setup](#-installation-and-setup)
+4. [Technologies Used](#-technologies-used)
+5. [Screenshots & Demo](#-screenshots--demo)
+6. [Acknowledgments](#-acknowledgments)
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+## 📖 Introduction
 
-## Learning Laravel
+YAJI Loan is designed to simplify the loan management process by providing a user-friendly platform for loan applications, payment tracking, and account management. The system features robust authentication, real-time loan status updates, and comprehensive reporting capabilities.
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+## ✨ Features
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+- **User Authentication & Profile Management**
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+  - Secure login and registration system
+  - Profile customization with image upload
+  - Role-based access control
 
-## Laravel Sponsors
+- **Loan Management**
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+  - Multiple loan type support
+  - Detailed loan application form
+  - Loan status tracking
+  - Payment scheduling and tracking
+  - Loan breakdown visualization
 
-### Premium Partners
+- **Payment Processing**
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[WebReinvent](https://webreinvent.com/)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Jump24](https://jump24.co.uk)**
-- **[Redberry](https://redberry.international/laravel/)**
-- **[Active Logic](https://activelogic.com)**
-- **[byte5](https://byte5.de)**
-- **[OP.GG](https://op.gg)**
+  - Secure payment processing
+  - Payment history tracking
+  - Real-time balance updates
+  - Transaction receipts
 
-## Contributing
+- **Dashboard & Reporting**
+  - Comprehensive dashboard for loan overview
+  - Transaction history
+  - Payment schedules
+  - Progress tracking with visual indicators
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+## 💻 Installation and Setup
 
-## Code of Conduct
+### ✅ Prerequisites
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+### 1. Node.js Version
 
-## Security Vulnerabilities
+This web app was made with `Node.js v20.16.0`, but you may download the latest LTS version.
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+**Download Link:** [Node.js LTS](https://nodejs.org/)
 
-## License
+### 2. Laravel/PHP/Composer Version
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+Laravel 10.x requires PHP 8.1+ and Composer 2.x
+
+**Download Links:**
+
+- [PHP](https://www.php.net/downloads.php)
+- [Composer](https://getcomposer.org/download/)
+- [Laravel](https://laravel.com/docs/10.x)
+
+### ⚙️ Installation
+
+### Step 1: Clone the repository and navigate to the project folder
+
+```bash
+git clone https://github.com/irarayzelji2002/itelec3c-yaji-loan.git
+cd itelec3c-yaji-loan
+```
+
+### Step 2: Install front end and back end depencencies
+
+Install all necessary dependencies and set up the environment:
+
+```bash
+composer install
+npm install
+cp .env.example .env
+php artisan key:generate
+php artisan migrate --seed
+```
+
+### ▶️ Run the app
+
+This will run the Laravel app in `http://localhost:8080`, and React app in `http://localhost:5173`.
+
+```bash
+npm run dev
+php artisan serve
+```
+
+or you can use this command for simplicity `npm start`.
+
+## 🤖 Technologies Used
+
+- **Front End:** \
+   React.js, Inertia.js, Tailwind CSS, Bootstrap
+
+- **Back End:** \
+   Laravel, PHP, MySQL
+
+- **UI/UX & Graphics:** \
+  [Figma](https://www.figma.com/design/zv3wCInqiP1nDrfRChydc4/loan-app?node-id=0-1&p=f&t=tGd6AxpIkNVTQ4Bw-0)
+
+## 📸 Screenshots & Demo
+
+This section provides an in-depth walkthrough of the system's core features. Each section highlights key functionalities with accompanying visuals to demonstrate their usage and user experience.
+
+### 1. Access, Authentication, and User Dashboard
+
+This section covers how users access and manage their accounts, set notification preferences, and personalize their experience. From registration and login to settings and logout, every step is streamlined for ease of use.
+
+- #### User Authentication Flow
+
+  [GIF/MP4: Landing → Register → Login → Logout → Forgot Password → Login] \
+  <img src="" alt="User Authentication Flow"> \
+  Overview of how users create accounts, log in, recover passwords, and securely log out.
+
+## 🤗 Acknowledgments
+
+This is a final project presented to the Department of Information Technology, College of Information and Computing Sciences of the University of Santo Tomas for the course ITELEC3C - Web Applications Development Using PHP of Bachelor of Science in Information Technology Specialization in Web and Mobile Development.
+
+This project was a collaborative effort with:
+
+**Proponents:**
+
+- **Jakob Michael M. Palomo** ([JakobPalomo](https://github.com/JakobPalomo)) <<jakobmichael.palomo.cics@ust.edu.ph>>
+- **Ira Rayzel S. Ji** ([irarayzelji2002](https://github.com/irarayzelji2002)) <<irarayzel.ji.cics@ust.edu.ph>>
+- **Aliah DR. Esteban** ([aliahestbn](https://github.com/aliahestbn)) <<aliah.esteban.cics@ust.edu.ph>>
+- **Yna Sophia Del Rosario** ([YnaSophiaDR](https://github.com/YnaSophiaDR)) <<ynasophia.delrosario.cics@ust.edu.ph>>
