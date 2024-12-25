@@ -7,8 +7,8 @@ export default function GuestLayout({ children }) {
         <img src={logosDark} alt="YAJI Corp Logo" className="logo" />
 
         <div
-          style={{ border: "1px solid #043C3C", width: "100%" }}
-          className="bg-white px-6 py-4 shadow-md sm:max-w-md sm:rounded-lg"
+          style={{ width: "100%" }}
+          className="border-green-900 bg-white px-6 py-4 shadow-md sm:max-w-md sm:rounded-lg"
         >
           {children}
         </div>

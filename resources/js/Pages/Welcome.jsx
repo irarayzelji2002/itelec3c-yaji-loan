@@ -1,5 +1,4 @@
 import Navbar from "@/Components/Navbar";
-import "@/Pages/App.css";
 import { Head, Link } from "@inertiajs/react";
 
 const Welcome = ({ auth }) => {

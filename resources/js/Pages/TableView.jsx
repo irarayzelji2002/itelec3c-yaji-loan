@@ -128,7 +128,7 @@ export default function Dashboard() {
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               placeholder="Search here..."
-              style={{ border: "1px solid #043C3C", width: "100%" }}
+              style={{ width: "100%" }}
             />
           </div>
           <div className="overflow-hidden bg-white shadow-sm sm:rounded-lg">

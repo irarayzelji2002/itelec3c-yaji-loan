@@ -1,4 +1,3 @@
-import "@/Pages/App.css";
 import logo from "/public/img/logosText.png";
 
 const Navbar = () => {
