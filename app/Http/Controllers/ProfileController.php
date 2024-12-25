@@ -47,38 +47,36 @@ class ProfileController extends Controller
     {
         try {
             $user = $request->user();
-            Log::info('Profile update started for user:', ['user_id' => $user->id]);
-            Log::info('Request data:', $request->all());
 
-            // Handle profile picture upload
+            // Handle file uploads if present
+            if ($request->hasFile('id_photo_front')) {
+                Storage::disk('public')->delete($user->id_photo_front);
+                $user->id_photo_front = $request->file('id_photo_front')->store('id-photos', 'public');
+            }
+
+            if ($request->hasFile('id_photo_back')) {
+                Storage::disk('public')->delete($user->id_photo_back);
+                $user->id_photo_back = $request->file('id_photo_back')->store('id-photos', 'public');
+            }
+
+            if ($request->hasFile('selfie_photo')) {
+                Storage::disk('public')->delete($user->selfie_photo);
+                $user->selfie_photo = $request->file('selfie_photo')->store('selfies', 'public');
+            }
+
             if ($request->hasFile('profile_picture')) {
-                Log::info('Profile picture upload detected');
-
-                // Delete old profile picture if exists
-                if ($user->profile_picture) {
-                    Log::info('Deleting old profile picture:', ['path' => $user->profile_picture]);
-                    Storage::disk('public')->delete($user->profile_picture);
-                }
-
-                // Store new profile picture
-                $path = $request->file('profile_picture')->store('profile-pictures', 'public');
-                Log::info('New profile picture stored:', ['path' => $path]);
-                $user->profile_picture = $path;
+                Storage::disk('public')->delete($user->profile_picture);
+                $user->profile_picture = $request->file('profile_picture')->store('profile-pictures', 'public');
             }
 
             $validated = $request->validated();
-            Log::info('Validated data:', $validated);
-
             $user->fill($validated);
 
             if ($user->isDirty('email')) {
-                Log::info('Email changed, resetting verification');
                 $user->email_verified_at = null;
             }
 
-            $result = $user->save();
-            Log::info('Save operation result:', ['success' => $result]);
-            Log::info('Updated user data:', $user->toArray());
+            $user->save();
 
             return Redirect::route('profile.edit');
         } catch (\Exception $e) {

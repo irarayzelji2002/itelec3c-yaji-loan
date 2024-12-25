@@ -20,7 +20,7 @@ class RegisteredUserController extends Controller
      */
     public function create(): Response
     {
-        return Inertia::render('Auth/Register');
+        return Inertia::render('Auth/Register/Register');
     }
 
     /**
@@ -31,34 +31,65 @@ class RegisteredUserController extends Controller
     public function store(Request $request): RedirectResponse
     {
         $request->validate([
-            'name' => 'required|string|max:255',
+            'first_name' => 'required|string|max:255',
+            'middle_name' => 'nullable|string|max:255',
+            'last_name' => 'required|string|max:255',
+            'gender' => 'required|string|in:male,female,other',
+            'birth_date' => 'required|date',
+            'nationality' => 'required|string|max:255',
+            'phone_number' => 'required|string|max:255',
             'email' => 'required|string|lowercase|email|max:255|unique:'.User::class,
+            'street' => 'required|string|max:255',
+            'barangay' => 'required|string|max:255',
+            'city' => 'required|string|max:255',
+            'province' => 'required|string|max:255',
+            'verification_type' => 'required|string|max:255',
+            'id_photo_front' => 'required|image|mimes:jpeg,png,jpg|max:2048',
+            'id_photo_back' => 'required|image|mimes:jpeg,png,jpg|max:2048',
+            'selfie_photo' => 'required|image|mimes:jpeg,png,jpg|max:2048',
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
-            'contact_information' => 'required|string|max:255',
-            'address' => 'required|string',
-            'profile_picture' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
+            'security_question_1' => 'required|string|max:255',
+            'security_answer_1' => 'required|string|max:255',
+            'security_question_2' => 'required|string|max:255',
+            'security_answer_2' => 'required|string|max:255',
         ]);
 
-        // Handle profile picture upload if present
-        $profile_picture_path = null;
-        if ($request->hasFile('profile_picture')) {
-            $profile_picture_path = $request->file('profile_picture')->store('profile-pictures', 'public');
-        }
+        // Handle file uploads
+        $idPhotoFrontPath = $request->file('id_photo_front')->store('id-photos', 'public');
+        $idPhotoBackPath = $request->file('id_photo_back')->store('id-photos', 'public');
+        $selfiePhotoPath = $request->file('selfie_photo')->store('selfies', 'public');
 
         $user = User::create([
-            'name' => $request->name,
+            'first_name' => $request->first_name,
+            'middle_name' => $request->middle_name,
+            'last_name' => $request->last_name,
+            'gender' => $request->gender,
+            'birth_date' => $request->birth_date,
+            'nationality' => $request->nationality,
+            'phone_number' => $request->phone_number,
             'email' => $request->email,
+            'street' => $request->street,
+            'barangay' => $request->barangay,
+            'city' => $request->city,
+            'province' => $request->province,
+            'verification_type' => $request->verification_type,
+            'id_photo_front' => $idPhotoFrontPath,
+            'id_photo_back' => $idPhotoBackPath,
+            'selfie_photo' => $selfiePhotoPath,
             'password' => Hash::make($request->password),
-            'contact_information' => $request->contact_information,
-            'address' => $request->address,
-            'profile_picture' => $profile_picture_path,
+            'security_question_1' => $request->security_question_1,
+            'security_answer_1' => $request->security_answer_1,
+            'security_question_2' => $request->security_question_2,
+            'security_answer_2' => $request->security_answer_2,
+            'role' => 'member',
+            'verification_status' => 'pending'
         ]);
 
-        // Assign default member role to new registrations
+        // Assign default member role
         $user->assignRole('member');
 
         event(new Registered($user));
-        Auth::login($user);
+        // Auth::login($user);
 
         return redirect(route('dashboard', absolute: false));
     }

@@ -18,13 +18,39 @@ class User extends Authenticatable
      *
      * @var array<int, string>
      */
-    protected $fillable = [
-        'name',
+        protected $fillable = [
+
+        // Basic Information
+        'first_name',
+        'middle_name',
+        'last_name',
+        'gender',
+        'birth_date',
+        'nationality',
+
+        // Contact Information
+        'phone_number',
         'email',
+        'street',
+        'barangay',
+        'city',
+        'province',
+
+        // Verification
+        'verification_type',
+        'id_photo_front',
+        'id_photo_back',
+        'selfie_photo',
+
+        // Account Creation
         'password',
-        'contact_information',
-        'address',
-        'profile_picture',
+        'security_question_1',
+        'security_answer_1',
+        'security_question_2',
+        'security_answer_2',
+        'role',
+        'verification_status',
+        'profile_picture'
     ];
 
     /**
@@ -47,7 +73,26 @@ class User extends Authenticatable
         return [
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
+            'birth_date' => 'date',
         ];
+    }
+
+    // Get full name accessor
+    public function getFullNameAttribute()
+    {
+        return "{$this->first_name} {$this->middle_name} {$this->last_name}";
+    }
+
+    // Get full address accessor
+    public function getFullAddressAttribute()
+    {
+        return "{$this->street}, {$this->barangay}, {$this->city}, {$this->province}";
+    }
+
+    // Get role name accessor
+    public function getRoleNameAttribute()
+    {
+        return $this->roles->first()->name ?? 'No Role';
     }
 
     // Hash the password when creating a user

@@ -60,7 +60,7 @@ This web app was made with `Node.js v20.16.0`, but you may download the latest L
 
 ### 2. Laravel/PHP/Composer Version
 
-Laravel 10.x requires PHP 8.1+ and Composer 2.x
+This web app was made with `Laravel Framework 11.30.0`, `PHP 8.3.10`, and `Composer 2.7.7`. Laravel 11.x requires PHP 8.2+ and Composer 2.x.
 
 **Download Links:**
 
