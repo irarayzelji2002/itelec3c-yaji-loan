@@ -87,13 +87,14 @@ export default function UpdateProfileInformation({ mustVerifyEmail, status, clas
         </div>
         {/* First Name */}
         <div className="mt-4">
-          <InputLabel htmlFor="first_name" value="First Name" />
+          <InputLabel htmlFor="first_name" value="First Name" required={true} />
           <TextInput
             id="first_name"
             type="text"
             className="mt-1 block w-full"
             value={data.first_name}
             onChange={(e) => setData("first_name", e.target.value)}
+            placeholder="First Name"
             required
             isFocused
             autoComplete="first_name"
@@ -109,19 +110,21 @@ export default function UpdateProfileInformation({ mustVerifyEmail, status, clas
             className="mt-1 block w-full"
             value={data.middle_name}
             onChange={(e) => setData("middle_name", e.target.value)}
+            placeholder="Middle Name"
             autoComplete="middle_name"
           />
           <InputError className="mt-2" message={errors.middle_name} />
         </div>
         {/* Last Name */}
         <div className="mt-4">
-          <InputLabel htmlFor="last_name" value="Last Name" />
+          <InputLabel htmlFor="last_name" value="Last Name" required={true} />
           <TextInput
             id="last_name"
             type="text"
             className="mt-1 block w-full"
             value={data.last_name}
             onChange={(e) => setData("last_name", e.target.value)}
+            placeholder="Last Name"
             required
             autoComplete="last_name"
           />
@@ -129,15 +132,18 @@ export default function UpdateProfileInformation({ mustVerifyEmail, status, clas
         </div>
         {/* Gender */}
         <div className="mt-4">
-          <InputLabel htmlFor="gender" value="Gender" />
+          <InputLabel htmlFor="gender" value="Gender" required={true} />
           <SelectInput
             id="gender"
             className="mt-1 block w-full"
             value={data.gender}
             onChange={(e) => setData("gender", e.target.value)}
+            defaultValue=""
             required
           >
-            <option value="">Select Gender</option>
+            <option value="" disabled>
+              Select Gender
+            </option>
             <option value="Male">Male</option>
             <option value="Female">Female</option>
             <option value="Other">Other</option>
@@ -146,7 +152,7 @@ export default function UpdateProfileInformation({ mustVerifyEmail, status, clas
         </div>
         {/* Birth Date */}
         <div className="mt-4">
-          <InputLabel htmlFor="birth_date" value="Birth Date" />
+          <InputLabel htmlFor="birth_date" value="Birth Date" required={true} />
           <DateInput
             id="birth_date"
             className="mt-1 block w-full"
@@ -158,15 +164,18 @@ export default function UpdateProfileInformation({ mustVerifyEmail, status, clas
         </div>
         {/* Nationality*/}
         <div className="mt-4">
-          <InputLabel htmlFor="nationality" value="Nationality" />
+          <InputLabel htmlFor="nationality" value="Nationality" required={true} />
           <SelectInput
             id="nationality"
             className="mt-1 block w-full"
             value={data.nationality}
             onChange={(e) => setData("nationality", e.target.value)}
+            defaultValue=""
             required
           >
-            <option value="">Select Nationality</option>
+            <option value="" disabled>
+              Select Nationality
+            </option>
             <option value="China">China</option>
             <option value="Japan">Japan</option>
             <option value="Korea">Korea</option>
@@ -181,13 +190,14 @@ export default function UpdateProfileInformation({ mustVerifyEmail, status, clas
         <h3 className="text-md font-medium text-gray-900">Contact Information</h3>
         {/* Email */}
         <div>
-          <InputLabel htmlFor="email" value="Email" />
+          <InputLabel htmlFor="email" value="Email Addresss" required={true} />
           <TextInput
             id="email"
             type="email"
             className="mt-1 block w-full"
             value={data.email}
             onChange={(e) => setData("email", e.target.value)}
+            placeholder="Email Address"
             required
             autoComplete="email"
           />
@@ -202,7 +212,7 @@ export default function UpdateProfileInformation({ mustVerifyEmail, status, clas
                 href={route("verification.send")}
                 method="post"
                 as="button"
-                className="rounded-md text-sm text-gray-600 underline hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-green-700 focus:ring-offset-2"
+                className="!rounded-lg text-sm text-gray-600 underline hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-green-700 focus:ring-offset-2"
               >
                 Click here to re-send the verification email.
               </Link>
@@ -217,65 +227,70 @@ export default function UpdateProfileInformation({ mustVerifyEmail, status, clas
         )}
         {/* Phone Number */}
         <div>
-          <InputLabel htmlFor="phone_number" value="Phone Number" />
+          <InputLabel htmlFor="phone_number" value="Phone Number" required={true} />
           <TextInput
             id="phone_number"
             type="text"
             className="mt-1 block w-full"
             value={data.phone_number}
             onChange={(e) => setData("phone_number", e.target.value)}
+            placeholder="09xxxxxxxxx"
             required
           />
           <InputError className="mt-2" message={errors.phone_number} />
         </div>
         {/* Street */}
         <div>
-          <InputLabel htmlFor="street" value="Street" />
+          <InputLabel htmlFor="street" value="Street" required={true} />
           <TextInput
             id="street"
             type="text"
             className="mt-1 block w-full"
             value={data.street}
             onChange={(e) => setData("street", e.target.value)}
+            placeholder="Street"
             required
           />
           <InputError className="mt-2" message={errors.street} />
         </div>
         {/* Barangay */}
         <div>
-          <InputLabel htmlFor="barangay" value="Barangay" />
+          <InputLabel htmlFor="barangay" value="Barangay" required={true} />
           <TextInput
             id="barangay"
             type="text"
             className="mt-1 block w-full"
             value={data.barangay}
             onChange={(e) => setData("barangay", e.target.value)}
+            placeholder="Barangay"
             required
           />
           <InputError className="mt-2" message={errors.barangay} />
         </div>
         {/* City */}
         <div>
-          <InputLabel htmlFor="city" value="City" />
+          <InputLabel htmlFor="city" value="City" required={true} />
           <TextInput
             id="city"
             type="text"
             className="mt-1 block w-full"
             value={data.city}
             onChange={(e) => setData("city", e.target.value)}
+            placeholder="City"
             required
           />
           <InputError className="mt-2" message={errors.city} />
         </div>
         {/* Province */}
         <div>
-          <InputLabel htmlFor="province" value="Province" />
+          <InputLabel htmlFor="province" value="Province" required={true} />
           <TextInput
             id="province"
             type="text"
             className="mt-1 block w-full"
             value={data.province}
             onChange={(e) => setData("province", e.target.value)}
+            placeholder="Province"
             required
           />
           <InputError className="mt-2" message={errors.province} />
@@ -285,15 +300,18 @@ export default function UpdateProfileInformation({ mustVerifyEmail, status, clas
         <h3 className="text-md font-medium text-gray-900">Security Questions</h3>
         {/* Security Question 1 */}
         <div className="mt-4">
-          <InputLabel htmlFor="security_question_1" value="Security Question 1" />
+          <InputLabel htmlFor="security_question_1" value="Security Question 1" required={true} />
           <SelectInput
             id="security_question_1"
             className="mt-1 block w-full"
             value={data.security_question_1}
             onChange={(e) => setData("security_question_1", e.target.value)}
+            defaultValue=""
             required
           >
-            <option value="">Select Security Question</option>
+            <option value="" disabled>
+              Select Security Question
+            </option>
             {securityQuestions.map((question, index) => (
               <option key={index} value={question} disabled={question === data.security_question_2}>
                 {question}
@@ -304,45 +322,54 @@ export default function UpdateProfileInformation({ mustVerifyEmail, status, clas
         </div>
         {/* Security Question 1 Answer */}
         <div className="mt-4">
-          <InputLabel htmlFor="security_answer_1" value="Answer 1" />
+          <InputLabel
+            htmlFor="security_answer_1"
+            value="Answer to Security Question 1"
+            required={true}
+          />
           <TextInput
             id="security_answer_1"
             type="text"
             className="mt-1 block w-full"
             value={data.security_answer_1}
             onChange={(e) => setData("security_answer_1", e.target.value)}
+            placeholder="Answer to Security Question 1"
             required
           />
           <InputError className="mt-2" message={errors.security_answer_1} />
         </div>
         {/* Security Question 2 */}
         <div className="mt-4">
-          <InputLabel htmlFor="security_question_2" value="Security Question 2" />
+          <InputLabel htmlFor="security_question_2" value="Security Question 2" required={true} />
           <SelectInput
             id="security_question_2"
             className="mt-1 block w-full"
             value={data.security_question_2}
             onChange={(e) => setData("security_question_2", e.target.value)}
+            defaultValue=""
             required
           >
-            <option value="">Select Security Question</option>
+            <option value="" disabled>
+              Select Security Question
+            </option>
             {securityQuestions.map((question, index) => (
               <option key={index} value={question} disabled={question === data.security_question_1}>
                 {question}
               </option>
             ))}
           </SelectInput>
-          <InputError className="mt-2" message={errors.security_question_2} />
+          <InputError className="mt-2" message={errors.security_question_2} required={true} />
         </div>
         {/* Security Question 2 Answer */}
         <div className="mt-4">
-          <InputLabel htmlFor="security_answer_2" value="Answer 2" />
+          <InputLabel htmlFor="security_answer_2" value="Answer to Security Question 2" />
           <TextInput
             id="security_answer_2"
             type="text"
             className="mt-1 block w-full"
             value={data.security_answer_2}
             onChange={(e) => setData("security_answer_2", e.target.value)}
+            placeholder="Answer to Security Question 2"
             required
           />
           <InputError className="mt-2" message={errors.security_answer_2} />

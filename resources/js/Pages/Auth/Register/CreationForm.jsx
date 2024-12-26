@@ -1,33 +1,168 @@
-const CreationForm = ({ onNext, onBack }) => {
+import InputError from "@/Components/InputError";
+import InputLabel from "@/Components/InputLabel";
+import PassInput from "@/Components/PassInput";
+import PrimaryButton from "@/Components/PrimaryButton";
+import SecondaryButton from "@/Components/SecondaryButton";
+import SelectInput from "@/Components/SelectInput";
+import TextInput from "@/Components/TextInput";
+
+const CreationForm = ({ data, setData, errors, onNext, onCancel, onBack }) => {
+  const handleNext = (e) => {
+    e.preventDefault();
+
+    // Validation
+    onNext();
+  };
+
+  const handleCancel = (e) => {
+    e.preventDefault();
+    onCancel();
+  };
+
+  const securityQuestions = [
+    "What is your mother's maiden name?",
+    "What was your first pet's name?",
+    "What city were you born in?",
+    "What is your favorite book?",
+    "What was the name of your first school?",
+  ];
+
   return (
     <div className="form-container">
-      <h3>Welcome – let's create your account</h3>
-      <p>Fill in your desired login information and security settings.</p>
-
-      <h4>Account Information</h4>
-      <div className="form-group">
-        <input placeholder="Username *" />
-        <input type="password" placeholder="Password *" />
-      </div>
-      <div className="form-group">
-        <input type="password" placeholder="Confirm Password *" />
+      <div className="mb-4">
+        <h3 className="text-center text-xl font-bold text-gray-900">Welcome – let's get started</h3>
+        <p className="mt-1 block text-center text-sm text-gray-600">
+          Tell us about your basic details and account requirements
+        </p>
       </div>
 
-      <h4>Security Questions</h4>
-      <div className="form-group">
-        <input placeholder="Security Question 1 *" />
-        <input placeholder="Answer 1 *" />
-      </div>
-      <div className="form-group">
-        <input placeholder="Security Question 2 *" />
-        <input placeholder="Answer 2 *" />
+      <h3 className="text-md font-medium text-gray-900">Account Information</h3>
+      <div className="form-group flex flex-col gap-4 md:flex-row">
+        <div className="flex-1">
+          <InputLabel htmlFor="password" value="Password" />
+          <PassInput
+            id="password"
+            className="mt-1 block w-full"
+            value={data.password}
+            onChange={(e) => setData("password", e.target.value)}
+            placeholder="Password"
+            required
+          />
+          <InputError message={errors.password} />
+        </div>
+        <div className="flex-1">
+          <InputLabel htmlFor="confirm_password" value="Confirm Password" />
+          <PassInput
+            id="confirm_password"
+            className="mt-1 block w-full"
+            value={data.confirm_password}
+            onChange={(e) => setData("confirm_password", e.target.value)}
+            placeholder="Confirm Password"
+            required
+          />
+          <InputError message={errors.password} />
+        </div>
       </div>
 
-      <div className="button-group">
-        <button onClick={onBack}>Back</button>
-        <button className="next-button" onClick={onNext}>
-          Next
-        </button>
+      <h3 className="text-md font-medium text-gray-900">Security Questions</h3>
+      <div className="form-group flex flex-col gap-4 md:flex-row">
+        {/* Security Question 1 */}
+        <div className="flex-1">
+          <InputLabel htmlFor="security_question_1" value="Security Question 1" required={true} />
+          <SelectInput
+            id="security_question_1"
+            className="mt-1 block w-full"
+            value={data.security_question_1}
+            onChange={(e) => setData("security_question_1", e.target.value)}
+            defaultValue=""
+            required
+          >
+            <option value="" disabled>
+              Select Security Question
+            </option>
+            {securityQuestions.map((question, index) => (
+              <option key={index} value={question} disabled={question === data.security_question_2}>
+                {question}
+              </option>
+            ))}
+          </SelectInput>
+          <InputError className="mt-2" message={errors.security_question_1} />
+        </div>
+        {/* Security Question 1 Answer */}
+        <div className="flex-1">
+          <InputLabel
+            htmlFor="security_answer_1"
+            value="Answer to Security Question 1"
+            required={true}
+          />
+          <TextInput
+            id="security_answer_1"
+            type="text"
+            className="mt-1 block w-full"
+            value={data.security_answer_1}
+            onChange={(e) => setData("security_answer_1", e.target.value)}
+            placeholder="Answer to Security Question 1"
+            required
+          />
+          <InputError className="mt-2" message={errors.security_answer_1} />
+        </div>
+      </div>
+      <div className="form-group flex flex-col gap-4 md:flex-row">
+        {/* Security Question 2 */}
+        <div className="flex-1">
+          <InputLabel htmlFor="security_question_2" value="Security Question 2" required={true} />
+          <SelectInput
+            id="security_question_2"
+            className="mt-1 block w-full"
+            value={data.security_question_2}
+            onChange={(e) => setData("security_question_2", e.target.value)}
+            defaultValue=""
+            required
+          >
+            <option value="" disabled>
+              Select Security Question
+            </option>
+            {securityQuestions.map((question, index) => (
+              <option key={index} value={question} disabled={question === data.security_question_1}>
+                {question}
+              </option>
+            ))}
+          </SelectInput>
+          <InputError className="mt-2" message={errors.security_question_2} required={true} />
+        </div>
+        {/* Security Question 2 Answer */}
+        <div className="flex-1">
+          <InputLabel htmlFor="security_answer_2" value="Answer to Security Question 2" />
+          <TextInput
+            id="security_answer_2"
+            type="text"
+            className="mt-1 block w-full"
+            value={data.security_answer_2}
+            onChange={(e) => setData("security_answer_2", e.target.value)}
+            placeholder="Answer to Security Question 2"
+            required
+          />
+          <InputError className="mt-2" message={errors.security_answer_2} />
+        </div>
+      </div>
+
+      {/* Buttons */}
+      <div className="mt-[25px] flex flex-col items-center gap-4 md:flex-row">
+        <div className="flex-1">
+          <SecondaryButton onClick={onBack} className="w-full text-lg">
+            Back
+          </SecondaryButton>
+        </div>
+        <div className="flex-1">
+          <SecondaryButton onClick={handleCancel} className="w-full text-lg">
+            Cancel
+          </SecondaryButton>
+        </div>
+        <div className="flex-1">
+          <PrimaryButton onClick={handleNext} className="w-full text-lg">
+            Next
+          </PrimaryButton>
+        </div>
       </div>
     </div>
   );

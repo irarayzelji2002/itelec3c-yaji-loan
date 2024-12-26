@@ -40,6 +40,7 @@ class User extends Authenticatable
         'verification_type',
         'id_photo_front',
         'id_photo_back',
+        'id_file',
         'selfie_photo',
 
         // Account Creation

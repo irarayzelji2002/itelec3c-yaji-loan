@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
+use App\Models\VerificationType;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -20,7 +21,9 @@ class RegisteredUserController extends Controller
      */
     public function create(): Response
     {
-        return Inertia::render('Auth/Register/Register');
+        return Inertia::render('Auth/Register/Register', [
+            'verificationTypes' => VerificationType::orderBy('order')->get()
+        ]);
     }
 
     /**
@@ -44,8 +47,9 @@ class RegisteredUserController extends Controller
             'city' => 'required|string|max:255',
             'province' => 'required|string|max:255',
             'verification_type' => 'required|string|max:255',
-            'id_photo_front' => 'required|image|mimes:jpeg,png,jpg|max:2048',
-            'id_photo_back' => 'required|image|mimes:jpeg,png,jpg|max:2048',
+            'id_photo_front' => 'nullable|image|mimes:jpeg,png,jpg|max:2048', // 2MB
+            'id_photo_back' => 'nullable|image|mimes:jpeg,png,jpg|max:2048', // 2MB
+            'id_file' => 'nullable|file|mimes:pdf|max:10240', // 10MB
             'selfie_photo' => 'required|image|mimes:jpeg,png,jpg|max:2048',
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
             'security_question_1' => 'required|string|max:255',
@@ -55,8 +59,27 @@ class RegisteredUserController extends Controller
         ]);
 
         // Handle file uploads
-        $idPhotoFrontPath = $request->file('id_photo_front')->store('id-photos', 'public');
-        $idPhotoBackPath = $request->file('id_photo_back')->store('id-photos', 'public');
+        $idPhotoFrontPath = null;
+        $idPhotoBackPath = null;
+        $idFilePath = null;
+        if($request->hasFile('id_photo_front')) {
+            $request->validate([
+                'id_photo_front' => 'required|image|mimes:jpeg,png,jpg|max:2048', // 2MB
+            ]);
+            $idPhotoFrontPath = $request->file('id_photo_front')->store('id-photos', 'public');
+        }
+        if($request->hasFile('id_photo_back')) {
+            $request->validate([
+                'id_photo_back' => 'required|image|mimes:jpeg,png,jpg|max:2048', // 2MB
+            ]);
+            $idPhotoBackPath = $request->file('id_photo_back')->store('id-photos', 'public');
+        }
+        if($request->hasFile('id_file')) {
+            $request->validate([
+                'id_file' => 'required|file|mimes:pdf|max:10240', // 10MB
+            ]);
+            $idFilePath = $request->file('id_file')->store('id-photos', 'public');
+        }
         $selfiePhotoPath = $request->file('selfie_photo')->store('selfies', 'public');
 
         $user = User::create([
@@ -75,6 +98,7 @@ class RegisteredUserController extends Controller
             'verification_type' => $request->verification_type,
             'id_photo_front' => $idPhotoFrontPath,
             'id_photo_back' => $idPhotoBackPath,
+            'id_file' => $idFilePath,
             'selfie_photo' => $selfiePhotoPath,
             'password' => Hash::make($request->password),
             'security_question_1' => $request->security_question_1,

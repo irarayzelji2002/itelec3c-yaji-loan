@@ -44,6 +44,7 @@ class UserFactory extends Factory
             'verification_type' => null,
             'id_photo_front' => null,
             'id_photo_back' => null,
+            'id_file' => null,
             'selfie_photo' => null,
 
             // Account Creation

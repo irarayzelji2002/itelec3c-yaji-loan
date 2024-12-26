@@ -195,5 +195,9 @@ class DatabaseSeeder extends Seeder
             'outstanding_balance' => 45000,
             'image_path' => 'images/loan5.jpg'
         ]);
+
+        $this->call([
+            VerificationTypeSeeder::class,
+        ]);
     }
 }

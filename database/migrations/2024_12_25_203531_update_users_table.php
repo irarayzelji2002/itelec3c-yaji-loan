@@ -26,6 +26,7 @@ return new class extends Migration
             $table->string('verification_type')->nullable();
             $table->string('id_photo_front')->nullable();
             $table->string('id_photo_back')->nullable();
+            $table->string('id_file')->nullable();
             $table->string('selfie_photo')->nullable();
 
             // Account Creation
@@ -54,6 +55,7 @@ return new class extends Migration
                 'verification_type',
                 'id_photo_front',
                 'id_photo_back',
+                'id_file',
                 'selfie_photo',
                 'security_question_1',
                 'security_answer_1',
