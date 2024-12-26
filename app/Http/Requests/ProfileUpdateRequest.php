@@ -34,7 +34,7 @@ class ProfileUpdateRequest extends FormRequest
             $rules['middle_name'] = ['nullable', 'string', 'max:255'];
             $rules['last_name'] = ['required', 'string', 'max:255'];
             $rules['email'] = ['required', 'string', 'lowercase', 'email', 'max:255', Rule::unique(User::class)->ignore($this->user()->id)];
-            $rules['gender'] = ['required', 'string'];
+            $rules['gender'] = ['required', 'string', Rule::in(['Male', 'Female', 'Other'])];
             $rules['birth_date'] = ['required', 'date'];
             $rules['nationality'] = ['required', 'string', 'max:255'];
             $rules['phone_number'] = ['required', 'string', 'max:255'];
@@ -42,6 +42,23 @@ class ProfileUpdateRequest extends FormRequest
             $rules['barangay'] = ['required', 'string', 'max:255'];
             $rules['city'] = ['required', 'string', 'max:255'];
             $rules['province'] = ['required', 'string', 'max:255'];
+            $rules['security_question_1'] = ['required', 'string', 'different:security_question_2', Rule::in([
+                'What is your mother\'s maiden name?',
+                'What was your first pet\'s name?',
+                'What city were you born in?',
+                'What is your favorite book?',
+                'What was the name of your first school?'
+            ])];
+
+            $rules['security_question_2'] = ['required', 'string', 'different:security_question_1', Rule::in([
+                'What is your mother\'s maiden name?',
+                'What was your first pet\'s name?',
+                'What city were you born in?',
+                'What is your favorite book?',
+                'What was the name of your first school?'
+            ])];
+            $rules['security_answer_1'] = ['required', 'string', 'max:255'];
+            $rules['security_answer_2'] = ['required', 'string', 'max:255'];
         }
 
         if ($this->hasFile('profile_picture')) {

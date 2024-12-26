@@ -4,6 +4,12 @@ import { Head, Link, usePage } from "@inertiajs/react";
 export default function Show() {
   const user = usePage().props.auth.user;
 
+  function formatDateMMDDYYY(value) {
+    const formattedDate = value ? value.split("T")[0] : value;
+    const [year, month, day] = formattedDate.split("-");
+    return `${month}/${day}/${year}`;
+  }
+
   function capitalizeFirstLetter(val) {
     return String(val).charAt(0).toUpperCase() + String(val).slice(1);
   }
@@ -44,41 +50,118 @@ export default function Show() {
                 </div>
               </div>
 
-              {/* Name */}
               <div className="space-y-6">
+                {/* Basic Information */}
                 <div>
-                  <label className="block text-sm font-medium text-gray-700">Name</label>
-                  <div className="mt-1 rounded-md bg-gray-50 p-2">{user.name}</div>
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium text-gray-700">Email</label>
-                  <div className="mt-1 rounded-md bg-gray-50 p-2">{user.email}</div>
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium text-gray-700">Role</label>
-                  <div className="mt-1 rounded-md bg-gray-50 p-2">
-                    {capitalizeFirstLetter(user.roles?.map((role) => role.name).join(", ") || "-")}
+                  <h3 className="text-lg font-medium text-gray-900">Basic Information</h3>
+                  <div className="mt-4 space-y-4">
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700">Full Name</label>
+                      <div className="mt-1 rounded-md bg-gray-50 p-2">
+                        {user.full_name} {/* Using the getFullNameAttribute accessor */}
+                      </div>
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700">Gender</label>
+                      <div className="mt-1 rounded-md bg-gray-50 p-2">
+                        {capitalizeFirstLetter(user.gender || "-")}
+                      </div>
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700">Birth Date</label>
+                      <div className="mt-1 rounded-md bg-gray-50 p-2">
+                        {formatDateMMDDYYY(user.birth_date) || "-"}
+                      </div>
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700">Nationality</label>
+                      <div className="mt-1 rounded-md bg-gray-50 p-2">
+                        {user.nationality || "-"}
+                      </div>
+                    </div>
                   </div>
                 </div>
 
+                {/* Contact Information */}
                 <div>
-                  <label className="block text-sm font-medium text-gray-700">Contact</label>
-                  <div className="mt-1 rounded-md bg-gray-50 p-2">
-                    {user.contact_information || "-"}
+                  <h3 className="text-lg font-medium text-gray-900">Contact Information</h3>
+                  <div className="mt-4 space-y-4">
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700">Email</label>
+                      <div className="mt-1 rounded-md bg-gray-50 p-2">{user.email}</div>
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700">
+                        Phone Number
+                      </label>
+                      <div className="mt-1 rounded-md bg-gray-50 p-2">
+                        {user.phone_number || "-"}
+                      </div>
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700">
+                        Complete Address
+                      </label>
+                      <div className="mt-1 rounded-md bg-gray-50 p-2">
+                        {user.full_address || ""} {/* Using the getFullAddressAttribute accessor */}
+                      </div>
+                    </div>
                   </div>
                 </div>
 
+                {/* Role and Verification */}
                 <div>
-                  <label className="block text-sm font-medium text-gray-700">Address</label>
-                  <div className="mt-1 rounded-md bg-gray-50 p-2">{user.address || "-"}</div>
+                  <h3 className="text-lg font-medium text-gray-900">Account Information</h3>
+                  <div className="mt-4 space-y-4">
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700">
+                        Security Question 1
+                      </label>
+                      <div className="mt-1 rounded-md bg-gray-50 p-2">
+                        {user.security_question_1 || "-"}
+                      </div>
+                      <label className="block text-sm font-medium text-gray-700">Answer</label>
+                      <div className="mt-1 rounded-md bg-gray-50 p-2">
+                        {user.security_answer_1 || "-"}
+                      </div>
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700">
+                        Security Question 2
+                      </label>
+                      <div className="mt-1 rounded-md bg-gray-50 p-2">
+                        {user.security_question_2 || "-"}
+                      </div>
+                      <label className="block text-sm font-medium text-gray-700">Answer</label>
+                      <div className="mt-1 rounded-md bg-gray-50 p-2">
+                        {user.security_answer_2 || "-"}
+                      </div>
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700">Role</label>
+                      <div className="mt-1 rounded-md bg-gray-50 p-2">
+                        {/* {capitalizeFirstLetter(
+                          user.roles?.map((role) => role.name).join(", ") || "-"
+                        )} */}
+                        {capitalizeFirstLetter(user.role_name)}{" "}
+                        {/* Using the getRoleNameAttribute accessor */}
+                      </div>
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700">
+                        Verification Status
+                      </label>
+                      <div className="mt-1 rounded-md bg-gray-50 p-2">
+                        {capitalizeFirstLetter(user.verification_status || "-")}
+                      </div>
+                    </div>
+                  </div>
                 </div>
 
                 <div className="flex items-center gap-4">
                   <Link
                     href={route("profile.edit")}
-                    className="inline-flex items-center rounded-md border border-transparent bg-gray-800 px-4 py-2 text-xs font-semibold uppercase tracking-widest text-white transition duration-150 ease-in-out hover:bg-gray-700 focus:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-green-700 focus:ring-offset-2 active:bg-gray-900"
+                    className="inline-flex items-center rounded-md border border-transparent bg-green-700 px-4 py-2 text-xs font-semibold uppercase tracking-widest text-black transition duration-150 ease-in-out hover:bg-green-500 focus:bg-green-500 focus:outline-none focus:ring-2 focus:ring-green-600 focus:ring-offset-2 active:bg-green-800"
                   >
                     Edit Profile
                   </Link>

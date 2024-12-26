@@ -1,6 +1,8 @@
+import DateInput from "@/Components/DateInput";
 import InputError from "@/Components/InputError";
 import InputLabel from "@/Components/InputLabel";
 import PrimaryButton from "@/Components/PrimaryButton";
+import SelectInput from "@/Components/SelectInput";
 import TextInput from "@/Components/TextInput";
 import { Transition } from "@headlessui/react";
 import { Link, useForm, usePage } from "@inertiajs/react";
@@ -10,23 +12,38 @@ export default function UpdateProfileInformation({ mustVerifyEmail, status, clas
 
   const { data, setData, post, errors, processing, recentlySuccessful } = useForm({
     profile_picture: null,
-    name: user.name,
-    email: user.email,
-    contact_information: user.contact_information,
-    address: user.address,
+    first_name: user.first_name || "",
+    middle_name: user.middle_name || "",
+    last_name: user.last_name || "",
+    email: user.email || "",
+    gender: user.gender || "",
+    birth_date: user.birth_date || "",
+    nationality: user.nationality || "",
+    phone_number: user.phone_number || "",
+    street: user.street || "",
+    barangay: user.barangay || "",
+    city: user.city || "",
+    province: user.province || "",
+    security_question_1: user.security_question_1 || "",
+    security_question_2: user.security_question_2 || "",
+    security_answer_1: user.security_answer_1 || "",
+    security_answer_2: user.security_answer_2 || "",
   });
 
   const submit = (e) => {
     e.preventDefault();
     const formData = new FormData();
 
-    formData.append("name", data.name);
-    formData.append("email", data.email);
+    // Append all form fields
+    Object.keys(data).forEach((key) => {
+      if (key === "profile_picture" && data[key]) {
+        formData.append(key, data[key]);
+      } else if (data[key] !== null) {
+        formData.append(key, data[key]);
+      }
+    });
     formData.append("_method", "PATCH");
-
-    if (data.profile_picture) {
-      formData.append("profile_picture", data.profile_picture);
-    }
+    console.log("formData", formData);
 
     post(route("profile.update"), {
       preserveScroll: true,
@@ -35,38 +52,136 @@ export default function UpdateProfileInformation({ mustVerifyEmail, status, clas
     });
   };
 
+  // Security questions
+  const securityQuestions = [
+    "What is your mother's maiden name?",
+    "What was your first pet's name?",
+    "What city were you born in?",
+    "What is your favorite book?",
+    "What was the name of your first school?",
+  ];
+
   return (
     <section className={className}>
       <header>
         <h2 className="text-lg font-medium text-gray-900">Profile Information</h2>
 
         <p className="mt-1 text-sm text-gray-600">
-          Update your account's profile information and email address.
+          Update your account's profile information here.
         </p>
       </header>
 
       <form onSubmit={submit} className="mt-6 space-y-6" encType="multipart/form-data">
-        {/* Name */}
-        <div>
-          <InputLabel htmlFor="name" value="Name" />
-
-          <TextInput
-            id="name"
+        {/* BASIC INFORMATION */}
+        <h3 className="text-md font-medium text-gray-900">Basic Information</h3>
+        {/* Profile picture */}
+        <div className="mb-6">
+          <label className="block text-sm font-medium text-gray-700">Profile Picture</label>
+          <input
+            type="file"
+            onChange={(e) => setData("profile_picture", e.target.files[0])}
             className="mt-1 block w-full"
-            value={data.name}
-            onChange={(e) => setData("name", e.target.value)}
+            accept="image/*"
+          />
+          {errors.profile_picture && <div className="text-red-500">{errors.profile_picture}</div>}
+        </div>
+        {/* First Name */}
+        <div className="mt-4">
+          <InputLabel htmlFor="first_name" value="First Name" />
+          <TextInput
+            id="first_name"
+            type="text"
+            className="mt-1 block w-full"
+            value={data.first_name}
+            onChange={(e) => setData("first_name", e.target.value)}
             required
             isFocused
-            autoComplete="name"
+            autoComplete="first_name"
           />
-
-          <InputError className="mt-2" message={errors.name} />
+          <InputError className="mt-2" message={errors.first_name} />
+        </div>
+        {/* Middle Name */}
+        <div className="mt-4">
+          <InputLabel htmlFor="middle_name" value="Middle Name" />
+          <TextInput
+            id="middle_name"
+            type="text"
+            className="mt-1 block w-full"
+            value={data.middle_name}
+            onChange={(e) => setData("middle_name", e.target.value)}
+            autoComplete="middle_name"
+          />
+          <InputError className="mt-2" message={errors.middle_name} />
+        </div>
+        {/* Last Name */}
+        <div className="mt-4">
+          <InputLabel htmlFor="last_name" value="Last Name" />
+          <TextInput
+            id="last_name"
+            type="text"
+            className="mt-1 block w-full"
+            value={data.last_name}
+            onChange={(e) => setData("last_name", e.target.value)}
+            required
+            autoComplete="last_name"
+          />
+          <InputError className="mt-2" message={errors.last_name} />
+        </div>
+        {/* Gender */}
+        <div className="mt-4">
+          <InputLabel htmlFor="gender" value="Gender" />
+          <SelectInput
+            id="gender"
+            className="mt-1 block w-full"
+            value={data.gender}
+            onChange={(e) => setData("gender", e.target.value)}
+            required
+          >
+            <option value="">Select Gender</option>
+            <option value="Male">Male</option>
+            <option value="Female">Female</option>
+            <option value="Other">Other</option>
+          </SelectInput>
+          <InputError className="mt-2" message={errors.gender} />
+        </div>
+        {/* Birth Date */}
+        <div className="mt-4">
+          <InputLabel htmlFor="birth_date" value="Birth Date" />
+          <DateInput
+            id="birth_date"
+            className="mt-1 block w-full"
+            value={data.birth_date}
+            onChange={(e) => setData("birth_date", e.target.value)}
+            required
+          />
+          <InputError className="mt-2" message={errors.birth_date} />
+        </div>
+        {/* Nationality*/}
+        <div className="mt-4">
+          <InputLabel htmlFor="nationality" value="Nationality" />
+          <SelectInput
+            id="nationality"
+            className="mt-1 block w-full"
+            value={data.nationality}
+            onChange={(e) => setData("nationality", e.target.value)}
+            required
+          >
+            <option value="">Select Nationality</option>
+            <option value="China">China</option>
+            <option value="Japan">Japan</option>
+            <option value="Korea">Korea</option>
+            <option value="Philippines">Philippines</option>
+            <option value="United States">United States</option>
+            {/* Add more nationalities as needed */}
+          </SelectInput>
+          <InputError className="mt-2" message={errors.nationality} />
         </div>
 
+        {/* CONTACT INFORMATION */}
+        <h3 className="text-md font-medium text-gray-900">Contact Information</h3>
         {/* Email */}
         <div>
           <InputLabel htmlFor="email" value="Email" />
-
           <TextInput
             id="email"
             type="email"
@@ -74,9 +189,8 @@ export default function UpdateProfileInformation({ mustVerifyEmail, status, clas
             value={data.email}
             onChange={(e) => setData("email", e.target.value)}
             required
-            autoComplete="username"
+            autoComplete="email"
           />
-
           <InputError className="mt-2" message={errors.email} />
         </div>
 
@@ -101,49 +215,137 @@ export default function UpdateProfileInformation({ mustVerifyEmail, status, clas
             )}
           </div>
         )}
-
-        {/* Contact Info */}
+        {/* Phone Number */}
         <div>
-          <InputLabel htmlFor="contact_information" value="Contact Information" />
-
+          <InputLabel htmlFor="phone_number" value="Phone Number" />
           <TextInput
-            id="contact_information"
+            id="phone_number"
             type="text"
             className="mt-1 block w-full"
-            value={data.contact_information}
-            onChange={(e) => setData("contact_information", e.target.value)}
+            value={data.phone_number}
+            onChange={(e) => setData("phone_number", e.target.value)}
             required
           />
-
-          <InputError className="mt-2" message={errors.contact_information} />
+          <InputError className="mt-2" message={errors.phone_number} />
         </div>
-
-        {/* Address */}
+        {/* Street */}
         <div>
-          <InputLabel htmlFor="address" value="Address" />
-
+          <InputLabel htmlFor="street" value="Street" />
           <TextInput
-            id="address"
+            id="street"
             type="text"
             className="mt-1 block w-full"
-            value={data.address}
-            onChange={(e) => setData("address", e.target.value)}
+            value={data.street}
+            onChange={(e) => setData("street", e.target.value)}
             required
           />
-
-          <InputError className="mt-2" message={errors.address} />
+          <InputError className="mt-2" message={errors.street} />
+        </div>
+        {/* Barangay */}
+        <div>
+          <InputLabel htmlFor="barangay" value="Barangay" />
+          <TextInput
+            id="barangay"
+            type="text"
+            className="mt-1 block w-full"
+            value={data.barangay}
+            onChange={(e) => setData("barangay", e.target.value)}
+            required
+          />
+          <InputError className="mt-2" message={errors.barangay} />
+        </div>
+        {/* City */}
+        <div>
+          <InputLabel htmlFor="city" value="City" />
+          <TextInput
+            id="city"
+            type="text"
+            className="mt-1 block w-full"
+            value={data.city}
+            onChange={(e) => setData("city", e.target.value)}
+            required
+          />
+          <InputError className="mt-2" message={errors.city} />
+        </div>
+        {/* Province */}
+        <div>
+          <InputLabel htmlFor="province" value="Province" />
+          <TextInput
+            id="province"
+            type="text"
+            className="mt-1 block w-full"
+            value={data.province}
+            onChange={(e) => setData("province", e.target.value)}
+            required
+          />
+          <InputError className="mt-2" message={errors.province} />
         </div>
 
-        {/* Profile picture */}
-        <div className="mb-6">
-          <label className="block text-sm font-medium text-gray-700">Profile Picture</label>
-          <input
-            type="file"
-            onChange={(e) => setData("profile_picture", e.target.files[0])}
+        {/* SECURITY QUESTION */}
+        <h3 className="text-md font-medium text-gray-900">Security Questions</h3>
+        {/* Security Question 1 */}
+        <div className="mt-4">
+          <InputLabel htmlFor="security_question_1" value="Security Question 1" />
+          <SelectInput
+            id="security_question_1"
             className="mt-1 block w-full"
-            accept="image/*"
+            value={data.security_question_1}
+            onChange={(e) => setData("security_question_1", e.target.value)}
+            required
+          >
+            <option value="">Select Security Question</option>
+            {securityQuestions.map((question, index) => (
+              <option key={index} value={question} disabled={question === data.security_question_2}>
+                {question}
+              </option>
+            ))}
+          </SelectInput>
+          <InputError className="mt-2" message={errors.security_question_1} />
+        </div>
+        {/* Security Question 1 Answer */}
+        <div className="mt-4">
+          <InputLabel htmlFor="security_answer_1" value="Answer 1" />
+          <TextInput
+            id="security_answer_1"
+            type="text"
+            className="mt-1 block w-full"
+            value={data.security_answer_1}
+            onChange={(e) => setData("security_answer_1", e.target.value)}
+            required
           />
-          {errors.profile_picture && <div className="text-red-500">{errors.profile_picture}</div>}
+          <InputError className="mt-2" message={errors.security_answer_1} />
+        </div>
+        {/* Security Question 2 */}
+        <div className="mt-4">
+          <InputLabel htmlFor="security_question_2" value="Security Question 2" />
+          <SelectInput
+            id="security_question_2"
+            className="mt-1 block w-full"
+            value={data.security_question_2}
+            onChange={(e) => setData("security_question_2", e.target.value)}
+            required
+          >
+            <option value="">Select Security Question</option>
+            {securityQuestions.map((question, index) => (
+              <option key={index} value={question} disabled={question === data.security_question_1}>
+                {question}
+              </option>
+            ))}
+          </SelectInput>
+          <InputError className="mt-2" message={errors.security_question_2} />
+        </div>
+        {/* Security Question 2 Answer */}
+        <div className="mt-4">
+          <InputLabel htmlFor="security_answer_2" value="Answer 2" />
+          <TextInput
+            id="security_answer_2"
+            type="text"
+            className="mt-1 block w-full"
+            value={data.security_answer_2}
+            onChange={(e) => setData("security_answer_2", e.target.value)}
+            required
+          />
+          <InputError className="mt-2" message={errors.security_answer_2} />
         </div>
 
         {/* Save Button */}

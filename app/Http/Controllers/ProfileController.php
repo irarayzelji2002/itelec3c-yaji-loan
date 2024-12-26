@@ -50,26 +50,39 @@ class ProfileController extends Controller
 
             // Handle file uploads if present
             if ($request->hasFile('id_photo_front')) {
-                Storage::disk('public')->delete($user->id_photo_front);
-                $user->id_photo_front = $request->file('id_photo_front')->store('id-photos', 'public');
+                if ($user->id_photo_front) {
+                    Storage::disk('public')->delete($user->id_photo_front);
+                }
+                $path = $request->file('id_photo_front')->store('id-photos', 'public');
+                if ($path) $user->id_photo_front = $path;
             }
 
             if ($request->hasFile('id_photo_back')) {
-                Storage::disk('public')->delete($user->id_photo_back);
-                $user->id_photo_back = $request->file('id_photo_back')->store('id-photos', 'public');
+                if ($user->id_photo_back) {
+                    Storage::disk('public')->delete($user->id_photo_back);
+                }
+                $path = $request->file('id_photo_back')->store('id-photos', 'public');
+                if ($path) $user->id_photo_back = $path;
             }
 
             if ($request->hasFile('selfie_photo')) {
-                Storage::disk('public')->delete($user->selfie_photo);
-                $user->selfie_photo = $request->file('selfie_photo')->store('selfies', 'public');
+                if ($user->selfie_photo) {
+                    Storage::disk('public')->delete($user->selfie_photo);
+                }
+                $path = $request->file('selfie_photo')->store('selfies', 'public');
+                if ($path) $user->selfie_photo = $path;
             }
 
             if ($request->hasFile('profile_picture')) {
-                Storage::disk('public')->delete($user->profile_picture);
-                $user->profile_picture = $request->file('profile_picture')->store('profile-pictures', 'public');
+                if ($user->profile_picture) {
+                    Storage::disk('public')->delete($user->profile_picture);
+                }
+                $path = $request->file('profile_picture')->store('profile-pictures', 'public');
+                if ($path) $user->profile_picture = $path;
             }
 
             $validated = $request->validated();
+            unset($validated['profile_picture']);
             $user->fill($validated);
 
             if ($user->isDirty('email')) {

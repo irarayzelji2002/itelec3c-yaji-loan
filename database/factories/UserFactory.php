@@ -24,10 +24,38 @@ class UserFactory extends Factory
     public function definition(): array
     {
         return [
-            'name' => fake()->name(),
+            // Basic Information
+            'first_name' => fake()->firstName(),
+            'middle_name' => null,
+            'last_name' => fake()->lastName(),
+            'gender' => fake()->randomElement(['Male', 'Female']),
+            'birth_date' => fake()->date(),
+            'nationality' => 'Filipino',
+
+            // Contact Information
+            'phone_number' => fake()->numerify('09#########'),
             'email' => fake()->unique()->safeEmail(),
+            'street' => fake()->streetAddress(),
+            'barangay' => 'test',
+            'city' => fake()->city(),
+            'province' => fake()->state(),
+
+            // Verification
+            'verification_type' => null,
+            'id_photo_front' => null,
+            'id_photo_back' => null,
+            'selfie_photo' => null,
+
+            // Account Creation
             'email_verified_at' => now(),
             'password' => static::$password ??= Hash::make('password'),
+            'security_question_1' => 'What is your mother\'s maiden name?',
+            'security_answer_1' => 'test',
+            'security_question_2' => 'What was your first pet\'s name?',
+            'security_answer_2' => 'test',
+            'role' => null,
+            'verification_status' => 'pending',
+            'profile_picture' => null,
             'remember_token' => Str::random(10),
         ];
     }

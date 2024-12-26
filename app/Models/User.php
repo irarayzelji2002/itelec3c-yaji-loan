@@ -77,6 +77,12 @@ class User extends Authenticatable
         ];
     }
 
+    protected $appends = [
+        'full_name',
+        'full_address',
+        'role_name',
+    ];
+
     // Get full name accessor
     public function getFullNameAttribute()
     {
@@ -86,7 +92,7 @@ class User extends Authenticatable
     // Get full address accessor
     public function getFullAddressAttribute()
     {
-        return "{$this->street}, {$this->barangay}, {$this->city}, {$this->province}";
+        return "{$this->street}, Brgy. {$this->barangay}, {$this->city}, {$this->province}";
     }
 
     // Get role name accessor

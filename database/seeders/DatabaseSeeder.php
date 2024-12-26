@@ -18,9 +18,9 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
         // Create roles
-        $adminRole = Role::create(['name' => 'admin']);
-        $employeeRole = Role::create(['name' => 'employee']);
-        $memberRole = Role::create(['name' => 'member']);
+        $adminRole = Role::firstOrCreate(['name' => 'admin']);
+        $employeeRole = Role::firstOrCreate(['name' => 'employee']);
+        $memberRole = Role::firstOrCreate(['name' => 'member']);
 
         // Create an admin user
         $adminUser = User::factory()->create([
@@ -30,12 +30,13 @@ class DatabaseSeeder extends Seeder
             'password' => bcrypt('admin123'),
             'gender' => 'Male',
             'birth_date' => '1990-01-01',
-            'nationality' => 'Filipino',
+            'nationality' => 'Philippines',
             'phone_number' => '09123456789',
             'street' => 'Sample Street',
             'barangay' => 'Sample Barangay',
             'city' => 'Manila',
             'province' => 'Metro Manila',
+            'verification_status' => 'verified'
         ]);
         $adminUser->assignRole($adminRole);
 
@@ -47,12 +48,13 @@ class DatabaseSeeder extends Seeder
             'password' => bcrypt('admin123'),
             'gender' => 'Male',
             'birth_date' => '1990-01-01',
-            'nationality' => 'Filipino',
+            'nationality' => 'Philippines',
             'phone_number' => '09999999999',
             'street' => 'Sample Street',
             'barangay' => 'Sample Barangay',
             'city' => 'Meycauayan',
             'province' => 'Bulacan',
+            'verification_status' => 'verified'
         ]);
         $employeeUser->assignRole($employeeRole);
 
@@ -64,12 +66,13 @@ class DatabaseSeeder extends Seeder
             'password' => bcrypt('admin123'),
             'gender' => 'Male',
             'birth_date' => '1990-01-01',
-            'nationality' => 'Filipino',
+            'nationality' => 'Philippines',
             'phone_number' => '09888888888',
             'street' => 'Sample Street',
             'barangay' => 'Sample Barangay',
             'city' => 'Makati',
             'province' => 'Metro Manila',
+            'verification_status' => 'verified'
         ]);
         $memberUser->assignRole($memberRole);
 

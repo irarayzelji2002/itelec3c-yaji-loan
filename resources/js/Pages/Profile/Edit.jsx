@@ -16,7 +16,7 @@ export default function Edit({ mustVerifyEmail, status }) {
       <div className="pb-12">
         <div className="flex justify-center p-5">
           <PrimaryButton>
-            <a href={route("profile.show")} className="text-sm text-white hover:text-white">
+            <a href={route("profile.show")} className="text-sm">
               ← Back to Profile
             </a>
           </PrimaryButton>
