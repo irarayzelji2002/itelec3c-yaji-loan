@@ -29,7 +29,7 @@ export default function PaymentPage() {
 
           <div className="request-body-2">
             <div className="tab-content">
-              <h3 style={{ color: "#043C3C" }}>Loan Due on December 3, 2024</h3>
+              <h3 style={{ color: "var(--color-header)" }}>Loan Due on December 3, 2024</h3>
               <h1 style={{ color: "black" }}>₱ 0.00</h1>
             </div>
           </div>
@@ -38,7 +38,7 @@ export default function PaymentPage() {
             <div className="tab-content">
               <h3 style={{ color: "white" }}>Enter Amount</h3>
               <input type="text" className="amount-input" placeholder="₱ 0.00" />
-              <span style={{ color: "#57df98" }}>Wallet Balance: ₱ 0.00</span>
+              <span style={{ color: "var(--color-light-green)" }}>Wallet Balance: ₱ 0.00</span>
 
               <div style={{ display: "flex", gap: "1rem" }}>
                 <Link href="/success" className="accept-button" style={{ marginLeft: "auto" }}>

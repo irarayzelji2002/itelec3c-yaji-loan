@@ -82,7 +82,7 @@ export default function Login({ status, canResetPassword }) {
         <div className="center-column">
           <button
             style={{
-              backgroundColor: "#57DF98",
+              backgroundColor: "var(--color-light-green)",
               color: "black",
               padding: "10px 20px",
               borderRadius: "5px",
