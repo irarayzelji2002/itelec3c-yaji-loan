@@ -10,7 +10,7 @@ export default function AuthenticatedLayout({ header, children }) {
   const [showingNavigationDropdown, setShowingNavigationDropdown] = useState(false);
 
   return (
-    <div className="min-h-screen bg-gray-100">
+    <div className="bg-green-gradient min-h-screen bg-gray-100">
       <nav className="nav-bar-logged">
         <div className="nav-bar-logged max-w-100 mx-auto px-4 sm:px-6 lg:px-8">
           <div className="nav-bar-logged flex h-16 justify-between">
