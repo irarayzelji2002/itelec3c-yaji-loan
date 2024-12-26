@@ -1,14 +1,13 @@
-const Reminders = ({ reminder, title }) => {
+const Reminders = ({ reminder, title, icon }) => {
   return (
-    <div className="reminders">
-      <div className="request-header">
-        {title}
-        <div style={{ gap: "1rem", display: "flex" }}>
-          <button className="decline-button">Dismiss</button>
+    <div className="reminder-card">
+      <div className="reminder-body">
+        <div className="column-down">
+          <div className="reminder-header">{title}</div>
+          <p>{reminder}</p>{" "}
         </div>
-      </div>
-      <div className="request-body">
-        <div className="request-value"> {reminder}</div>
+
+        {/* {icon && <img src={icon} alt="icon" className="reminder-icon" />} */}
       </div>
     </div>
   );

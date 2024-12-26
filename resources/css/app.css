@@ -381,6 +381,7 @@
   display: flex;
   justify-content: space-between;
   background-color: var(--color-header);
+  border: 1px solid var(--color-border);
   font-size: 20px;
   font-weight: bold;
   color: var(--color-white);
@@ -427,6 +428,7 @@
   width: 100%;
   display: flex;
   background-color: var(--color-light-gray);
+  border: 1px solid var(--color-border);
   padding: 20px;
   border-radius: 12px;
   margin-bottom: 20px;
@@ -439,6 +441,27 @@
   width: 100%;
   display: flex;
   background-color: var(--color-light-gray);
+  border: 5px solid;
+  border-image: linear-gradient(to right, #00a878, #004d40) 1;
+  padding: 20px;
+  margin-bottom: 20px;
+  flex-direction: column;
+}
+.request-body-2 {
+  width: 100%;
+  display: flex;
+  background-color: var(--color-light-gray);
+  border: 5px solid;
+  border-image: linear-gradient(to right, #00a878, #004d40) 1;
+  padding: 20px;
+  margin-bottom: 20px;
+  flex-direction: column;
+}
+.request-body-3 {
+  width: 100%;
+  display: flex;
+  background-color: var(--color-light-gray);
+  border: 5px solid var(--color-gray);
   padding: 20px;
   margin-bottom: 20px;
   flex-direction: column;
@@ -515,6 +538,12 @@
 
 .tab-content h2 {
   text-align: end;
+}
+
+.row-side {
+  display: flex;
+  flex-direction: row;
+  font-weight: bold;
 }
 
 .column-down {
@@ -604,6 +633,7 @@
 
 .amount-input {
   width: 100%;
+  height: auto;
   padding: 10px;
   border-radius: 4px;
   border: 1px solid var(--color-gray);
@@ -612,6 +642,63 @@
 
 option:first {
   color: #999;
+}
+
+/* Reminders.css */
+.reminder-card {
+  background: linear-gradient(135deg, #55da55, #00a878);
+  color: #ffffff;
+  border-radius: 12px;
+  padding: 16px 24px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+  transition:
+    transform 0.3s ease,
+    box-shadow 0.3s ease;
+  margin-bottom: 16px;
+}
+
+.reminder-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.15);
+}
+
+.reminder-header {
+  font-size: 24px;
+  font-weight: bold;
+  margin-bottom: 8px;
+}
+
+.reminder-body {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.reminder-body p {
+  margin: 0;
+  font-size: 14px;
+  line-height: 1.5;
+  max-width: 120px;
+  font-weight: lighter;
+}
+
+.reminder-icon {
+  width: 48px;
+  height: 48px;
+}
+
+.reminders-container {
+  display: flex;
+  flex-direction: row;
+  gap: 16px;
+}
+.breakdown-content {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
 }
 
 @media screen and (max-width: 768px) {
