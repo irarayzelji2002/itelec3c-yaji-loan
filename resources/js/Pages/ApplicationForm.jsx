@@ -10,12 +10,12 @@ export default function LoanApplicationForm() {
       <Head title="Loan Application Form" />
       <div className="min-h-screen bg-gradient-to-b from-green-100 to-white py-12">
         <div className="mx-auto max-w-4xl rounded-lg bg-white p-8 shadow-lg">
-          <h1 className="mb-6 text-center text-2xl font-bold text-gray-800">
+          <h1 className="mb-6 text-center text-2xl font-bold text-[#043C3C]">
             Loan Application Form
           </h1>
           <form>
             <div className="mb-4">
-              <label className="mb-2 block font-medium text-gray-700" htmlFor="amount">
+              <label className="mb-2 block font-bold text-[#043C3C]" htmlFor="amount">
                 How much do you want to borrow? <span className="text-red-500">*</span>
               </label>
               <input
@@ -27,7 +27,7 @@ export default function LoanApplicationForm() {
             </div>
 
             <div className="mb-4">
-              <label className="mb-2 block font-medium text-gray-700" htmlFor="purpose">
+              <label className="mb-2 block font-bold text-[#043C3C]" htmlFor="purpose">
                 Purpose of Loan <span className="text-red-500">*</span>
               </label>
               <input
@@ -39,7 +39,7 @@ export default function LoanApplicationForm() {
             </div>
 
             <div className="mb-4">
-              <label className="mb-2 block font-medium text-gray-700" htmlFor="term">
+              <label className="mb-2 block font-bold text-[#043C3C]" htmlFor="term">
                 Loan Term (Months/Years) <span className="text-red-500">*</span>
               </label>
               <input
@@ -51,9 +51,10 @@ export default function LoanApplicationForm() {
             </div>
 
             <div className="mb-6">
-              <label className="mb-2 block font-medium text-gray-700">
+              <label className="mb-2 block font-bold text-[#043C3C]">
                 Select a Loan Type <span className="text-red-500">*</span>
               </label>
+
               <div className="grid grid-cols-2 gap-4 sm:grid-cols-4">
                 {[
                   { name: "Entry", range: "Php 5,000-20,000", rate: "3% monthly interest" },
@@ -77,7 +78,7 @@ export default function LoanApplicationForm() {
                     }}
                     onClick={() => setSelectedLoanType(type.name)}
                   >
-                    <h3 className="mb-2 text-lg font-bold text-gray-700">{type.name}</h3>
+                    <h3 className="text-black-700 mb-2 text-lg font-bold">{type.name}</h3>
                     <p className="text-sm text-gray-600">{type.range}</p>
                     <p className="text-sm text-gray-600">{type.rate}</p>
                   </div>
@@ -89,15 +90,15 @@ export default function LoanApplicationForm() {
               <label className="inline-flex items-center">
                 <input
                   type="checkbox"
-                  className="form-checkbox text-green-500 focus:ring focus:ring-green-300"
+                  className="form-checkbox rounded text-[#57DF98] focus:ring focus:ring-[#57DF98]"
                 />
-                <span className="ml-2 text-sm text-gray-700">
+                <span className="text-black-700 ml-2 text-sm font-bold">
                   I understand and agree with
-                  <a href="#" className="ml-1 text-green-600 underline">
+                  <a href="#" className="ml-1 text-[#57DF98] underline">
                     Terms & Conditions
                   </a>
-                  and
-                  <a href="#" className="ml-1 text-green-600 underline">
+                  &nbsp;and
+                  <a href="#" className="ml-1 text-[#57DF98] underline">
                     Privacy Policy
                   </a>
                   .
@@ -108,13 +109,13 @@ export default function LoanApplicationForm() {
             <div className="flex justify-center gap-4">
               <button
                 type="submit"
-                className="!rounded-lg bg-green-500 px-6 py-2 text-white hover:bg-green-600 focus:outline-none focus:ring focus:ring-green-300"
+                className="!rounded-lg bg-[#57DF98] px-6 py-2 font-bold text-black hover:bg-[#4bcf8f] focus:outline-none focus:ring focus:ring-[#45C878]"
               >
-                Apply
+                <strong>Apply</strong>
               </button>
               <button
                 type="button"
-                className="!rounded-lg bg-gray-300 px-6 py-2 text-gray-700 hover:bg-gray-400 focus:outline-none focus:ring focus:ring-gray-200"
+                className="!rounded-lg border-2 border-[#57DF98] bg-white px-6 py-2 font-bold text-black hover:bg-[#F7F7F7] focus:outline-none focus:ring focus:ring-[#57DF98]"
               >
                 Cancel
               </button>
