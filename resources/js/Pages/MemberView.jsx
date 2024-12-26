@@ -31,9 +31,30 @@ export default function MemberView() {
           <MyLoan loanNo={2} />
           <MyLoan loanNo={3} />
           <div className="column-down">
+            {" "}
             <h2>Reminders</h2>
-            <Reminders reminder={"Please update your email."} title={"Account Setup"} />
-            <Reminders reminder={"Please settle your loan now."} title={"Loan Reminder"} />
+            <div className="reminders-container">
+              <Reminders
+                reminder="Get cashback when you complete your loan in advance."
+                title="Get Cashback"
+                icon="/img/building.png"
+              />
+              <Reminders
+                reminder="Please settle your loan now."
+                title="Loan Reminder"
+                icon="/img/logo.png"
+              />
+              <Reminders
+                reminder="Get cashback when you complete your loan in advance."
+                title="Get Cashback"
+                icon="/img/building.png"
+              />
+              <Reminders
+                reminder="Please settle your loan now."
+                title="Loan Reminder"
+                icon="/img/logo.png"
+              />
+            </div>
           </div>
         </div>
       </div>
