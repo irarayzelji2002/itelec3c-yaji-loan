@@ -16,14 +16,14 @@
         }
 
         .btn-green {
-            background-color: #57DF98;
-            border-color: #57DF98;
+            background-color: var(  --color-light-green);
+            border-color: var(  --color-light-green);
             font-weight: bold
         }
 
         .btn-green:hover {
-            background-color: #043C3C;
-            border-color: #043C3C;
+            background-color:var(--color-header);
+            border-color:var(--color-header);
             font-weight: bold;
             color: white;
         }
@@ -33,7 +33,7 @@
         }
 
         .card-header-green {
-            background-color: #043C3C;
+            background-color: var(--color-header);
             color: white;
         }
 
