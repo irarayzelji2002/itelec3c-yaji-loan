@@ -17,7 +17,7 @@ export default function MemberView() {
         <div className="mx-auto max-w-7xl sm:px-6 lg:px-8">
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
             <h1 className="welcome-text">
-              Welcome, <span className="highlighted-name">{user.name}</span>
+              Welcome, <span className="highlighted-name">{user.first_name}!</span>
             </h1>
             <Link href="/application-form" className="add-table-button">
               <span className="plus-icon">+</span> Apply for a Loan

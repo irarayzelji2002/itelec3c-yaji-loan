@@ -1,18 +1,9 @@
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
+import { capitalizeFirstLetter, formatDateMMDDYYY } from "@/utils/displayFunctions";
 import { Head, Link, usePage } from "@inertiajs/react";
 
 export default function Show() {
   const user = usePage().props.auth.user;
-
-  function formatDateMMDDYYY(value) {
-    const formattedDate = value ? value.split("T")[0] : value;
-    const [year, month, day] = formattedDate.split("-");
-    return `${month}/${day}/${year}`;
-  }
-
-  function capitalizeFirstLetter(val) {
-    return String(val).charAt(0).toUpperCase() + String(val).slice(1);
-  }
 
   return (
     <AuthenticatedLayout
