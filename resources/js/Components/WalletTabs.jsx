@@ -39,7 +39,12 @@ const WalletTabs = () => {
         </div>
       </div>
       {/* Content */}
-      <div className="content-container">{renderContent()}</div>
+      <div
+        className="content-container"
+        style={{ borderTopLeftRadius: "0", borderTopRightRadius: "0" }}
+      >
+        {renderContent()}
+      </div>
     </div>
   );
 };
