@@ -1,5 +1,6 @@
+import { validateStep1, validateStep2, validateStep3 } from "@/utils/validationRules";
 import { useForm } from "@inertiajs/react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import CreationForm from "./CreationForm";
 import IdentificationForm from "./IdentificationForm";
 import "./Register.css";
@@ -8,6 +9,13 @@ import VerificationForm from "./VerificationForm";
 
 const Register = ({ verificationTypes = [] }) => {
   const [step, setStep] = useState(1);
+  const [selectedType, setSelectedType] = useState(null);
+  const [previews, setPreviews] = useState({
+    id_photo_front: null,
+    id_photo_back: null,
+    selfie_photo: null,
+    id_file: null,
+  });
 
   const blankData = {
     // Basic Information
@@ -44,8 +52,7 @@ const Register = ({ verificationTypes = [] }) => {
 
   const { data, setData, post, processing, errors } = useForm(blankData);
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
+  const handleSubmit = () => {
     const formData = new FormData();
 
     // Append all form fields
@@ -70,10 +77,19 @@ const Register = ({ verificationTypes = [] }) => {
   };
 
   const handleNext = () => {
-    setStep(step + 1);
-    if (step === 3) {
+    if (step === 1) {
+      const { isValid } = validateStep1(data);
+      if (!isValid) return;
+    } else if (step === 2) {
+      const { isValid } = validateStep2(data, selectedType);
+      if (!isValid) return;
+    } else if (step === 3) {
+      const { isValid } = validateStep3(data);
+      if (!isValid) return;
       handleSubmit();
+      return;
     }
+    setStep(step + 1);
   };
 
   const handleCancel = () => {
@@ -84,6 +100,17 @@ const Register = ({ verificationTypes = [] }) => {
   const handleBack = () => {
     setStep(step - 1);
   };
+
+  useEffect(() => {
+    return () => {
+      // Cleanup preview URLs when component unmounts
+      Object.values(previews).forEach((preview) => {
+        if (preview && typeof preview === "string" && preview.startsWith("blob:")) {
+          URL.revokeObjectURL(preview);
+        }
+      });
+    };
+  }, []);
 
   return (
     <div className="app">
@@ -112,6 +139,10 @@ const Register = ({ verificationTypes = [] }) => {
           onBack={handleBack}
           onCancel={handleCancel}
           verificationTypes={verificationTypes}
+          selectedType={selectedType}
+          setSelectedType={setSelectedType}
+          previews={previews}
+          setPreviews={setPreviews}
         />
       )}
       {step === 3 && (

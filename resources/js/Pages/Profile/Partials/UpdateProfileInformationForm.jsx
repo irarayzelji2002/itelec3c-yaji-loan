@@ -99,7 +99,7 @@ export default function UpdateProfileInformation({ mustVerifyEmail, status, clas
             isFocused
             autoComplete="first_name"
           />
-          <InputError className="mt-2" message={errors.first_name} />
+          <InputError className="mt-1" message={errors.first_name} />
         </div>
         {/* Middle Name */}
         <div className="mt-4">
@@ -113,7 +113,7 @@ export default function UpdateProfileInformation({ mustVerifyEmail, status, clas
             placeholder="Middle Name"
             autoComplete="middle_name"
           />
-          <InputError className="mt-2" message={errors.middle_name} />
+          <InputError className="mt-1" message={errors.middle_name} />
         </div>
         {/* Last Name */}
         <div className="mt-4">
@@ -128,7 +128,7 @@ export default function UpdateProfileInformation({ mustVerifyEmail, status, clas
             required
             autoComplete="last_name"
           />
-          <InputError className="mt-2" message={errors.last_name} />
+          <InputError className="mt-1" message={errors.last_name} />
         </div>
         {/* Gender */}
         <div className="mt-4">
@@ -148,7 +148,7 @@ export default function UpdateProfileInformation({ mustVerifyEmail, status, clas
             <option value="Female">Female</option>
             <option value="Other">Other</option>
           </SelectInput>
-          <InputError className="mt-2" message={errors.gender} />
+          <InputError className="mt-1" message={errors.gender} />
         </div>
         {/* Birth Date */}
         <div className="mt-4">
@@ -160,7 +160,7 @@ export default function UpdateProfileInformation({ mustVerifyEmail, status, clas
             onChange={(e) => setData("birth_date", e.target.value)}
             required
           />
-          <InputError className="mt-2" message={errors.birth_date} />
+          <InputError className="mt-1" message={errors.birth_date} />
         </div>
         {/* Nationality*/}
         <div className="mt-4">
@@ -183,7 +183,7 @@ export default function UpdateProfileInformation({ mustVerifyEmail, status, clas
             <option value="United States">United States</option>
             {/* Add more nationalities as needed */}
           </SelectInput>
-          <InputError className="mt-2" message={errors.nationality} />
+          <InputError className="mt-1" message={errors.nationality} />
         </div>
 
         {/* CONTACT INFORMATION */}
@@ -201,7 +201,7 @@ export default function UpdateProfileInformation({ mustVerifyEmail, status, clas
             required
             autoComplete="email"
           />
-          <InputError className="mt-2" message={errors.email} />
+          <InputError className="mt-1" message={errors.email} />
         </div>
 
         {mustVerifyEmail && user.email_verified_at === null && (
@@ -237,7 +237,7 @@ export default function UpdateProfileInformation({ mustVerifyEmail, status, clas
             placeholder="09xxxxxxxxx"
             required
           />
-          <InputError className="mt-2" message={errors.phone_number} />
+          <InputError className="mt-1" message={errors.phone_number} />
         </div>
         {/* Street */}
         <div>
@@ -251,7 +251,7 @@ export default function UpdateProfileInformation({ mustVerifyEmail, status, clas
             placeholder="Street"
             required
           />
-          <InputError className="mt-2" message={errors.street} />
+          <InputError className="mt-1" message={errors.street} />
         </div>
         {/* Barangay */}
         <div>
@@ -265,7 +265,7 @@ export default function UpdateProfileInformation({ mustVerifyEmail, status, clas
             placeholder="Barangay"
             required
           />
-          <InputError className="mt-2" message={errors.barangay} />
+          <InputError className="mt-1" message={errors.barangay} />
         </div>
         {/* City */}
         <div>
@@ -279,7 +279,7 @@ export default function UpdateProfileInformation({ mustVerifyEmail, status, clas
             placeholder="City"
             required
           />
-          <InputError className="mt-2" message={errors.city} />
+          <InputError className="mt-1" message={errors.city} />
         </div>
         {/* Province */}
         <div>
@@ -293,7 +293,7 @@ export default function UpdateProfileInformation({ mustVerifyEmail, status, clas
             placeholder="Province"
             required
           />
-          <InputError className="mt-2" message={errors.province} />
+          <InputError className="mt-1" message={errors.province} />
         </div>
 
         {/* SECURITY QUESTION */}
@@ -318,7 +318,7 @@ export default function UpdateProfileInformation({ mustVerifyEmail, status, clas
               </option>
             ))}
           </SelectInput>
-          <InputError className="mt-2" message={errors.security_question_1} />
+          <InputError className="mt-1" message={errors.security_question_1} />
         </div>
         {/* Security Question 1 Answer */}
         <div className="mt-4">
@@ -336,7 +336,7 @@ export default function UpdateProfileInformation({ mustVerifyEmail, status, clas
             placeholder="Answer to Security Question 1"
             required
           />
-          <InputError className="mt-2" message={errors.security_answer_1} />
+          <InputError className="mt-1" message={errors.security_answer_1} />
         </div>
         {/* Security Question 2 */}
         <div className="mt-4">
@@ -358,7 +358,7 @@ export default function UpdateProfileInformation({ mustVerifyEmail, status, clas
               </option>
             ))}
           </SelectInput>
-          <InputError className="mt-2" message={errors.security_question_2} required={true} />
+          <InputError className="mt-1" message={errors.security_question_2} required={true} />
         </div>
         {/* Security Question 2 Answer */}
         <div className="mt-4">
@@ -372,7 +372,7 @@ export default function UpdateProfileInformation({ mustVerifyEmail, status, clas
             placeholder="Answer to Security Question 2"
             required
           />
-          <InputError className="mt-2" message={errors.security_answer_2} />
+          <InputError className="mt-1" message={errors.security_answer_2} />
         </div>
 
         {/* Save Button */}

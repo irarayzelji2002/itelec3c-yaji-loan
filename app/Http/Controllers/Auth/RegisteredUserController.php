@@ -37,7 +37,7 @@ class RegisteredUserController extends Controller
             'first_name' => 'required|string|max:255',
             'middle_name' => 'nullable|string|max:255',
             'last_name' => 'required|string|max:255',
-            'gender' => 'required|string|in:male,female,other',
+            'gender' => 'required|string|in:Male,Female,Other',
             'birth_date' => 'required|date',
             'nationality' => 'required|string|max:255',
             'phone_number' => 'required|string|max:255',
@@ -51,7 +51,7 @@ class RegisteredUserController extends Controller
             'id_photo_back' => 'nullable|image|mimes:jpeg,png,jpg|max:2048', // 2MB
             'id_file' => 'nullable|file|mimes:pdf|max:10240', // 10MB
             'selfie_photo' => 'required|image|mimes:jpeg,png,jpg|max:2048',
-            'password' => ['required', 'confirmed', Rules\Password::defaults()],
+            'password' => ['required', Rules\Password::defaults()],
             'security_question_1' => 'required|string|max:255',
             'security_answer_1' => 'required|string|max:255',
             'security_question_2' => 'required|string|max:255',
