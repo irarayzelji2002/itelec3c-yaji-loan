@@ -26,6 +26,7 @@ Route::get('/dashboard', function () {
     return Inertia::render('Dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
 
+
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'show'])->name('profile.show');
     Route::get('/profile/edit', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -53,6 +54,9 @@ Route::middleware('auth')->group(function () {
     Route::get('/success', function () {
         return Inertia::render('SuccessPage');
     })->name('success.page');
+    Route::get('/success-loan', function () {
+        return Inertia::render('SuccessLoan');
+    })->name('success.loan');
 });
 
 Route::get('/loan', [ViewTable::class, 'ViewTables'])->name('view.loan');
