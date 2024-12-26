@@ -12,16 +12,21 @@ export default function AuthenticatedLayout({ header, children }) {
   return (
     <div className="min-h-screen bg-gray-100">
       <nav className="nav-bar-logged">
-        <div className="nav-bar-logged mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div className="nav-bar-logged max-w-100 mx-auto px-4 sm:px-6 lg:px-8">
           <div className="nav-bar-logged flex h-16 justify-between">
-            <div className="flex w-full justify-between">
+            <div className="flex flex-grow justify-between">
               <div className="flex shrink-0 items-center">
                 <Link href="/">
                   <img className="block h-12 w-auto" src="/img/logosText.png" alt="Workflow" />
                 </Link>
               </div>
 
-              <div className="flex justify-end space-x-8 sm:-my-px sm:ms-10 sm:flex">
+              <div
+                className={
+                  (!showingNavigationDropdown ? "flex" : "hidden") +
+                  " flex justify-end space-x-8 sm:-my-px sm:ms-10 sm:flex"
+                }
+              >
                 <NavLink
                   style={{ color: "aliceblue" }}
                   href={route("dashboard")}
@@ -85,7 +90,7 @@ export default function AuthenticatedLayout({ header, children }) {
             <div className="-me-2 flex items-center sm:hidden">
               <button
                 onClick={() => setShowingNavigationDropdown((previousState) => !previousState)}
-                className="inline-flex items-center justify-center !rounded-lg p-2 text-gray-400 transition duration-150 ease-in-out hover:bg-gray-100 hover:text-gray-500 focus:bg-gray-100 focus:text-gray-500 focus:outline-none"
+                className="inline-flex items-center justify-center !rounded-lg p-2 text-white transition duration-150 ease-in-out hover:bg-gray-100 hover:text-gray-300 focus:bg-gray-100 focus:text-gray-300 focus:outline-none"
               >
                 <svg className="h-6 w-6" stroke="currentColor" fill="none" viewBox="0 0 24 24">
                   <path
@@ -109,7 +114,7 @@ export default function AuthenticatedLayout({ header, children }) {
         </div>
 
         <div className={(showingNavigationDropdown ? "block" : "hidden") + " sm:hidden"}>
-          <div className="space-y-1 pb-3 pt-2">
+          <div>
             <ResponsiveNavLink href={route("dashboard")} active={route().current("dashboard")}>
               Dashboard
             </ResponsiveNavLink>
@@ -124,13 +129,13 @@ export default function AuthenticatedLayout({ header, children }) {
             </ResponsiveNavLink>
           </div>
 
-          <div className="border-t border-gray-200 pb-1 pt-4">
-            <div className="px-4">
-              <div className="text-base font-medium text-gray-800">{user.full_name}</div>
-              <div className="text-sm font-medium text-gray-500">{user.email}</div>
-            </div>
+          <div className="pb-1">
+            {/* <div className="px-4">
+              <div className="text-base font-medium text-white">{user.full_name}</div>
+              <div className="text-sm font-medium text-gray-300">{user.email}</div>
+            </div> */}
 
-            <div className="mt-3 space-y-1">
+            <div>
               <ResponsiveNavLink href={route("profile.show")}>Profile</ResponsiveNavLink>
               <ResponsiveNavLink method="post" href={route("logout")} as="button">
                 Log Out
@@ -142,7 +147,7 @@ export default function AuthenticatedLayout({ header, children }) {
 
       {header && (
         <header className="bg-white shadow">
-          <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">{header}</div>
+          <div className="max-w-100 mx-auto px-4 py-6 sm:px-6 lg:px-8">{header}</div>
         </header>
       )}
 

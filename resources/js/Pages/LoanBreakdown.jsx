@@ -12,7 +12,7 @@ export default function LoanBreakdown() {
     <AuthenticatedLayout>
       <Head title="Dashboard" />
       <div className="py-12">
-        <div className="mx-auto max-w-7xl sm:px-6 lg:px-8">
+        <div className="max-w-100 mx-auto sm:px-6 lg:px-8">
           <div className="request-body-2">
             <div className="request-row">
               <div className="request-label">Loan ID: </div>

@@ -6,8 +6,10 @@ const Table = ({
   columns,
   data: initialData,
   showSearch = true,
+  showStatusBar = true,
   itemsPerPage = 10,
   loading: externalLoading = false,
+  defaultSort = { column: "id", direction: "asc" },
 }) => {
   const [data, setData] = useState([]);
   const [filteredData, setFilteredData] = useState([]);
@@ -15,18 +17,23 @@ const Table = ({
   const [isSearching, setIsSearching] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
-  const [sort, setSort] = useState(
-    columns.reduce((acc, col) => {
+  const [sort, setSort] = useState(() => {
+    const sortState = columns.reduce((acc, col) => {
       if (col.sortable) {
-        acc[col.id] = "asc";
+        acc[col.id] = col.id === defaultSort.column ? defaultSort.direction : "asc";
       }
       return acc;
-    }, {})
-  );
+    }, {});
+    return sortState;
+  });
 
+  // Apply default sort on initial data load
   useEffect(() => {
-    setData(initialData);
-    setFilteredData(initialData);
+    if (initialData.length > 0) {
+      const sorted = sortData(initialData, defaultSort.column, defaultSort.direction);
+      setData(sorted);
+      setFilteredData(sorted);
+    }
   }, [initialData]);
 
   useEffect(() => {
@@ -79,6 +86,35 @@ const Table = ({
     setFilteredData(sortedData);
   };
 
+  const sortData = (data, columnId, order) => {
+    return [...data].sort((a, b) => {
+      const column = columns.find((col) => col.id === columnId);
+      let aValue = column?.getValue ? column.getValue(a) : a[columnId];
+      let bValue = column?.getValue ? column.getValue(b) : b[columnId];
+
+      // Handle null/undefined values
+      aValue = aValue ?? "";
+      bValue = bValue ?? "";
+
+      // Handle different data types
+      if (column?.type === "date") {
+        aValue = new Date(aValue);
+        bValue = new Date(bValue);
+        return order === "asc" ? aValue - bValue : bValue - aValue;
+      }
+
+      if (column?.type === "number") {
+        aValue = Number(aValue);
+        bValue = Number(bValue);
+        return order === "asc" ? aValue - bValue : bValue - aValue;
+      }
+
+      return order === "asc"
+        ? aValue.toString().localeCompare(bValue.toString())
+        : bValue.toString().localeCompare(aValue.toString());
+    });
+  };
+
   const paginatedData = filteredData.slice(
     (currentPage - 1) * itemsPerPage,
     currentPage * itemsPerPage
@@ -89,31 +125,38 @@ const Table = ({
   return (
     <div>
       {showSearch && (
-        <div className="mb-4">
-          <TextInput
-            type="text"
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            placeholder="Search here..."
-            className="w-full"
-          />
-          {isSearching && <div>Searching {searchQuery}...</div>}
+        <div className="mx-4 mb-4 sm:mx-0">
+          <div className="relative">
+            <TextInput
+              type="text"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              placeholder="Search..."
+              className="w-full"
+            />
+            <div className="absolute inset-y-0 right-0 flex items-center px-3 text-gray-600 hover:text-gray-800">
+              <i className="fa-solid fa-magnifying-glass"></i>
+            </div>
+          </div>
+          {isSearching && <div className="mt-1 text-sm">Searching {searchQuery}...</div>}
         </div>
       )}
 
       <div className="overflow-x-auto">
         <table className="min-w-full divide-y divide-gray-200">
-          <thead className="bg-gray-50">
+          <thead className="bg-green-900 text-white">
             <tr>
               {columns.map((column) => (
                 <th
                   key={column.id}
-                  className="px-6 py-3 text-xs font-medium uppercase"
+                  className="px-2 py-1 text-center text-sm font-medium"
                   style={{ minWidth: column.minWidth }}
                 >
                   <div className="flex items-center justify-between">
-                    <span>{column.label}</span>
-                    {column.sortable && (
+                    <span className={`${column.sortable && "mr-2"} flex flex-grow justify-center`}>
+                      {column.label}
+                    </span>
+                    {column.sortable && !column.isAction && (
                       <button className="text-gray-500" onClick={() => handleSort(column.id)}>
                         {sort[column.id] === "asc" ? (
                           <i className="fa-solid fa-chevron-up" />
@@ -130,13 +173,13 @@ const Table = ({
           <tbody className="divide-y divide-gray-200 bg-white">
             {loading ? (
               <tr>
-                <td colSpan={columns.length} className="px-6 py-4 text-center">
+                <td colSpan={columns.length} className="px-2 py-1 text-center">
                   Loading...
                 </td>
               </tr>
             ) : paginatedData.length === 0 ? (
               <tr>
-                <td colSpan={columns.length} className="px-6 py-4 text-center">
+                <td colSpan={columns.length} className="px-2 py-1 text-center">
                   No results found
                 </td>
               </tr>
@@ -144,10 +187,14 @@ const Table = ({
               paginatedData.map((item) => (
                 <tr key={item.id}>
                   {columns.map((column) => (
-                    <td key={column.id} className="whitespace-nowrap px-6 py-4">
-                      {column.render
-                        ? column.render(item)
-                        : item[column.id] || column.defaultValue || "-"}
+                    <td key={column.id} className="whitespace-nowrap px-2 py-1 text-sm">
+                      {column.isAction
+                        ? typeof column.component === "function"
+                          ? column.component(item)
+                          : column.component
+                        : column.render
+                          ? column.render(item)
+                          : item[column.id] || column.defaultValue || "-"}
                     </td>
                   ))}
                 </tr>

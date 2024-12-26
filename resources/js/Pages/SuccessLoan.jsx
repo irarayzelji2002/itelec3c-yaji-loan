@@ -6,7 +6,7 @@ export default function Dashboard() {
     <AuthenticatedLayout>
       <Head title="Dashboard" />
       <div className="py-12">
-        <div className="mx-auto max-w-7xl sm:px-6 lg:px-8">
+        <div className="max-w-100 mx-auto sm:px-6 lg:px-8">
           cool coool cool cool cool cool{/* code here */}
         </div>
       </div>
