@@ -98,7 +98,7 @@ export default function LoanApplicationForm() {
               <label className="inline-flex items-center">
                 <input
                   type="checkbox"
-                  className="form-checkbox rounded text-[#57DF98] focus:ring focus:ring-[#57DF98]"
+                  className="form-checkbox rounded text-green-700 focus:ring focus:ring-green-700"
                 />
                 <span className="text-black-700 ml-2 text-sm font-bold">
                   I understand and agree with
