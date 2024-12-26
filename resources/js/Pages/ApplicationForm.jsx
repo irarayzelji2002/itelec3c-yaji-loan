@@ -10,12 +10,12 @@ export default function LoanApplicationForm() {
       <Head title="Loan Application Form" />
       <div className="min-h-screen bg-gradient-to-b from-green-100 to-white py-12">
         <div className="mx-auto max-w-4xl rounded-lg bg-white p-8 shadow-lg">
-          <h1 className="mb-6 text-center text-2xl font-bold text-[#043C3C]">
+          <h1 className="mb-6 text-center text-2xl font-bold text-green-900">
             Loan Application Form
           </h1>
           <form>
             <div className="mb-4">
-              <label className="mb-2 block font-bold text-[#043C3C]" htmlFor="amount">
+              <label className="mb-2 block font-bold text-green-900" htmlFor="amount">
                 How much do you want to borrow? <span className="text-red-500">*</span>
               </label>
               <input
@@ -27,7 +27,7 @@ export default function LoanApplicationForm() {
             </div>
 
             <div className="mb-4">
-              <label className="mb-2 block font-bold text-[#043C3C]" htmlFor="purpose">
+              <label className="mb-2 block font-bold text-green-900" htmlFor="purpose">
                 Purpose of Loan <span className="text-red-500">*</span>
               </label>
               <input
@@ -39,7 +39,7 @@ export default function LoanApplicationForm() {
             </div>
 
             <div className="mb-4">
-              <label className="mb-2 block font-bold text-[#043C3C]" htmlFor="term">
+              <label className="mb-2 block font-bold text-green-900" htmlFor="term">
                 Loan Term (Months/Years) <span className="text-red-500">*</span>
               </label>
               <input
@@ -51,7 +51,7 @@ export default function LoanApplicationForm() {
             </div>
 
             <div className="mb-6">
-              <label className="mb-2 block font-bold text-[#043C3C]">
+              <label className="mb-2 block font-bold text-green-900">
                 Select a Loan Type <span className="text-red-500">*</span>
               </label>
 
@@ -94,11 +94,11 @@ export default function LoanApplicationForm() {
                 />
                 <span className="text-black-700 ml-2 text-sm font-bold">
                   I understand and agree with
-                  <a href="#" className="ml-1 text-[#57DF98] underline">
+                  <a href="#" className="ml-1 text-green-700 underline hover:text-green-600">
                     Terms & Conditions
                   </a>
                   &nbsp;and
-                  <a href="#" className="ml-1 text-[#57DF98] underline">
+                  <a href="#" className="ml-1 text-green-700 underline hover:text-green-600">
                     Privacy Policy
                   </a>
                   .
@@ -109,13 +109,14 @@ export default function LoanApplicationForm() {
             <div className="flex justify-center gap-4">
               <button
                 type="submit"
-                className="!rounded-lg bg-[#57DF98] px-6 py-2 font-bold text-black hover:bg-[#4bcf8f] focus:outline-none focus:ring focus:ring-[#45C878]"
+                className="!rounded-lg bg-green-700 px-6 py-2 font-bold text-black hover:bg-green-600 focus:outline-none focus:ring focus:ring-green-500"
               >
                 <strong>Apply</strong>
               </button>
+
               <button
                 type="button"
-                className="!rounded-lg border-2 border-[#57DF98] bg-white px-6 py-2 font-bold text-black hover:bg-[#F7F7F7] focus:outline-none focus:ring focus:ring-[#57DF98]"
+                className="!rounded-lg border-2 border-green-700 bg-white px-6 py-2 font-bold text-black hover:bg-green-100 focus:outline-none focus:ring focus:ring-green-700"
               >
                 Cancel
               </button>
