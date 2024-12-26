@@ -14,30 +14,30 @@ export default function AuthenticatedLayout({ header, children }) {
       <nav className="nav-bar-logged">
         <div className="nav-bar-logged mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="nav-bar-logged flex h-16 justify-between">
-            <div className="flex">
+            <div className="flex w-full justify-between">
               <div className="flex shrink-0 items-center">
                 <Link href="/">
                   <img className="block h-12 w-auto" src="/img/logosText.png" alt="Workflow" />
                 </Link>
               </div>
 
-              <div className="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
+              <div className="flex justify-end space-x-8 sm:-my-px sm:ms-10 sm:flex">
                 <NavLink
-                  style={{ fontWeight: "aliceblue" }}
+                  style={{ color: "aliceblue" }}
                   href={route("dashboard")}
                   active={route().current("dashboard")}
                 >
                   Dashboard
                 </NavLink>
                 <NavLink
-                  style={{ fontWeight: "aliceblue" }}
+                  style={{ color: "aliceblue" }}
                   href={route("loan.requests")}
                   active={route().current("loan.requests")}
                 >
                   Loan Requests
                 </NavLink>
                 <NavLink
-                  style={{ fontWeight: "aliceblue" }}
+                  style={{ color: "aliceblue" }}
                   href={route("member.view")}
                   active={route().current("member.view")}
                 >
