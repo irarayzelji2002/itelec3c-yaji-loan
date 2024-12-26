@@ -1,5 +1,5 @@
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
-import { Head } from "@inertiajs/react";
+import { Head, Link } from "@inertiajs/react";
 import { useState } from "react";
 
 export default function LoanApplicationForm() {
@@ -86,6 +86,14 @@ export default function LoanApplicationForm() {
               </div>
             </div>
 
+            {selectedLoanType && (
+              <div className="mb-6">
+                <h2 className="text-m text-center font-bold text-green-900">
+                  Selected : <bold>{selectedLoanType}</bold>
+                </h2>
+              </div>
+            )}
+
             <div className="mb-6">
               <label className="inline-flex items-center">
                 <input
@@ -107,12 +115,13 @@ export default function LoanApplicationForm() {
             </div>
 
             <div className="flex justify-center gap-4">
-              <button
+              <Link
+                href="/success-loan"
                 type="submit"
                 className="!rounded-lg bg-green-700 px-6 py-2 font-bold text-black hover:bg-green-600 focus:outline-none focus:ring focus:ring-green-500"
               >
                 <strong>Apply</strong>
-              </button>
+              </Link>
 
               <button
                 type="button"
