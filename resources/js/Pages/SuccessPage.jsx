@@ -20,12 +20,12 @@ export default function SuccessPage() {
                 <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
               </svg>
             </div>
-            <h2 className="mb-2 text-2xl font-semibold text-gray-800">Loan Payment Received</h2>
-            <p className="mb-6 text-sm text-gray-600">
+            <h2 className="mb-2 text-2xl font-semibold text-[#043C3C]">Loan Payment Received</h2>
+            <p className="text-black-600 mb-6 text-center text-sm font-semibold">
               This has been processed and your payment will be posted in real time.
             </p>
             <div className="w-full !rounded-lg border bg-gray-50 p-4">
-              <h3 className="mb-4 font-medium text-gray-700">Transaction Receipt</h3>
+              <h3 className="mb-4 font-bold text-[#043C3C]">Transaction Receipt</h3>
               <div className="space-y-2">
                 <div className="flex justify-between">
                   <span className="text-gray-600">Account Name</span>
@@ -51,13 +51,13 @@ export default function SuccessPage() {
             </div>
             <div className="mt-6 flex w-full space-x-4">
               <button
-                className="w-full !rounded-lg bg-green-500 px-4 py-2 text-white hover:bg-green-600"
+                className="w-full !rounded-lg bg-[#57DF98] px-4 py-2 font-bold text-black hover:bg-[#4bcf8f]"
                 type="button"
               >
                 Download
               </button>
               <button
-                className="w-full !rounded-lg bg-gray-300 px-4 py-2 text-gray-800 hover:bg-gray-400"
+                className="w-full !rounded-lg border border-[#57DF98] bg-white px-4 py-2 font-bold text-black hover:bg-[#F7F7F7]"
                 type="button"
               >
                 Done
