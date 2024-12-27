@@ -34,31 +34,31 @@ export default function SuccessLoanDownload() {
               <h3 className="mb-4 font-bold text-green-900">Transaction Reciept</h3>
               <ul className="space-y-4 text-sm text-gray-700">
                 <li className="flex justify-between">
-                  <span className="font-medium text-gray-800">Account Name:</span>
+                  <span className="font-medium text-gray-800">Account Name</span>
                   <span className="text-gray-600">Harry Edward Styles</span>
                 </li>
                 <li className="flex justify-between">
-                  <span className="font-medium text-gray-800">Purpose of Loan:</span>
+                  <span className="font-medium text-gray-800">Purpose of Loan</span>
                   <span className="text-gray-600">University Tuition</span>
                 </li>
                 <li className="flex justify-between">
-                  <span className="font-medium text-gray-800">Next Repayment Date:</span>
+                  <span className="font-medium text-gray-800">Next Repayment Date</span>
                   <span className="text-gray-600">January 1, 2025</span>
                 </li>
                 <li className="flex justify-between">
-                  <span className="font-medium text-gray-800">Interest Rate:</span>
+                  <span className="font-medium text-gray-800">Interest Rate</span>
                   <span className="text-gray-600">3%</span>
                 </li>
                 <li className="flex justify-between">
-                  <span className="font-medium text-gray-800">Monthly Payment:</span>
+                  <span className="font-medium text-gray-800">Monthly Payment</span>
                   <span className="text-gray-600">-</span>
                 </li>
                 <li className="flex justify-between">
-                  <span className="font-medium text-gray-800">No. of Payments:</span>
+                  <span className="font-medium text-gray-800">No. of Payments</span>
                   <span className="text-gray-600">-</span>
                 </li>
                 <li className="flex justify-between">
-                  <span className="font-medium text-gray-800">Total Payback Amount:</span>
+                  <span className="font-medium text-gray-800">Total Payback Amount</span>
                   <span className="text-gray-600">-</span>
                 </li>
                 <li className="flex justify-between">

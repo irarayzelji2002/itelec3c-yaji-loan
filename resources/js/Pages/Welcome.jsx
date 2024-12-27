@@ -3,7 +3,7 @@ import { Head, Link } from "@inertiajs/react";
 
 const Welcome = ({ auth }) => {
   return (
-    <div style={{ backgroundColor: "whitesmoke" }}>
+    <div>
       <Head title="Welcome" />
       <Navbar auth={auth} />
 
@@ -54,63 +54,169 @@ const Welcome = ({ auth }) => {
       </section>
 
       {/* Cash-express Advantages Section */}
-      <section className="advantages">
-        <h2 className="advantages-heading">YAJI Corp. Advantages</h2>
-        <div className="advantages-cards">
-          <div className="advantage-card">
-            {/* <img src="/path/to/easy-icon.png" alt="Easy Icon" className="advantage-icon" /> */}
-            <h3>Easy</h3>
-            <p>Simple and quick solution at the tip of your fingers</p>
-            <ul>
-              <li>Apply anywhere you are</li>
-              <li>Only one document needed</li>
-            </ul>
+
+      {/* Steps Section */}
+      <div className="steps">
+        <div className="step">
+          <h3>1 REGISTER</h3>
+          <p>Create your profile and fill out the application form</p>
+        </div>
+        <div className="step">
+          <h3>2 GET VERIFIED</h3>
+          <p>Take our call and wait for the decision in just minutes</p>
+        </div>
+        <div className="step">
+          <h3>3 GET CREDITED</h3>
+          <p>Once approved, money is transferred instantly to your bank</p>
+        </div>
+      </div>
+
+      <div className="progress-bar-container-1">
+        <div className="progress-bar">
+          <div className="step-indicator"></div>
+          <div className="step-indicator"></div>
+          <div className="step-indicator"></div>
+        </div>
+      </div>
+
+      <div className="money-transfer-section">
+        <div className="transfer-left">
+          <h2>Send & receive money instantly</h2>
+          <p>
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
+            incididunt ut labore et.
+          </p>
+          <ul className="benefits-list">
+            <li>
+              <span className="check-icon">✔</span> Malesuada Ipsum
+            </li>
+            <li>
+              <span className="check-icon">✔</span> Vestibulum
+            </li>
+            <li>
+              <span className="check-icon">✔</span> Parturient Lorem
+            </li>
+          </ul>
+        </div>
+        <div className="transfer-right">
+          <div className="transaction">
+            <div className="transaction-icon">
+              <img src="apple-icon.png" alt="Apple" />
+            </div>
+            <div className="transaction-details">
+              <h4>Apple</h4>
+              <p>Macbook</p>
+            </div>
+            <div className="transaction-amount">-999€</div>
           </div>
-          <div className="advantage-card">
-            {/* <img src="/path/to/secure-icon.png" alt="Secure Icon" className="advantage-icon" /> */}
-            <h3>Advance & Secured</h3>
-            <p>CXPH utilizes advanced digital tools to ensure your data is protected.</p>
-            <ul>
-              <li>We carry the NPC seal of accreditation</li>
-              <li>Guaranteed confidentiality</li>
-            </ul>
+          <div className="transaction">
+            <div className="transaction-icon">
+              <img src="amazon-icon.png" alt="Amazon" />
+            </div>
+            <div className="transaction-details">
+              <h4>Amazon</h4>
+              <p>Electronics</p>
+            </div>
+            <div className="transaction-amount">-49€</div>
           </div>
-          <div className="advantage-card">
-            {/* <img src="/path/to/fast-icon.png" alt="Fast Icon" className="advantage-icon" /> */}
-            <h3>Fast & Convenient</h3>
-            <p>It only takes 5 minutes!</p>
-            <ul>
-              <li>Get your loan proceeds instantly</li>
-              <li>Repay via online banking</li>
-              <li>Extend your loan due date</li>
-            </ul>
+          <div className="transaction">
+            <div className="transaction-icon">
+              <img src="twitter-icon.png" alt="Twitter" />
+            </div>
+            <div className="transaction-details">
+              <h4>Twitter</h4>
+              <p>Ads</p>
+            </div>
+            <div className="transaction-amount">-29€</div>
           </div>
+          <div className="transaction">
+            <div className="transaction-icon">
+              <img src="microsoft-icon.png" alt="Microsoft" />
+            </div>
+            <div className="transaction-details">
+              <h4>Microsoft</h4>
+              <p>Office Suite</p>
+            </div>
+            <div className="transaction-amount">-149€</div>
+          </div>
+          <div className="transaction">
+            <div className="transaction-icon">
+              <img src="dropbox-icon.png" alt="Dropbox" />
+            </div>
+            <div className="transaction-details">
+              <h4>Dropbox</h4>
+              <p>Cloud</p>
+            </div>
+            <div className="transaction-amount">-14€</div>
+          </div>
+          <div className="transaction">
+            <div className="transaction-icon">
+              <img src="paypal-icon.png" alt="Paypal" />
+            </div>
+            <div className="transaction-details">
+              <h4>Paypal</h4>
+              <p>Shopping</p>
+            </div>
+            <div className="transaction-amount">-200€</div>
+          </div>
+        </div>
+      </div>
+      <div className="card-section">
+        {/* Support Bar */}
+        <div className="support-bar">
+          <div className="support-info">
+            <p className="support-heading">Still have questions?</p>
+            <p>We are here to help.</p>
+          </div>
+          <div className="support-contact">
+            <div className="contact-item">
+              <span>📞</span>
+              <p>
+                +49 176 123 456 <br />
+                <small>Support Hotline</small>
+              </p>
+            </div>
+            <div className="contact-item">
+              <span>📧</span>
+              <p>
+                help@banko.com <br />
+                <small>Support Email</small>
+              </p>
+            </div>
+          </div>
+          <button className="chat-button">Chat with us</button>
         </div>
 
-        {/* Steps Section */}
-        <div className="steps">
-          <div className="step">
-            <h3>1 REGISTER</h3>
-            <p>Create your profile and fill out the application form</p>
+        {/* Main Content */}
+        <div className="main-content">
+          <h3>Features</h3>
+          <h1>All in one card.</h1>
+          <p>
+            Senectus et netus et malesuada fames ac turpis. <br />
+            Sagittis vitae et leo duis ut diam.
+          </p>
+          <div className="buttons">
+            <button className="primary-button">Open Account</button>
+            <button className="secondary-button">Compare Cards →</button>
           </div>
-          <div className="step">
-            <h3>2 GET VERIFIED</h3>
-            <p>Take our call and wait for the decision in just minutes</p>
-          </div>
-          <div className="step">
-            <h3>3 GET CREDITED</h3>
-            <p>Once approved, money is transferred instantly to your bank</p>
-          </div>
-        </div>
 
-        <div className="progress-bar-container-1">
-          <div className="progress-bar">
-            <div className="step-indicator"></div>
-            <div className="step-indicator"></div>
-            <div className="step-indicator"></div>
-          </div>
+          {/* Cards Section
+            <div className="card-display">
+              <div className="card">
+                banquee. <br />
+                1234 5678 9012 3456
+              </div>
+              <div className="card">
+                banquee. <br />
+                1234 5678 9012 3456
+              </div>
+              <div className="card">
+                banquee. <br />
+                1234 5678 9012 3456
+              </div>
+            </div> */}
         </div>
-      </section>
+      </div>
     </div>
   );
 };
