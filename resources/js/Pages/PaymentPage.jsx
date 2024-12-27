@@ -1,5 +1,6 @@
+import PrimaryButton from "@/Components/PrimaryButton";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
-import { Head, Link, usePage } from "@inertiajs/react";
+import { Head, usePage } from "@inertiajs/react";
 import { useState } from "react";
 
 export default function PaymentPage() {
@@ -78,13 +79,13 @@ export default function PaymentPage() {
                 style={{ marginBottom: "10px", display: "flex", gap: "10px" }}
               >
                 <input type="text" className="amount-input" placeholder="₱ 0.00"></input>{" "}
-                <Link
-                  href="/success"
+                <PrimaryButton
+                  onClick={() => (window.location.href = "/success")}
                   className="accept-button ml-auto whitespace-nowrap"
                   style={{ marginLeft: "auto", alignItems: "center", display: "flex" }}
                 >
                   Pay Now
-                </Link>
+                </PrimaryButton>
               </div>
 
               <span style={{ color: "var(--color-light-green)" }}>

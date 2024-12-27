@@ -1,7 +1,8 @@
 import DropdownInfo from "@/Components/DropdownInfo";
+import PrimaryButton from "@/Components/PrimaryButton";
 import ProgressBar from "@/Components/ProgressBar";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
-import { Head, Link, usePage } from "@inertiajs/react";
+import { Head, usePage } from "@inertiajs/react";
 
 export default function LoanBreakdown() {
   const user = usePage().props.auth.user;
@@ -34,9 +35,15 @@ export default function LoanBreakdown() {
               <h3>Loan Due on December 3, 2024</h3>
               <h1>₱ 0.00</h1>
               <div style={{ display: "flex", gap: "1rem" }}>
-                <Link href="/payment" className="accept-button" style={{ marginLeft: "auto" }}>
+                <PrimaryButton
+                  onClick={() => {
+                    window.location.href = route("payment.page");
+                  }}
+                  className="accept-button"
+                  style={{ marginLeft: "auto" }}
+                >
                   Pay Now
-                </Link>
+                </PrimaryButton>
               </div>
             </div>
           </div>
