@@ -103,7 +103,7 @@ const Welcome = ({ auth }) => {
           </div>
         </div>
 
-        <div className="progress-bar-container">
+        <div className="progress-bar-container-1">
           <div className="progress-bar">
             <div className="step-indicator"></div>
             <div className="step-indicator"></div>
