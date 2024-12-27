@@ -1,7 +1,7 @@
 import TableContainer from "@/Components/TableContainer";
+import TertiaryButton from "@/Components/TertiaryButton";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 import { Head, usePage } from "@inertiajs/react";
-
 export default function Dashboard() {
   const user = usePage().props.auth.user;
   console.log("User props:", user);
@@ -16,15 +16,15 @@ export default function Dashboard() {
             <h1 className="welcome-text">
               Welcome, <span className="highlighted-name">{user.first_name}!</span>
             </h1>
-            <button className="add-table-button">
+            <TertiaryButton className="add-table-button">
               <span className="plus-icon">+</span> Add Employee
-            </button>
+            </TertiaryButton>
           </div>
           <div className="center-column">
-            <TableContainer table={"Loan Table"} />
-            <TableContainer table={"Member Table"} />
-            <TableContainer table={"Payment Table"} />
-            <TableContainer table={"Loan Type Table"} />
+            <TableContainer table={"Loan Table"} img={"/img/loan-table.png"} />
+            <TableContainer table={"Member Table"} img={"/img/member-table.png"} />
+            <TableContainer table={"Payment Table"} img={"/img/payment-table.png"} />
+            <TableContainer table={"Loan Type Table"} img={"/img/loan-type-table.png"} />
           </div>
         </div>
       </div>

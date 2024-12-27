@@ -339,6 +339,9 @@
 
 .placeholder-table {
   border-radius: 8px;
+  max-height: 200px;
+  width: 1000px;
+  object-fit: cover;
 }
 
 .view-button {

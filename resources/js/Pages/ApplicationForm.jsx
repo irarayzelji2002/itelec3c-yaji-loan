@@ -1,3 +1,5 @@
+import PrimaryButton from "@/Components/PrimaryButton";
+import SecondaryButton from "@/Components/SecondaryButton";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 import { Head } from "@inertiajs/react";
 import { useState } from "react";
@@ -186,20 +188,20 @@ export default function LoanApplicationForm() {
             </div>
 
             <div className="flex justify-center gap-4">
-              <button
+              <PrimaryButton
                 type="submit"
                 className="!rounded-lg bg-green-700 px-6 py-2 font-bold text-black hover:bg-green-600 focus:outline-none focus:ring focus:ring-green-500"
               >
                 <strong>Apply</strong>
-              </button>
+              </PrimaryButton>
 
-              <button
+              <SecondaryButton
                 type="button"
                 className="!rounded-lg border-2 border-green-700 bg-white px-6 py-2 font-bold text-black hover:bg-green-100 focus:outline-none focus:ring focus:ring-green-700"
                 onClick={() => (window.location.href = "/")}
               >
                 Cancel
-              </button>
+              </SecondaryButton>
             </div>
           </form>
         </div>

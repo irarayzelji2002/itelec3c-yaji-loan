@@ -1,3 +1,5 @@
+import PrimaryButton from "@/Components/PrimaryButton";
+import SecondaryButton from "@/Components/SecondaryButton";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 import { Head } from "@inertiajs/react";
 
@@ -50,19 +52,19 @@ export default function SuccessPage() {
               </div>
             </div>
             <div className="mt-6 flex w-full space-x-4">
-              <button
+              <PrimaryButton
                 className="w-full !rounded-lg bg-green-700 px-4 py-2 text-sm font-bold text-black hover:bg-green-600 focus:outline-none focus:ring focus:ring-green-500"
                 type="button"
               >
                 Download
-              </button>
+              </PrimaryButton>
 
-              <button
+              <SecondaryButton
                 className="text-black-700 w-full !rounded-lg border border-green-700 bg-white px-4 py-2 text-sm font-bold hover:bg-green-100 focus:outline-none focus:ring focus:ring-green-500"
                 type="button"
               >
                 Done
-              </button>
+              </SecondaryButton>
             </div>
           </div>
         </div>

@@ -1,5 +1,7 @@
+import PrimaryButton from "@/Components/PrimaryButton";
+import SecondaryButton from "@/Components/SecondaryButton";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
-import { Head, Link} from "@inertiajs/react";
+import { Head } from "@inertiajs/react";
 import { useState } from "react";
 
 export default function LoanApplicationForm() {
@@ -64,19 +66,19 @@ export default function LoanApplicationForm() {
               </ul>
             </div>
             <div className="mt-6 flex w-full space-x-4">
-              <Link
-                to="/success-loan-download"
+              <PrimaryButton
+                onClick={() => (window.location.href = route("success.loan.download"))}
                 className="w-full !rounded-lg bg-green-700 px-4 py-2 text-center font-bold text-black hover:bg-green-600 focus:outline-none focus:ring focus:ring-green-500"
               >
                 Accept
-              </Link>
+              </PrimaryButton>
 
-              <button
+              <SecondaryButton
                 className="w-full !rounded-lg border border-green-700 bg-white px-4 py-2 font-bold text-black hover:bg-green-100 focus:outline-none focus:ring focus:ring-green-500"
                 type="button"
               >
                 Done
-              </button>
+              </SecondaryButton>
             </div>
           </div>
         </div>

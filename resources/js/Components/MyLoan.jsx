@@ -1,4 +1,4 @@
-import { Link } from "@inertiajs/react";
+import PrimaryButton from "@/Components/PrimaryButton";
 
 function MyLoan({ loanNo }) {
   return (
@@ -6,9 +6,12 @@ function MyLoan({ loanNo }) {
       <div className="request-header">
         Loan Request #{loanNo}
         <div style={{ gap: "1rem", display: "flex" }}>
-          <Link href="/loan-breakdown" className="accept-button">
+          <PrimaryButton
+            className="accept-button"
+            onClick={() => (window.location.href = "/loan-breakdown")}
+          >
             Pay Now
-          </Link>
+          </PrimaryButton>
         </div>
       </div>
       <div className="request-body">

@@ -1,11 +1,13 @@
+import PrimaryButton from "@/Components/PrimaryButton";
+import SecondaryButton from "@/Components/SecondaryButton";
 function RequestPopUp({ loanNo }) {
   return (
     <>
       <div className="request-header">
         Loan Request #{loanNo}
         <div style={{ gap: "1rem", display: "flex" }}>
-          <button className="accept-button">Accept</button>
-          <button className="decline-button">Decline</button>
+          <PrimaryButton className="accept-button">Accept</PrimaryButton>
+          <SecondaryButton className="decline-button">Decline</SecondaryButton>
         </div>
       </div>
       <div className="request-body">
