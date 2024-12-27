@@ -9,6 +9,7 @@ export default function LoanApplicationForm() {
   const [amount, setAmount] = useState("");
   const [purpose, setPurpose] = useState("");
   const [term, setTerm] = useState("");
+  const [termUnit, setTermUnit] = useState("months");
   const [agree, setAgree] = useState(false);
   const [errors, setErrors] = useState({});
 
@@ -97,19 +98,29 @@ export default function LoanApplicationForm() {
 
             <div className="mb-4">
               <label className="mb-2 block font-bold text-green-900" htmlFor="term">
-                Loan Term (Months/Years) <span className="text-red-500">*</span>
+                Loan Term <span className="text-red-500">*</span>
               </label>
-              <input
-                type="text"
-                id="term"
-                className="w-full !rounded-lg border border-gray-300 px-4 py-2 focus:outline-none focus:ring focus:ring-green-300"
-                placeholder="Enter term"
-                value={term}
-                onChange={(e) => {
-                  setTerm(e.target.value);
-                  setErrors((prev) => ({ ...prev, term: "" }));
-                }}
-              />
+              <div className="flex">
+                <input
+                  type="number"
+                  id="term"
+                  className="w-3/4 !rounded-lg border border-gray-300 px-4 py-2 focus:outline-none focus:ring focus:ring-green-300"
+                  placeholder="Enter term"
+                  value={term}
+                  onChange={(e) => {
+                    setTerm(e.target.value);
+                    setErrors((prev) => ({ ...prev, term: "" }));
+                  }}
+                />
+                <select
+                  className="ml-4 w-1/4 !rounded-lg border border-gray-300 px-4 py-2 focus:outline-none focus:ring focus:ring-green-300"
+                  value={termUnit}
+                  onChange={(e) => setTermUnit(e.target.value)}
+                >
+                  <option value="months">Months</option>
+                  <option value="years">Years</option>
+                </select>
+              </div>
               {errors.term && <p className="text-sm text-red-500">{errors.term}</p>}
             </div>
 

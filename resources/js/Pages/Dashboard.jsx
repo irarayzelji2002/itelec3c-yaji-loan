@@ -13,10 +13,13 @@ export default function Dashboard() {
       <div className="py-12">
         <div className="max-w-100 mx-auto sm:px-6 lg:px-8">
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-            <h1 className="welcome-text">
-              Welcome, <span className="highlighted-name">{user.first_name}!</span>
+            <h1 className="welcome-text font-bold">
+              Welcome, <span className="highlighted-name font-bold">{user.first_name}!</span>
             </h1>
-            <TertiaryButton className="add-table-button">
+            <TertiaryButton
+              onClick={() => (window.location.href = "/employee-form")}
+              className="add-table-button"
+            >
               <span className="plus-icon">+</span> Add Employee
             </TertiaryButton>
           </div>

@@ -1,3 +1,5 @@
+import PrimaryButton from "@/Components/PrimaryButton";
+import SecondaryButton from "@/Components/SecondaryButton";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 import { Head } from "@inertiajs/react";
 import { useState } from "react";
@@ -29,7 +31,11 @@ export default function EmployeeForm() {
     if (!gender) validationErrors.gender = "Gender is required";
     if (!birthDate) validationErrors.birthDate = "Birth date is required";
     if (!nationality) validationErrors.nationality = "Nationality is required";
-    if (!phoneNumber) validationErrors.phoneNumber = "Phone number is required";
+    if (!phoneNumber) {
+      validationErrors.phoneNumber = "Phone number is required";
+    } else if (!phoneNumber.startsWith("09")) {
+      validationErrors.phoneNumber = "Phone number should start with 09";
+    }
     if (!street) validationErrors.street = "Street is required";
     if (!barangay) validationErrors.barangay = "Barangay is required";
     if (!city) validationErrors.city = "City is required";
@@ -59,6 +65,7 @@ export default function EmployeeForm() {
               <input
                 type="text"
                 id="firstName"
+                maxLength="50"
                 className="w-full !rounded-lg border border-gray-300 px-4 py-2 focus:outline-none focus:ring focus:ring-green-300"
                 placeholder="Enter first name"
                 value={firstName}
@@ -76,6 +83,7 @@ export default function EmployeeForm() {
               <input
                 type="text"
                 id="lastName"
+                maxLength="50"
                 className="w-full !rounded-lg border border-gray-300 px-4 py-2 focus:outline-none focus:ring focus:ring-green-300"
                 placeholder="Enter last name"
                 value={lastName}
@@ -93,6 +101,7 @@ export default function EmployeeForm() {
               <input
                 type="email"
                 id="email"
+                maxLength="100"
                 className="w-full !rounded-lg border border-gray-300 px-4 py-2 focus:outline-none focus:ring focus:ring-green-300"
                 placeholder="Enter email"
                 value={email}
@@ -110,6 +119,7 @@ export default function EmployeeForm() {
               <input
                 type="password"
                 id="password"
+                maxLength="50"
                 className="w-full !rounded-lg border border-gray-300 px-4 py-2 focus:outline-none focus:ring focus:ring-green-300"
                 placeholder="Enter password"
                 value={password}
@@ -124,17 +134,19 @@ export default function EmployeeForm() {
               <label className="mb-2 block font-bold text-green-900" htmlFor="gender">
                 Gender <span className="text-red-500">*</span>
               </label>
-              <input
-                type="text"
+              <select
                 id="gender"
                 className="w-full !rounded-lg border border-gray-300 px-4 py-2 focus:outline-none focus:ring focus:ring-green-300"
-                placeholder="Enter gender"
                 value={gender}
                 onChange={(e) => {
                   setGender(e.target.value);
                   setErrors((prev) => ({ ...prev, gender: "" }));
                 }}
-              />
+              >
+                <option value="">Select gender</option>
+                <option value="female">Female</option>
+                <option value="male">Male</option>
+              </select>
               {errors.gender && <p className="text-sm text-red-500">{errors.gender}</p>}
             </div>
             <div className="mb-4">
@@ -144,6 +156,7 @@ export default function EmployeeForm() {
               <input
                 type="date"
                 id="birthDate"
+                maxLength="10"
                 className="w-full !rounded-lg border border-gray-300 px-4 py-2 focus:outline-none focus:ring focus:ring-green-300"
                 placeholder="Enter birth date"
                 value={birthDate}
@@ -161,6 +174,7 @@ export default function EmployeeForm() {
               <input
                 type="text"
                 id="nationality"
+                maxLength="30"
                 className="w-full !rounded-lg border border-gray-300 px-4 py-2 focus:outline-none focus:ring focus:ring-green-300"
                 placeholder="Enter nationality"
                 value={nationality}
@@ -178,8 +192,9 @@ export default function EmployeeForm() {
               <input
                 type="text"
                 id="phoneNumber"
+                maxLength="15"
                 className="w-full !rounded-lg border border-gray-300 px-4 py-2 focus:outline-none focus:ring focus:ring-green-300"
-                placeholder="Enter phone number"
+                placeholder="Enter phone number (Ex. 09123456789)"
                 value={phoneNumber}
                 onChange={(e) => {
                   setPhoneNumber(e.target.value);
@@ -195,6 +210,7 @@ export default function EmployeeForm() {
               <input
                 type="text"
                 id="street"
+                maxLength="100"
                 className="w-full !rounded-lg border border-gray-300 px-4 py-2 focus:outline-none focus:ring focus:ring-green-300"
                 placeholder="Enter street"
                 value={street}
@@ -212,6 +228,7 @@ export default function EmployeeForm() {
               <input
                 type="text"
                 id="barangay"
+                maxLength="50"
                 className="w-full !rounded-lg border border-gray-300 px-4 py-2 focus:outline-none focus:ring focus:ring-green-300"
                 placeholder="Enter barangay"
                 value={barangay}
@@ -229,6 +246,7 @@ export default function EmployeeForm() {
               <input
                 type="text"
                 id="city"
+                maxLength="50"
                 className="w-full !rounded-lg border border-gray-300 px-4 py-2 focus:outline-none focus:ring focus:ring-green-300"
                 placeholder="Enter city"
                 value={city}
@@ -246,6 +264,7 @@ export default function EmployeeForm() {
               <input
                 type="text"
                 id="province"
+                maxLength="50"
                 className="w-full !rounded-lg border border-gray-300 px-4 py-2 focus:outline-none focus:ring focus:ring-green-300"
                 placeholder="Enter province"
                 value={province}
@@ -276,20 +295,20 @@ export default function EmployeeForm() {
               {errors.role && <p className="text-sm text-red-500">{errors.role}</p>}
             </div>
             <div className="flex justify-center gap-4">
-              <button
+              <PrimaryButton
                 type="submit"
                 className="!rounded-lg bg-green-700 px-6 py-2 font-bold text-black hover:bg-green-600 focus:outline-none focus:ring focus:ring-green-500"
               >
                 <strong>Submit</strong>
-              </button>
+              </PrimaryButton>
 
-              <button
+              <SecondaryButton
                 type="button"
                 className="!rounded-lg border-2 border-green-700 bg-white px-6 py-2 font-bold text-black hover:bg-green-100 focus:outline-none focus:ring focus:ring-green-700"
                 onClick={() => (window.location.href = "/")}
               >
                 Cancel
-              </button>
+              </SecondaryButton>
             </div>
           </form>
         </div>
