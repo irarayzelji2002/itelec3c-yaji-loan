@@ -103,7 +103,13 @@ const Welcome = ({ auth }) => {
           </div>
         </div>
 
-        <button className="apply-loan-btn">Apply for a loan</button>
+        <div className="progress-bar-container">
+          <div className="progress-bar">
+            <div className="step-indicator"></div>
+            <div className="step-indicator"></div>
+            <div className="step-indicator"></div>
+          </div>
+        </div>
       </section>
     </div>
   );

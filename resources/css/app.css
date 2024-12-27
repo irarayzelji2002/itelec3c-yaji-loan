@@ -709,7 +709,7 @@ option:first {
   font-size: 2rem; /* Large font size for emphasis */
   font-weight: bold; /* Bold text */
   text-align: center; /* Center align the text */
-  color: #003580; /* Dark blue color for text */
+  color: var(--color-header); /* Dark blue color for text */
   margin-bottom: 40px; /* Space below the heading */
   margin-top: 40px; /* Space above the heading */
   letter-spacing: 0.5px; /* Slight spacing between letters */
@@ -725,7 +725,7 @@ option:first {
 
 .cash-express-advantages h2 {
   font-size: 2rem;
-  color: #003580; /* Dark blue heading color */
+  color: var(--color-green); /* Dark blue heading color */
   margin-bottom: 30px;
 }
 
@@ -749,7 +749,7 @@ option:first {
 .advantage-card h3 {
   font-size: 1.2rem;
   font-weight: bold;
-  color: #003580;
+  color: var(--color-header);
   margin-bottom: 10px;
 }
 
@@ -793,7 +793,7 @@ option:first {
 .step-card h3 {
   font-size: 2rem;
   font-weight: bold;
-  color: #003580;
+  color: var(--color-header);
 }
 
 .step-card p {
@@ -805,7 +805,7 @@ option:first {
 .steps-section .apply-btn {
   margin-top: 20px;
   background-color: #ffcc00;
-  color: #003580;
+  color: var(--color-green);
   padding: 10px 20px;
   font-size: 1rem;
   font-weight: bold;
@@ -851,7 +851,7 @@ option:first {
 .step h3 {
   font-size: 1.5rem; /* Bold and prominent step number and title */
   font-weight: bold;
-  color: #003580; /* Dark blue for step titles */
+  color: var(--color-dark-teal); /* Dark blue for step titles */
   margin-bottom: 15px;
 }
 
@@ -859,6 +859,51 @@ option:first {
   font-size: 0.95rem; /* Slightly smaller for descriptions */
   color: #555; /* Neutral gray text color */
   line-height: 1.5; /* Good line spacing for readability */
+}
+
+/* Progress Bar Container */
+.progress-bar-container {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  margin-top: 20px; /* Adjust space between steps and progress bar */
+  margin-bottom: 40px;
+}
+
+/* Progress Bar */
+.progress-bar {
+  position: relative;
+  width: 80%; /* Adjust width to fit within your design */
+  height: 4px; /* Thickness of the progress bar */
+  background-color: #e0e0e0; /* Light gray for the inactive bar */
+  border-radius: 2px; /* Rounded edges */
+}
+
+/* Step Indicators */
+.step-indicator {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 12px; /* Circle size */
+  height: 12px; /* Circle size */
+  background-color: var(--color-green); /* Blue color for the indicators */
+  border-radius: 50%; /* Make them circular */
+  border: 2px solid white; /* Optional border for a clean look */
+  box-shadow: 0 0 4px rgba(0, 0, 0, 0.2); /* Slight shadow for emphasis */
+}
+
+/* Position the Step Indicators */
+.step-indicator:nth-child(1) {
+  left: 0; /* First step at the start */
+}
+
+.step-indicator:nth-child(2) {
+  left: 50%; /* Second step in the middle */
+  transform: translate(-50%, -50%);
+}
+
+.step-indicator:nth-child(3) {
+  right: 0; /* Third step at the end */
 }
 
 @media screen and (max-width: 768px) {
