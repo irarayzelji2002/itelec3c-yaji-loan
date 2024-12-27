@@ -20,45 +20,45 @@ export default function SuccessPage() {
                 <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
               </svg>
             </div>
-            <h2 className="mb-2 text-2xl font-semibold text-green-900">Loan Payment Received</h2>
-            <p className="text-black-600 mb-6 text-center text-sm font-semibold">
+            <h2 className="mb-2 text-2xl font-bold text-green-900">Loan Payment Received</h2>
+            <p className="mb-6 text-center text-sm font-medium text-gray-700">
               This has been processed and your payment will be posted in real time.
             </p>
             <div className="w-full !rounded-lg border bg-gray-50 p-4">
-              <h3 className="mb-4 font-bold text-green-900">Transaction Receipt</h3>
+              <h3 className="mb-4 text-lg font-semibold text-green-900">Transaction Receipt</h3>
               <div className="space-y-2">
                 <div className="flex justify-between">
-                  <span className="text-gray-600">Account Name</span>
-                  <span className="font-medium text-gray-800">Harry Edward Styles</span>
+                  <span className="text-sm text-gray-600">Account Name</span>
+                  <span className="text-sm font-medium text-gray-800">Harry Edward Styles</span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-gray-600">Amount Paid</span>
-                  <span className="font-medium text-gray-800">₱ 2,265.17</span>
+                  <span className="text-sm text-gray-600">Amount Paid</span>
+                  <span className="text-sm font-medium text-gray-800">₱ 2,265.17</span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-gray-600">Outstanding Balance</span>
-                  <span className="font-medium text-gray-800">₱ 9,265.17</span>
+                  <span className="text-sm text-gray-600">Outstanding Balance</span>
+                  <span className="text-sm font-medium text-gray-800">₱ 9,265.17</span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-gray-600">Ref. No.</span>
-                  <span className="font-medium text-green-600">12345678</span>
+                  <span className="text-sm text-gray-600">Ref. No.</span>
+                  <span className="text-sm font-medium text-green-600">12345678</span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-gray-600">Date</span>
-                  <span className="font-medium text-gray-800">16 April 2024 12:49 PM</span>
+                  <span className="text-sm text-gray-600">Date</span>
+                  <span className="text-sm font-medium text-gray-800">16 April 2024 12:49 PM</span>
                 </div>
               </div>
             </div>
             <div className="mt-6 flex w-full space-x-4">
               <button
-                className="w-full !rounded-lg bg-green-700 px-4 py-2 font-bold text-black hover:bg-green-600 focus:outline-none focus:ring focus:ring-green-500"
+                className="w-full !rounded-lg bg-green-700 px-4 py-2 text-sm font-bold text-black hover:bg-green-600 focus:outline-none focus:ring focus:ring-green-500"
                 type="button"
               >
                 Download
               </button>
 
               <button
-                className="w-full !rounded-lg border border-green-700 bg-white px-4 py-2 font-bold text-black hover:bg-green-100 focus:outline-none focus:ring focus:ring-green-500"
+                className="text-black-700 w-full !rounded-lg border border-green-700 bg-white px-4 py-2 text-sm font-bold hover:bg-green-100 focus:outline-none focus:ring focus:ring-green-500"
                 type="button"
               >
                 Done
