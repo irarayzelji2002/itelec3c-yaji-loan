@@ -702,6 +702,120 @@ option:first {
   height: 48px;
 }
 
+.advantages-heading {
+  font-size: 2rem; /* Large font size for emphasis */
+  font-weight: bold; /* Bold text */
+  text-align: center; /* Center align the text */
+  color: #003580; /* Dark blue color for text */
+  margin-bottom: 40px; /* Space below the heading */
+  margin-top: 40px; /* Space above the heading */
+  letter-spacing: 0.5px; /* Slight spacing between letters */
+  line-height: 1.2; /* Balanced line height */
+}
+
+/* General Section Styling */
+.cash-express-advantages {
+  background-color: #f8f9fc; /* Light background */
+  padding: 40px 20px;
+  text-align: center;
+}
+
+.cash-express-advantages h2 {
+  font-size: 2rem;
+  color: #003580; /* Dark blue heading color */
+  margin-bottom: 30px;
+}
+
+/* Advantages Cards */
+.advantages-cards {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.advantage-card {
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  width: 300px;
+  padding: 20px;
+  text-align: left;
+}
+
+.advantage-card h3 {
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: #003580;
+  margin-bottom: 10px;
+}
+
+.advantage-card p {
+  font-size: 0.9rem;
+  color: #555;
+  margin-bottom: 15px;
+}
+
+.advantage-card ul {
+  padding-left: 20px;
+  margin: 0;
+  color: #555;
+  list-style-type: disc;
+}
+
+.advantage-card ul li {
+  font-size: 0.9rem;
+  margin-bottom: 8px;
+}
+
+/* Steps Section */
+.steps-section {
+  margin-top: 40px;
+  padding: 20px 10px;
+  text-align: center;
+}
+
+.steps-section .steps-list {
+  display: flex;
+  justify-content: center;
+  gap: 40px;
+  flex-wrap: wrap;
+}
+
+.step-card {
+  text-align: center;
+  width: 200px;
+}
+
+.step-card h3 {
+  font-size: 2rem;
+  font-weight: bold;
+  color: #003580;
+}
+
+.step-card p {
+  font-size: 0.9rem;
+  color: #555;
+  margin: 10px 0;
+}
+
+.steps-section .apply-btn {
+  margin-top: 20px;
+  background-color: #ffcc00;
+  color: #003580;
+  padding: 10px 20px;
+  font-size: 1rem;
+  font-weight: bold;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.steps-section .apply-btn:hover {
+  background-color: #e6b800;
+}
+
 .reminders-container {
   display: flex;
   flex-direction: row;
@@ -712,8 +826,47 @@ option:first {
   flex-direction: column;
   gap: 10px;
 }
+.steps {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 40px; /* Space between steps */
+  padding: 20px;
+  text-align: center;
+  flex-wrap: wrap; /* Adjusts for smaller screens */
+  margin-top: 40px;
+}
+
+.step {
+  border-radius: 8px; /* Rounded corners */
+
+  padding: 20px;
+  width: 280px; /* Fixed width for consistent size */
+  text-align: center;
+}
+
+.step h3 {
+  font-size: 1.5rem; /* Bold and prominent step number and title */
+  font-weight: bold;
+  color: #003580; /* Dark blue for step titles */
+  margin-bottom: 15px;
+}
+
+.step p {
+  font-size: 0.95rem; /* Slightly smaller for descriptions */
+  color: #555; /* Neutral gray text color */
+  line-height: 1.5; /* Good line spacing for readability */
+}
 
 @media screen and (max-width: 768px) {
+  .steps {
+    flex-direction: column; /* Stack steps vertically on smaller screens */
+    gap: 20px; /* Reduce spacing */
+  }
+
+  .step {
+    width: 100%; /* Full width for smaller screens */
+  }
   .container {
     flex-direction: column;
     max-width: 100% !important;

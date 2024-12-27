@@ -60,17 +60,36 @@ export default function LoanApplicationForm() {
               <label className="mb-2 block font-bold text-green-900" htmlFor="purpose">
                 Purpose of Loan <span className="text-red-500">*</span>
               </label>
-              <input
-                type="text"
+              <select
                 id="purpose"
                 className="w-full !rounded-lg border border-gray-300 px-4 py-2 focus:outline-none focus:ring focus:ring-green-300"
-                placeholder="Enter purpose"
                 value={purpose}
                 onChange={(e) => {
                   setPurpose(e.target.value);
                   setErrors((prev) => ({ ...prev, purpose: "" }));
                 }}
-              />
+              >
+                <option value="">Select purpose</option>
+                <optgroup label="Personal">
+                  <option value="Emergency expenses">Emergency expenses</option>
+                  <option value="Education">Education</option>
+                  <option value="Medical bills">Medical bills</option>
+                  <option value="Travel">Travel</option>
+                  <option value="Household improvements">Household improvements</option>
+                </optgroup>
+                <optgroup label="Business">
+                  <option value="Startup capital">Startup capital</option>
+                  <option value="Operational expenses">Operational expenses</option>
+                  <option value="Equipment purchase">Equipment purchase</option>
+                  <option value="Inventory">Inventory</option>
+                  <option value="Marketing and advertising">Marketing and advertising</option>
+                </optgroup>
+                <optgroup label="Debt Consolidation">
+                  <option value="Vehicle Purchase">Vehicle Purchase</option>
+                  <option value="Real Estate or Home Purchase">Real Estate or Home Purchase</option>
+                </optgroup>
+                <option value="Other">Other (Please Specify)</option>
+              </select>
               {errors.purpose && <p className="text-sm text-red-500">{errors.purpose}</p>}
             </div>
 
