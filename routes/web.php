@@ -60,6 +60,9 @@ Route::middleware('auth')->group(function () {
      Route::get('/success-loan-download', function () {
         return Inertia::render('SuccessLoanDownload');
     })->name('success.loan.download');
+    Route::get('/employee-form', function () {
+        return Inertia::render('EmployeeForm');
+    })->name('employee.form');
 });
 
 Route::get('/loan', [ViewTable::class, 'ViewTables'])->name('view.loan');
