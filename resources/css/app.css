@@ -862,7 +862,7 @@ option:first {
 }
 
 /* Progress Bar Container */
-.progress-bar-container {
+.progress-bar-container-1 {
   width: 100%;
   display: flex;
   justify-content: center;
