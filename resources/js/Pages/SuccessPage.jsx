@@ -28,24 +28,24 @@ export default function SuccessPage() {
               <h3 className="mb-4 text-lg font-semibold text-green-900">Transaction Receipt</h3>
               <div className="space-y-2">
                 <div className="flex justify-between">
-                  <span className="text-sm text-gray-600">Account Name</span>
-                  <span className="text-sm font-medium text-gray-800">Harry Edward Styles</span>
+                  <span className="text-sm font-medium text-gray-800">Account Name</span>
+                  <span className="text-sm text-gray-600">Harry Edward Styles</span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-sm text-gray-600">Amount Paid</span>
-                  <span className="text-sm font-medium text-gray-800">₱ 2,265.17</span>
+                  <span className="text-sm font-medium text-gray-800">Amount Paid</span>
+                  <span className="text-sm text-gray-600">₱ 2,265.17</span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-sm text-gray-600">Outstanding Balance</span>
-                  <span className="text-sm font-medium text-gray-800">₱ 9,265.17</span>
+                  <span className="text-sm font-medium text-gray-800">Outstanding Balance</span>
+                  <span className="text-sm text-gray-600">₱ 9,265.17</span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-sm text-gray-600">Ref. No.</span>
-                  <span className="text-sm font-medium text-green-600">12345678</span>
+                  <span className="text-sm font-medium text-gray-800">Ref. No.</span>
+                  <span className="text-sm text-green-600">12345678</span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-sm text-gray-600">Date</span>
-                  <span className="text-sm font-medium text-gray-800">16 April 2024 12:49 PM</span>
+                  <span className="text-sm font-medium text-gray-800">Date</span>
+                  <span className="text-sm text-gray-600">16 April 2024 12:49 PM</span>
                 </div>
               </div>
             </div>
