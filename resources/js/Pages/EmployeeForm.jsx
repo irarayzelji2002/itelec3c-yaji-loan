@@ -146,6 +146,7 @@ export default function EmployeeForm() {
                 <option value="">Select gender</option>
                 <option value="female">Female</option>
                 <option value="male">Male</option>
+                <option value="other">Other</option>
               </select>
               {errors.gender && <p className="text-sm text-red-500">{errors.gender}</p>}
             </div>
@@ -171,18 +172,22 @@ export default function EmployeeForm() {
               <label className="mb-2 block font-bold text-green-900" htmlFor="nationality">
                 Nationality <span className="text-red-500">*</span>
               </label>
-              <input
-                type="text"
+              <select
                 id="nationality"
-                maxLength="30"
                 className="w-full !rounded-lg border border-gray-300 px-4 py-2 focus:outline-none focus:ring focus:ring-green-300"
-                placeholder="Enter nationality"
                 value={nationality}
                 onChange={(e) => {
                   setNationality(e.target.value);
                   setErrors((prev) => ({ ...prev, nationality: "" }));
                 }}
-              />
+              >
+                <option value="">Select nationality</option>
+                <option value="china">China</option>
+                <option value="japan">Japan</option>
+                <option value="korea">Korea</option>
+                <option value="philippines">Philippines</option>
+                <option value="united states">United States</option>
+              </select>
               {errors.nationality && <p className="text-sm text-red-500">{errors.nationality}</p>}
             </div>
             <div className="mb-4">
@@ -194,7 +199,7 @@ export default function EmployeeForm() {
                 id="phoneNumber"
                 maxLength="15"
                 className="w-full !rounded-lg border border-gray-300 px-4 py-2 focus:outline-none focus:ring focus:ring-green-300"
-                placeholder="Enter phone number (Ex. 09123456789)"
+                placeholder="09xxxxxxxxx"
                 value={phoneNumber}
                 onChange={(e) => {
                   setPhoneNumber(e.target.value);

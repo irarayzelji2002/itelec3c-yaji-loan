@@ -78,4 +78,14 @@ Route::get('/table-view', function () {
     return Inertia::render('TableView');
 })->middleware(['auth', 'verified'])->name('table.view');
 
+// Add the new route for Terms of Service page
+Route::get('/terms-of-service', function () {
+    return Inertia::render('TermsofService');
+})->name('terms.of.service');
+
+// Add the new route for Privacy Policy page
+Route::get('/privacy-policy', function () {
+    return Inertia::render('PrivacyPolicy');
+})->name('privacy.policy');
+
 require __DIR__.'/auth.php';

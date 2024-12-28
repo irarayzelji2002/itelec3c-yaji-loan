@@ -94,6 +94,7 @@ export default function UpdateProfileInformation({ mustVerifyEmail, status, clas
             className="mt-1 block w-full"
             value={data.first_name}
             onChange={(e) => setData("first_name", e.target.value)}
+            maxLength={50}
             placeholder="First Name"
             required
             isFocused
@@ -109,6 +110,7 @@ export default function UpdateProfileInformation({ mustVerifyEmail, status, clas
             type="text"
             className="mt-1 block w-full"
             value={data.middle_name}
+            maxLength={50}
             onChange={(e) => setData("middle_name", e.target.value)}
             placeholder="Middle Name"
             autoComplete="middle_name"
@@ -125,6 +127,7 @@ export default function UpdateProfileInformation({ mustVerifyEmail, status, clas
             value={data.last_name}
             onChange={(e) => setData("last_name", e.target.value)}
             placeholder="Last Name"
+            maxLength={50}
             required
             autoComplete="last_name"
           />
@@ -247,6 +250,7 @@ export default function UpdateProfileInformation({ mustVerifyEmail, status, clas
             type="text"
             className="mt-1 block w-full"
             value={data.street}
+            maxLength={100}
             onChange={(e) => setData("street", e.target.value)}
             placeholder="Street"
             required
@@ -261,6 +265,7 @@ export default function UpdateProfileInformation({ mustVerifyEmail, status, clas
             type="text"
             className="mt-1 block w-full"
             value={data.barangay}
+            maxLength={50}
             onChange={(e) => setData("barangay", e.target.value)}
             placeholder="Barangay"
             required
@@ -274,6 +279,7 @@ export default function UpdateProfileInformation({ mustVerifyEmail, status, clas
             id="city"
             type="text"
             className="mt-1 block w-full"
+            maxLength={50}
             value={data.city}
             onChange={(e) => setData("city", e.target.value)}
             placeholder="City"
@@ -287,6 +293,7 @@ export default function UpdateProfileInformation({ mustVerifyEmail, status, clas
           <TextInput
             id="province"
             type="text"
+            maxLength={50}
             className="mt-1 block w-full"
             value={data.province}
             onChange={(e) => setData("province", e.target.value)}

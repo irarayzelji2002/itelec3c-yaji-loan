@@ -11,11 +11,10 @@ const Welcome = ({ auth }) => {
         {/* Left Section */}
         <div className="left-section">
           <h1 className="heading">
-            Banking <br /> <span className="subheading">starts here.</span>
+            Loans <br /> <span className="subheading">made simple.</span>
           </h1>
           <p className="description">
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
-            incididunt ut labore.
+            Experience financial freedom with our trusted loan services.
           </p>
 
           {/* Features */}
@@ -36,7 +35,7 @@ const Welcome = ({ auth }) => {
             ) : (
               <>
                 <Link href={route("register")} className="open-account-btn">
-                  Create Account
+                  Apply Now
                 </Link>
                 <Link href={route("login")} className="compare-btn">
                   Login
@@ -82,19 +81,16 @@ const Welcome = ({ auth }) => {
       <div className="money-transfer-section">
         <div className="transfer-left">
           <h2>Send & receive money instantly</h2>
-          <p>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
-            incididunt ut labore et.
-          </p>
+          <p>Seamless transactions designed to keep your finances moving effortlessly.</p>
           <ul className="benefits-list">
             <li>
-              <span className="check-icon">✔</span> Malesuada Ipsum
+              <span className="check-icon">-</span>Instant Money Transfers
             </li>
             <li>
-              <span className="check-icon">✔</span> Vestibulum
+              <span className="check-icon">-</span> Secure & Reliable Payments
             </li>
             <li>
-              <span className="check-icon">✔</span> Parturient Lorem
+              <span className="check-icon">-</span> Global Accessibility
             </li>
           </ul>
         </div>
@@ -172,14 +168,14 @@ const Welcome = ({ auth }) => {
             <div className="contact-item">
               <span>📞</span>
               <p>
-                +49 176 123 456 <br />
+                +0990 123 4567 <br />
                 <small>Support Hotline</small>
               </p>
             </div>
             <div className="contact-item">
               <span>📧</span>
               <p>
-                help@banko.com <br />
+                yajicorp@gmail.com <br />
                 <small>Support Email</small>
               </p>
             </div>
@@ -190,14 +186,11 @@ const Welcome = ({ auth }) => {
         {/* Main Content */}
         <div className="main-content">
           <h3>Features</h3>
-          <h1>All in one card.</h1>
-          <p>
-            Senectus et netus et malesuada fames ac turpis. <br />
-            Sagittis vitae et leo duis ut diam.
-          </p>
+          <h1>One Solution for All Your Loan Needs.</h1>
+          <p>Simplify your borrowing experience with features designed for you.</p>
           <div className="buttons">
             <button className="primary-button">Open Account</button>
-            <button className="secondary-button">Compare Cards →</button>
+            <button className="secondary-button">Login →</button>
           </div>
 
           {/* Cards Section
@@ -217,15 +210,26 @@ const Welcome = ({ auth }) => {
             </div> */}
         </div>
       </div>
+      <Footer />
     </div>
   );
 };
 
 const features = [
-  "Instant Transfer",
-  "Saving accounts",
-  "Payments worldwide",
-  "100% mobile banking",
+  "Quick Approvals",
+  "Flexible Repayment Options",
+  "Competitive Interest Rates",
+  "24/7 Loan Management",
 ];
+
+const Footer = () => (
+  <footer className="footer">
+    <p>&copy; 2024 Group 3- 4ITE - YAJI Corp. All rights reserved.</p>
+    <p>
+      <a href="/terms-of-service">Terms of Service</a> |{" "}
+      <a href="/privacy-policy">Privacy Policy</a>
+    </p>
+  </footer>
+);
 
 export default Welcome;

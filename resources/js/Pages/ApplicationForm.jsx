@@ -186,7 +186,7 @@ export default function LoanApplicationForm() {
                 <span className="text-black-700 ml-2 text-sm font-bold">
                   I understand and agree with
                   <a href="#" className="ml-1 text-green-700 underline hover:text-green-600">
-                    Terms & Conditions
+                    Terms of Service
                   </a>
                   &nbsp;and
                   <a href="#" className="ml-1 text-green-700 underline hover:text-green-600">

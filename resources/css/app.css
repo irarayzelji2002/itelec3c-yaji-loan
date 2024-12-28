@@ -1,3 +1,5 @@
+@import url("https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&display=swap");
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -23,7 +25,12 @@
   --color-border: #e0e0e0;
   --color-dropdown-bg: #d7f0e9;
   --color-dropdown-hover: #c0e5dc;
+  --color-home-bg: #f5fdf5;
   --color-text-light-green: #38b876;
+}
+
+body {
+  font-family: "DM Sans", sans-serif;
 }
 
 /* FONTS */
@@ -357,7 +364,21 @@
 .next-button:hover {
   background-color: var(--color-hover);
 }
+.content {
+  display: flex;
 
+  align-items: center;
+  flex-direction: column;
+  height: 80vh;
+  background-color: #f5fdf5;
+  font-family: "DM Sans", Arial, sans-serif;
+  color: #333;
+}
+
+.terms-content {
+  margin-top: 20px;
+  font-size: 20px;
+}
 .button-group {
   display: flex;
   gap: 10px;
@@ -366,9 +387,9 @@
 
 .container {
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
   align-items: center;
-  background-color: var(--color-background);
+  background-color: var(--color-home-bg);
   padding: 60px;
   min-width: 100%;
   font-family: "DM Sans", Arial, sans-serif;
@@ -440,7 +461,7 @@
 
 .right-section {
   position: relative;
-  width: 50%;
+  width: 200px;
   height: 300px;
 }
 
