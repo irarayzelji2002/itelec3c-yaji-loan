@@ -86,7 +86,7 @@ Route::middleware('auth')->group(function () {
     // Admin only page routes
     Route::middleware(['role:admin'])->group(function () {
         Route::get('/users-table', function () {
-            return Inertia::render('TableView');
+            return Inertia::render('TableViewUsers');
         })->name('view.users-table');
     });
 
