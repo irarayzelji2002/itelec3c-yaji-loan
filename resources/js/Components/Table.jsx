@@ -178,7 +178,7 @@ const Table = ({
       {/* Status and Actions Bar */}
       {!!showStatusBar && (
         <div
-          className="flex min-h-[56px] items-center justify-between rounded-t-lg border-gray-300 bg-gray-50 px-4 py-2"
+          className="flex min-h-[56px] flex-col items-center justify-between gap-2 rounded-t-lg border-gray-300 bg-gray-50 px-4 py-2 sm:flex-row"
           style={{ borderWidth: "1px" }}
         >
           <div className="flex gap-1">
@@ -186,7 +186,7 @@ const Table = ({
               <div
                 key={status.id}
                 onClick={() => handleStatusClick(status)}
-                className={`flex cursor-pointer items-center gap-2 px-2 pb-1 font-medium capitalize transition-all ${
+                className={`flex cursor-pointer items-center gap-2 p-1 px-2 pt-1.5 font-medium capitalize transition-all ${
                   selectedStatus?.id === status.id
                     ? "border-b-2 border-green-800"
                     : "hover:border-b-2 hover:border-green-800/50"

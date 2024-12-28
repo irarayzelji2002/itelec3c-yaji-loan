@@ -340,11 +340,12 @@ export default function UsersTableView() {
     try {
       setSelectedUser(user);
       if (new_verification_status === "verified") {
-        setDisableDenyBtn(true);
-      } else if (new_verification_status === "denied") {
         setDisableAcceptBtn(true);
+      } else if (new_verification_status === "denied") {
+        setDisableDenyBtn(true);
       }
 
+      console.log(`Sending request to: /api/admin/users/${user.id}/verification-status`);
       const response = await fetch(`/api/admin/users/${user.id}/verification-status`, {
         method: "PUT",
         headers: {
@@ -353,16 +354,16 @@ export default function UsersTableView() {
         },
         body: JSON.stringify({ verification_status: new_verification_status }),
       });
-
+      console.log("Response status:", response.status);
       if (!response.ok) {
         if (response.status === 403) {
           throw new Error("You do not have permission to perform this action");
         }
         throw new Error("Failed to update verification status");
       }
-
       const data = await response.json();
-      console.log(data);
+      console.log("Response data:", data);
+
       setUsers((prevUsers) =>
         prevUsers.map((u) =>
           u.id === user.id ? { ...u, verification_status: new_verification_status } : u
@@ -374,9 +375,9 @@ export default function UsersTableView() {
       showToast("error", error.message);
     } finally {
       if (new_verification_status === "verified") {
-        setDisableDenyBtn(false);
-      } else if (new_verification_status === "denied") {
         setDisableAcceptBtn(false);
+      } else if (new_verification_status === "denied") {
+        setDisableDenyBtn(false);
       }
     }
   };
