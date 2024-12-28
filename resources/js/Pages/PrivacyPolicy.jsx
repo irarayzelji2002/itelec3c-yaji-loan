@@ -8,13 +8,13 @@ function PrivacyPolicy({ auth }) {
       <Navbar auth={auth} />
       <section className="container">
         <div className="content">
-          <h1 className="heading">
+          <h1 className="heading" style={{ fontSize: "4rem" }}>
             Privacy <span className="subheading">Policy</span>
           </h1>
           <p className="description">
             At YAJI Loan App, your privacy is our priority. Here's how we handle your data:
           </p>
-          <div className="privacy-content">
+          <div className="terms-content">
             <h2>
               <b>1. Information We Collect</b>
             </h2>
