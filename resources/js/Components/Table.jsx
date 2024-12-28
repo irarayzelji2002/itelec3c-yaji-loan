@@ -181,7 +181,7 @@ const Table = ({
           className="flex min-h-[56px] flex-col items-center justify-between gap-2 rounded-t-lg border-gray-300 bg-gray-50 px-4 py-2 sm:flex-row"
           style={{ borderWidth: "1px" }}
         >
-          <div className="flex gap-1">
+          <div className="flex flex-wrap gap-1">
             {statuses.map((status) => (
               <div
                 key={status.id}

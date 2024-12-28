@@ -68,4 +68,53 @@ class UserController extends Controller
             ], 500);
         }
     }
+
+    public function updateRole(Request $request, $id)
+{
+    Log::info('updateRole called', [
+        'user_id' => $id,
+        'request_data' => $request->all()
+    ]);
+
+    try {
+        // Find user
+        $user = User::findOrFail($id);
+        Log::info('User found', ['user_id' => $user->id, 'current_status' => $user->verification_status]);
+
+        // Get the new role from request
+        $newRole = $request->input('role');
+
+        // Validate role
+        if (!in_array($newRole, ['admin', 'employee', 'member'])) {
+            return response()->json([
+                'message' => 'Invalid role specified'
+            ], 400);
+        }
+
+        // Remove old roles and assign new role
+        $user->syncRoles([$newRole]);
+
+        // Update the role column in users table
+        $user->update(['role' => $newRole]);
+
+        Log::info('Role updated successfully', [
+            'user_id' => $user->id,
+            'new_role' => $user->newRole
+        ]);
+        return response()->json([
+            'message' => 'User role updated successfully',
+            'user' => $user->load('roles')
+        ]);
+
+    } catch (\Exception $e) {
+        Log::error('Error updating user role:', [
+            'error' => $e->getMessage(),
+            'user_id' => $id
+        ]);
+
+        return response()->json([
+            'message' => 'Failed to update user role'
+        ], 500);
+    }
+}
 }
