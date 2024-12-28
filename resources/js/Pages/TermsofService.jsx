@@ -8,7 +8,7 @@ function TermsOfService({ auth }) {
       <Navbar auth={auth} />
       <section className="container">
         <div className="content">
-          <h1 className="heading">
+          <h1 className="heading" style={{ fontSize: "4rem" }}>
             Terms & <span className="subheading">Conditions</span>
           </h1>
           <p className="description">
