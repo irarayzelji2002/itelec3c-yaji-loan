@@ -134,7 +134,7 @@ export default function AuthenticatedLayout({ header, children }) {
       </nav>
 
       {header && (
-        <header className="z-100 sticky top-[64px] bg-white shadow">
+        <header className="z-1 sticky top-[64px] bg-white shadow">
           <div className="max-w-100 montserrat-700 bg-green-gradient-horiz mx-auto px-4 py-4 text-lg font-bold leading-tight text-gray-800 sm:px-6 lg:px-8">
             {header}
           </div>

@@ -84,13 +84,13 @@ const Welcome = ({ auth }) => {
           <p>Seamless transactions designed to keep your finances moving effortlessly.</p>
           <ul className="benefits-list">
             <li>
-              <span className="check-icon">✔</span> Instant Money Transfers
+              <span className="check-icon">-</span>Instant Money Transfers
             </li>
             <li>
-              <span className="check-icon">✔</span> Secure & Reliable Payments
+              <span className="check-icon">-</span> Secure & Reliable Payments
             </li>
             <li>
-              <span className="check-icon">✔</span> Global Accessibility
+              <span className="check-icon">-</span> Global Accessibility
             </li>
           </ul>
         </div>
@@ -226,7 +226,8 @@ const Footer = () => (
   <footer className="footer">
     <p>&copy; 2024 Group 3- 4ITE - YAJI Corp. All rights reserved.</p>
     <p>
-      <a href="/terms">Terms of Service</a> | <a href="/privacy">Privacy Policy</a>
+      <a href="/terms-of-service">Terms of Service</a> |{" "}
+      <a href="/privacy-policy">Privacy Policy</a>
     </p>
   </footer>
 );
