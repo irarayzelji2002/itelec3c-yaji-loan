@@ -344,12 +344,16 @@ export default function UsersTableView() {
       } else if (new_verification_status === "denied") {
         setDisableAcceptBtn(true);
       }
+      const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute("content");
+      if (!csrfToken) {
+        throw new Error("CSRF token not found");
+      }
 
       const response = await fetch(`/api/admin/users/${user.id}/verification-status`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
-          "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]').getAttribute("content"),
+          "X-CSRF-TOKEN": csrfToken,
         },
         body: JSON.stringify({ verification_status: new_verification_status }),
       });
