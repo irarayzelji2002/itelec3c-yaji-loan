@@ -5,16 +5,17 @@ import SecondaryButton from "@/Components/SecondaryButton";
 import Table from "@/Components/Table";
 import TertiaryButton from "@/Components/TertiaryButton";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
-import { capitalizeFirstLetter } from "@/utils/displayFunctions";
-import { Head, usePage } from "@inertiajs/react";
+import { capitalizeFirstLetter, showToast } from "@/utils/displayFunctions";
+import { Head } from "@inertiajs/react";
 import { useEffect, useState } from "react";
 
 export default function UsersTableView() {
-  const user = usePage().props.auth.user;
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(false);
   const [selectedUser, setSelectedUser] = useState(null);
   const [showModal, setShowModal] = useState(false);
+  const [disableAcceptBtn, setDisableAcceptBtn] = useState(false);
+  const [disableDenyBtn, setDisableDenyBtn] = useState(false);
 
   useEffect(() => {
     setLoading(true);
@@ -246,12 +247,16 @@ export default function UsersTableView() {
       component: (user) => (
         <div className="flex gap-3">
           <TertiaryButton onClick={() => handleViewDetails(user)}>View</TertiaryButton>
-          <PrimaryButton onClick={() => handleChangeVerificationStatus(user, "verified")}>
+          <PrimaryButton
+            onClick={() => handleChangeVerificationStatus(user, "verified")}
+            disabled={user.verification_status === "verified" || disableAcceptBtn}
+          >
             Accept
           </PrimaryButton>
           <SecondaryButton
             onClick={() => handleChangeVerificationStatus(user, "denied")}
             className="bg-white"
+            disabled={user.verification_status === "denied" || disableDenyBtn}
           >
             Deny
           </SecondaryButton>
@@ -299,7 +304,10 @@ export default function UsersTableView() {
       id: "accept",
       label: "Accept",
       render: (user) => (
-        <PrimaryButton onClick={() => handleChangeVerificationStatus(user, "verified")}>
+        <PrimaryButton
+          onClick={() => handleChangeVerificationStatus(user, "verified")}
+          disabled={user.verification_status === "verified" || disableAcceptBtn}
+        >
           Accept
         </PrimaryButton>
       ),
@@ -311,6 +319,7 @@ export default function UsersTableView() {
         <SecondaryButton
           onClick={() => handleChangeVerificationStatus(user, "denied")}
           className="bg-white"
+          disabled={user.verification_status === "denied" || disableDenyBtn}
         >
           Deny
         </SecondaryButton>
@@ -325,16 +334,59 @@ export default function UsersTableView() {
 
   const closeModal = () => {
     setShowModal(false);
-    // setSelectedUser(null);
   };
 
-  const handleChangeVerificationStatus = (user, new_verification_status) => {
-    // Implement change verification status logic
+  const handleChangeVerificationStatus = async (user, new_verification_status) => {
+    try {
+      setSelectedUser(user);
+      if (new_verification_status === "verified") {
+        setDisableDenyBtn(true);
+      } else if (new_verification_status === "denied") {
+        setDisableAcceptBtn(true);
+      }
+
+      const response = await fetch(`/api/admin/users/${user.id}/verification-status`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]').getAttribute("content"),
+        },
+        body: JSON.stringify({ verification_status: new_verification_status }),
+      });
+
+      if (!response.ok) {
+        if (response.status === 403) {
+          throw new Error("You do not have permission to perform this action");
+        }
+        throw new Error("Failed to update verification status");
+      }
+
+      const data = await response.json();
+      console.log(data);
+      setUsers((prevUsers) =>
+        prevUsers.map((u) =>
+          u.id === user.id ? { ...u, verification_status: new_verification_status } : u
+        )
+      );
+      showToast("success", `User verification ${new_verification_status} successfully`);
+    } catch (error) {
+      console.error("Error:", error);
+      showToast("error", error.message);
+    } finally {
+      if (new_verification_status === "verified") {
+        setDisableDenyBtn(false);
+      } else if (new_verification_status === "denied") {
+        setDisableAcceptBtn(false);
+      }
+    }
   };
 
   return (
     <AuthenticatedLayout>
       <Head title="Dashboard" />
+      <button onClick={() => showToast("success", "Test Success")}>Click for Toast Success</button>
+      <button onClick={() => showToast("error", "Test Error")}>Click for Toast Error</button>
+      <button onClick={() => showToast("info", "Test Info")}>Click for Toast Info</button>
       <div className="py-12">
         <div className="max-w-100 mx-auto sm:px-6 lg:px-8">
           <div className="overflow-hidden shadow-sm sm:rounded-lg">
@@ -361,21 +413,12 @@ export default function UsersTableView() {
 
 export function UserDetailsModal({ showModal, closeModal, user }) {
   return (
-    <Modal show={showModal} onClose={closeModal} maxWidth="2xl">
-      <div className="bg-green-900 px-6 py-2 text-white">
-        <h2 className="text-lg font-bold">User Details</h2>
-        <button
-          onClick={closeModal}
-          className="absolute right-2.5 top-2.5 h-[22px] w-[22px] rounded-full bg-green-800 bg-opacity-0 text-white hover:bg-green-800 hover:bg-opacity-25"
-        >
-          <i className="fa-solid fa-xmark mt-[-5px]"></i>
-        </button>
-      </div>
+    <Modal show={showModal} onClose={closeModal} maxWidth="2xl" title="User Details">
       <div className="p-6">
         {user && (
-          <div className="flex items-start gap-4 space-x-4">
+          <div className="flex flex-grow flex-col items-start gap-4 sm:flex-row">
             {/* Basic Information */}
-            <div className="flex flex-grow flex-col">
+            <div className="flex w-full flex-grow flex-col">
               <h3 className="text-lg font-medium text-gray-900">Basic Information</h3>
               <div className="mt-4 space-y-4">
                 <div>
@@ -462,7 +505,7 @@ export function UserDetailsModal({ showModal, closeModal, user }) {
             </div>
 
             {/* Contact Information */}
-            <div className="flex flex-grow flex-col">
+            <div className="flex w-full flex-grow flex-col">
               <h3 className="text-lg font-medium text-gray-900">Contact Information</h3>
               <div className="mt-4 space-y-4">
                 <div>
@@ -505,7 +548,7 @@ export function UserDetailsModal({ showModal, closeModal, user }) {
             </div>
 
             {/* Role and Verification */}
-            <div className="flex flex-grow flex-col">
+            <div className="flex w-full flex-grow flex-col">
               <h3 className="text-lg font-medium text-gray-900">Verification</h3>
               <div className="mt-4 space-y-4">
                 <div>

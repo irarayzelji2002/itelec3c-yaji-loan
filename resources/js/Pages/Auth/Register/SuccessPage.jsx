@@ -1,5 +1,5 @@
 import PrimaryButton from "@/Components/PrimaryButton";
-import CheckCircle from "@/Icons/CheckCircle";
+import { CheckCircle } from "@/Icons/GeneralIcons";
 
 const SuccessPage = () => {
   const handleOK = () => {
