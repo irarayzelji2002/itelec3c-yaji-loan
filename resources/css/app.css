@@ -23,6 +23,7 @@
   --color-border: #e0e0e0;
   --color-dropdown-bg: #d7f0e9;
   --color-dropdown-hover: #c0e5dc;
+  --color-home-bg: #f5fdf5;
 }
 
 /* FONTS */
@@ -367,7 +368,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background-color: var(--color-background);
+  background-color: var(--color-home-bg);
   padding: 60px;
   min-width: 100%;
   font-family: "DM Sans", Arial, sans-serif;
