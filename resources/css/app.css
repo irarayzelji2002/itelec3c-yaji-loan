@@ -23,6 +23,250 @@
   --color-border: #e0e0e0;
   --color-dropdown-bg: #d7f0e9;
   --color-dropdown-hover: #c0e5dc;
+  --color-home-bg: #f5fdf5;
+}
+
+/* FONTS */
+.dm-sans-100 {
+  font-family: "DM Sans", serif;
+  font-optical-sizing: auto;
+  font-weight: 100;
+  font-style: normal;
+}
+.dm-sans-100-italic {
+  font-family: "DM Sans", serif;
+  font-optical-sizing: auto;
+  font-weight: 100;
+  font-style: italic;
+}
+.dm-sans-200 {
+  font-family: "DM Sans", serif;
+  font-optical-sizing: auto;
+  font-weight: 200;
+  font-style: normal;
+}
+.dm-sans-200-italic {
+  font-family: "DM Sans", serif;
+  font-optical-sizing: auto;
+  font-weight: 200;
+  font-style: italic;
+}
+.dm-sans-300 {
+  font-family: "DM Sans", serif;
+  font-optical-sizing: auto;
+  font-weight: 300;
+  font-style: normal;
+}
+.dm-sans-300-italic {
+  font-family: "DM Sans", serif;
+  font-optical-sizing: auto;
+  font-weight: 300;
+  font-style: italic;
+}
+.dm-sans-300 {
+  font-family: "DM Sans", serif;
+  font-optical-sizing: auto;
+  font-weight: 300;
+  font-style: normal;
+}
+.dm-sans-300-italic {
+  font-family: "DM Sans", serif;
+  font-optical-sizing: auto;
+  font-weight: 300;
+  font-style: italic;
+}
+.dm-sans-400 {
+  font-family: "DM Sans", serif;
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-style: normal;
+}
+.dm-sans-400-italic {
+  font-family: "DM Sans", serif;
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-style: italic;
+}
+.dm-sans-500 {
+  font-family: "DM Sans", serif;
+  font-optical-sizing: auto;
+  font-weight: 500;
+  font-style: normal;
+}
+.dm-sans-500-italic {
+  font-family: "DM Sans", serif;
+  font-optical-sizing: auto;
+  font-weight: 500;
+  font-style: italic;
+}
+.dm-sans-600 {
+  font-family: "DM Sans", serif;
+  font-optical-sizing: auto;
+  font-weight: 600;
+  font-style: normal;
+}
+.dm-sans-600-italic {
+  font-family: "DM Sans", serif;
+  font-optical-sizing: auto;
+  font-weight: 600;
+  font-style: italic;
+}
+.dm-sans-700 {
+  font-family: "DM Sans", serif;
+  font-optical-sizing: auto;
+  font-weight: 700;
+  font-style: normal;
+}
+.dm-sans-700-italic {
+  font-family: "DM Sans", serif;
+  font-optical-sizing: auto;
+  font-weight: 700;
+  font-style: italic;
+}
+.dm-sans-800 {
+  font-family: "DM Sans", serif;
+  font-optical-sizing: auto;
+  font-weight: 800;
+  font-style: normal;
+}
+.dm-sans-800-italic {
+  font-family: "DM Sans", serif;
+  font-optical-sizing: auto;
+  font-weight: 800;
+  font-style: italic;
+}
+.dm-sans-900 {
+  font-family: "DM Sans", serif;
+  font-optical-sizing: auto;
+  font-weight: 900;
+  font-style: normal;
+}
+.dm-sans-900-italic {
+  font-family: "DM Sans", serif;
+  font-optical-sizing: auto;
+  font-weight: 900;
+  font-style: italic;
+}
+
+.montserrat-100 {
+  font-family: "Montserrat", serif;
+  font-optical-sizing: auto;
+  font-weight: 100;
+  font-style: normal;
+}
+.montserrat-100-italic {
+  font-family: "Montserrat", serif;
+  font-optical-sizing: auto;
+  font-weight: 100;
+  font-style: italic;
+}
+.montserrat-200 {
+  font-family: "Montserrat", serif;
+  font-optical-sizing: auto;
+  font-weight: 200;
+  font-style: normal;
+}
+.montserrat-200-italic {
+  font-family: "Montserrat", serif;
+  font-optical-sizing: auto;
+  font-weight: 200;
+  font-style: italic;
+}
+.montserrat-300 {
+  font-family: "Montserrat", serif;
+  font-optical-sizing: auto;
+  font-weight: 300;
+  font-style: normal;
+}
+.montserrat-300-italic {
+  font-family: "Montserrat", serif;
+  font-optical-sizing: auto;
+  font-weight: 300;
+  font-style: italic;
+}
+.montserrat-300 {
+  font-family: "Montserrat", serif;
+  font-optical-sizing: auto;
+  font-weight: 300;
+  font-style: normal;
+}
+.montserrat-300-italic {
+  font-family: "Montserrat", serif;
+  font-optical-sizing: auto;
+  font-weight: 300;
+  font-style: italic;
+}
+.montserrat-400 {
+  font-family: "Montserrat", serif;
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-style: normal;
+}
+.montserrat-400-italic {
+  font-family: "Montserrat", serif;
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-style: italic;
+}
+.montserrat-500 {
+  font-family: "Montserrat", serif;
+  font-optical-sizing: auto;
+  font-weight: 500;
+  font-style: normal;
+}
+.montserrat-500-italic {
+  font-family: "Montserrat", serif;
+  font-optical-sizing: auto;
+  font-weight: 500;
+  font-style: italic;
+}
+.montserrat-600 {
+  font-family: "Montserrat", serif;
+  font-optical-sizing: auto;
+  font-weight: 600;
+  font-style: normal;
+}
+.montserrat-600-italic {
+  font-family: "Montserrat", serif;
+  font-optical-sizing: auto;
+  font-weight: 600;
+  font-style: italic;
+}
+.montserrat-700 {
+  font-family: "Montserrat", serif;
+  font-optical-sizing: auto;
+  font-weight: 700;
+  font-style: normal;
+}
+.montserrat-700-italic {
+  font-family: "Montserrat", serif;
+  font-optical-sizing: auto;
+  font-weight: 700;
+  font-style: italic;
+}
+.montserrat-800 {
+  font-family: "Montserrat", serif;
+  font-optical-sizing: auto;
+  font-weight: 800;
+  font-style: normal;
+}
+.montserrat-800-italic {
+  font-family: "Montserrat", serif;
+  font-optical-sizing: auto;
+  font-weight: 800;
+  font-style: italic;
+}
+.montserrat-900 {
+  font-family: "Montserrat", serif;
+  font-optical-sizing: auto;
+  font-weight: 900;
+  font-style: normal;
+}
+.montserrat-900-italic {
+  font-family: "Montserrat", serif;
+  font-optical-sizing: auto;
+  font-weight: 900;
+  font-style: italic;
 }
 
 .app {
@@ -39,6 +283,18 @@
     #edfcf4 53%,
     #eafbf2 66%,
     #81e7b2 94%,
+    #62e19e 97%,
+    #57df98 100%
+  );
+}
+
+.bg-green-gradient-horiz {
+  background-image: linear-gradient(
+    to left,
+    #f5fdf9 0%,
+    #edfcf4 20%,
+    #eafbf2 30%,
+    #81e7b2 80%,
     #62e19e 97%,
     #57df98 100%
   );
@@ -112,7 +368,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background-color: var(--color-background);
+  background-color: var(--color-home-bg);
   padding: 60px;
   min-width: 100%;
   font-family: "DM Sans", Arial, sans-serif;
@@ -339,6 +595,9 @@
 
 .placeholder-table {
   border-radius: 8px;
+  max-height: 200px;
+  width: 1000px;
+  object-fit: cover;
 }
 
 .view-button {
@@ -702,6 +961,123 @@ option:first {
   height: 48px;
 }
 
+.advantages-heading {
+  font-size: 2rem; /* Large font size for emphasis */
+  font-weight: bold; /* Bold text */
+  text-align: center; /* Center align the text */
+  color: var(--color-header); /* Dark blue color for text */
+  margin-bottom: 40px; /* Space below the heading */
+  margin-top: 40px; /* Space above the heading */
+  letter-spacing: 0.5px; /* Slight spacing between letters */
+  line-height: 1.2; /* Balanced line height */
+}
+
+/* General Section Styling */
+.cash-express-advantages {
+  padding: 40px 20px;
+  text-align: center;
+}
+
+.cash-express-advantages h2 {
+  font-size: 2rem;
+  color: var(--color-green); /* Dark blue heading color */
+  margin-bottom: 30px;
+}
+
+/* Advantages Cards */
+.advantages-cards {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.advantage-card {
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  width: 300px;
+  padding: 20px;
+  text-align: left;
+}
+
+.advantage-card h3 {
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: var(--color-header);
+  margin-bottom: 10px;
+}
+
+.advantage-card p {
+  font-size: 0.9rem;
+  color: #555;
+  margin-bottom: 15px;
+}
+
+.advantage-card ul {
+  padding-left: 20px;
+  margin: 0;
+  color: #555;
+  list-style-type: disc;
+}
+
+.advantage-card ul li {
+  font-size: 0.9rem;
+  margin-bottom: 8px;
+}
+
+.steps {
+  background-color: #f5fdf5;
+}
+
+/* Steps Section */
+.steps-section {
+  margin-top: 40px;
+  padding: 20px 10px;
+  text-align: center;
+}
+
+.steps-section .steps-list {
+  display: flex;
+  justify-content: center;
+  gap: 40px;
+  flex-wrap: wrap;
+}
+
+.step-card {
+  text-align: center;
+  width: 200px;
+}
+
+.step-card h3 {
+  font-size: 2rem;
+  font-weight: bold;
+  color: var(--color-header);
+}
+
+.step-card p {
+  font-size: 0.9rem;
+  color: #555;
+  margin: 10px 0;
+}
+
+.steps-section .apply-btn {
+  margin-top: 20px;
+  background-color: #ffcc00;
+  color: var(--color-green);
+  padding: 10px 20px;
+  font-size: 1rem;
+  font-weight: bold;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.steps-section .apply-btn:hover {
+  background-color: #e6b800;
+}
+
 .reminders-container {
   display: flex;
   flex-direction: row;
@@ -712,8 +1088,337 @@ option:first {
   flex-direction: column;
   gap: 10px;
 }
+.steps {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 40px; /* Space between steps */
+  padding: 20px;
+  text-align: center;
+  flex-wrap: wrap; /* Adjusts for smaller screens */
+}
+
+.step {
+  border-radius: 8px; /* Rounded corners */
+
+  padding: 20px;
+  width: 280px; /* Fixed width for consistent size */
+  text-align: center;
+}
+
+.step h3 {
+  font-size: 1.5rem; /* Bold and prominent step number and title */
+  font-weight: bold;
+  color: var(--color-dark-teal); /* Dark blue for step titles */
+  margin-bottom: 15px;
+}
+
+.step p {
+  font-size: 0.95rem; /* Slightly smaller for descriptions */
+  color: #555; /* Neutral gray text color */
+  line-height: 1.5; /* Good line spacing for readability */
+}
+
+/* Progress Bar Container */
+.progress-bar-container-1 {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+
+  background-color: #f5fdf5;
+}
+
+/* Progress Bar */
+.progress-bar {
+  position: relative;
+  width: 80%; /* Adjust width to fit within your design */
+  height: 4px; /* Thickness of the progress bar */
+  background-color: #e0e0e0; /* Light gray for the inactive bar */
+  border-radius: 2px; /* Rounded edges */
+}
+
+/* Step Indicators */
+.step-indicator {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 12px; /* Circle size */
+  height: 12px; /* Circle size */
+  background-color: var(--color-green); /* Blue color for the indicators */
+  border-radius: 50%; /* Make them circular */
+  border: 2px solid white; /* Optional border for a clean look */
+  box-shadow: 0 0 4px rgba(0, 0, 0, 0.2); /* Slight shadow for emphasis */
+}
+
+/* Position the Step Indicators */
+.step-indicator:nth-child(1) {
+  left: 0; /* First step at the start */
+}
+
+.step-indicator:nth-child(2) {
+  left: 50%; /* Second step in the middle */
+  transform: translate(-50%, -50%);
+}
+
+.step-indicator:nth-child(3) {
+  right: 0; /* Third step at the end */
+}
+
+/* Overall Section */
+.money-transfer-section {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #f5fdf5;
+  padding: 40px;
+  border-radius: 12px;
+}
+
+/* Left Side (Heading and List) */
+.transfer-left {
+  max-width: 45%;
+}
+
+.transfer-left h2 {
+  font-size: 32px;
+  font-weight: bold;
+  margin-bottom: 16px;
+  color: #222; /* Dark text */
+}
+
+.transfer-left p {
+  font-size: 16px;
+  margin-bottom: 24px;
+  color: #555; /* Slightly muted text */
+}
+
+.benefits-list {
+  list-style: none;
+  padding: 0;
+}
+
+.benefits-list li {
+  display: flex;
+  align-items: center;
+  margin-bottom: 12px;
+  font-size: 16px;
+  color: #222;
+}
+
+.benefits-list .check-icon {
+  font-size: 18px;
+  color: #28a745; /* Green check color */
+  margin-right: 12px;
+}
+
+/* Right Side (Transactions) */
+.transfer-right {
+  max-width: 50%;
+}
+
+.transaction {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: #fff;
+  padding: 12px 20px;
+  margin-bottom: 10px;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+}
+
+.transaction-icon img {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%; /* Circular icons */
+}
+
+.transaction-details h4 {
+  font-size: 16px;
+  font-weight: bold;
+  margin: 0;
+  color: #222;
+}
+
+.transaction-details p {
+  font-size: 14px;
+  margin: 0;
+  color: #555;
+}
+
+.transaction-amount {
+  font-size: 16px;
+  font-weight: bold;
+  color: #d9534f; /* Red for negative amounts */
+}
+
+/* Overall Section */
+.card-section {
+  font-family: Arial, sans-serif;
+  background: linear-gradient(180deg, #f5fdf5 0%, #d6f7d8 100%);
+  padding: 20px;
+  text-align: center;
+}
+
+/* Support Bar */
+.support-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #1e4a41;
+  color: white;
+  padding: 20px;
+  border-radius: 8px;
+  margin-bottom: 30px;
+}
+
+.support-info {
+  text-align: left;
+}
+
+.support-heading {
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+.support-contact {
+  display: flex;
+  gap: 20px;
+}
+
+.contact-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.chat-button {
+  background: #0fa17b;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.chat-button:hover {
+  background: #0d8568;
+}
+
+/* Main Content */
+.main-content {
+  padding: 20px;
+}
+
+.main-content h3 {
+  font-size: 16px;
+  color: #555;
+  text-transform: uppercase;
+  margin-bottom: 10px;
+}
+
+.main-content h1 {
+  font-size: 48px;
+  color: #222;
+  margin-bottom: 20px;
+}
+
+.main-content p {
+  font-size: 18px;
+  color: #555;
+  margin-bottom: 30px;
+  line-height: 1.6;
+}
+
+.buttons {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+  margin-bottom: 50px;
+}
+
+.primary-button {
+  background: #0fa17b;
+  color: white;
+  padding: 15px 30px;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.primary-button:hover {
+  background: #0d8568;
+}
+
+.secondary-button {
+  background: transparent;
+  color: #0fa17b;
+  padding: 15px 30px;
+  border: 2px solid #0fa17b;
+  border-radius: 8px;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.secondary-button:hover {
+  background: #f5fdf5;
+}
+
+/* Card Display */
+.card-display {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+}
+
+.card {
+  background: #3a6b59;
+  color: white;
+  padding: 20px;
+  width: 200px;
+  height: 120px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: bold;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.footer {
+  background-color: var(--color-dark-teal);
+  color: var(--color-white);
+  padding: 20px 0;
+  text-align: center;
+  font-family: "DM Sans", Arial, sans-serif;
+}
+
+.footer p {
+  margin: 0;
+  font-size: 14px;
+}
+
+.footer a {
+  color: var(--color-light-green);
+  text-decoration: none;
+  margin: 0 10px;
+}
+
+.footer a:hover {
+  text-decoration: underline;
+}
 
 @media screen and (max-width: 768px) {
+  .steps {
+    flex-direction: column; /* Stack steps vertically on smaller screens */
+    gap: 20px; /* Reduce spacing */
+  }
+
+  .step {
+    width: 100%; /* Full width for smaller screens */
+  }
   .container {
     flex-direction: column;
     max-width: 100% !important;

@@ -1,5 +1,7 @@
+import PrimaryButton from "@/Components/PrimaryButton";
+import SecondaryButton from "@/Components/SecondaryButton";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
-import { Head, Link} from "@inertiajs/react";
+import { Head } from "@inertiajs/react";
 import { useState } from "react";
 
 export default function LoanApplicationForm() {
@@ -34,49 +36,49 @@ export default function LoanApplicationForm() {
               <h3 className="mb-4 font-bold text-green-900">Transaction Summary</h3>
               <ul className="space-y-4 text-sm text-gray-700">
                 <li className="flex justify-between">
-                  <span className="font-medium text-gray-800">Account Name:</span>
+                  <span className="font-medium text-gray-800">Account Name</span>
                   <span className="text-gray-600">Harry Edward Styles</span>
                 </li>
                 <li className="flex justify-between">
-                  <span className="font-medium text-gray-800">Purpose of Loan:</span>
+                  <span className="font-medium text-gray-800">Purpose of Loan</span>
                   <span className="text-gray-600">University Tuition</span>
                 </li>
                 <li className="flex justify-between">
-                  <span className="font-medium text-gray-800">Next Repayment Date:</span>
+                  <span className="font-medium text-gray-800">Next Repayment Date</span>
                   <span className="text-gray-600">January 1, 2025</span>
                 </li>
                 <li className="flex justify-between">
-                  <span className="font-medium text-gray-800">Interest Rate:</span>
+                  <span className="font-medium text-gray-800">Interest Rate</span>
                   <span className="text-gray-600">3%</span>
                 </li>
                 <li className="flex justify-between">
-                  <span className="font-medium text-gray-800">Monthly Payment:</span>
+                  <span className="font-medium text-gray-800">Monthly Payment</span>
                   <span className="text-gray-600">-</span>
                 </li>
                 <li className="flex justify-between">
-                  <span className="font-medium text-gray-800">No. of Payments:</span>
+                  <span className="font-medium text-gray-800">No. of Payments</span>
                   <span className="text-gray-600">-</span>
                 </li>
                 <li className="flex justify-between">
-                  <span className="font-medium text-gray-800">Total Payback Amount:</span>
+                  <span className="font-medium text-gray-800">Total Payback Amount</span>
                   <span className="text-gray-600">-</span>
                 </li>
               </ul>
             </div>
             <div className="mt-6 flex w-full space-x-4">
-              <Link
-                to="/success-loan-download"
+              <PrimaryButton
+                onClick={() => (window.location.href = route("success.loan.download"))}
                 className="w-full !rounded-lg bg-green-700 px-4 py-2 text-center font-bold text-black hover:bg-green-600 focus:outline-none focus:ring focus:ring-green-500"
               >
                 Accept
-              </Link>
+              </PrimaryButton>
 
-              <button
+              <SecondaryButton
                 className="w-full !rounded-lg border border-green-700 bg-white px-4 py-2 font-bold text-black hover:bg-green-100 focus:outline-none focus:ring focus:ring-green-500"
                 type="button"
               >
                 Done
-              </button>
+              </SecondaryButton>
             </div>
           </div>
         </div>

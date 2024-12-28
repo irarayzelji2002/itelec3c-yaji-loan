@@ -1,9 +1,10 @@
 import MyLoan from "@/Components/MyLoan";
 import ProgressBar from "@/Components/ProgressBar";
 import Reminders from "@/Components/Reminders";
+import TertiaryButton from "@/Components/TertiaryButton";
 import WalletTabs from "@/Components/WalletTabs";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
-import { Head, Link, usePage } from "@inertiajs/react";
+import { Head, usePage } from "@inertiajs/react";
 
 export default function MemberView() {
   const user = usePage().props.auth.user;
@@ -15,13 +16,16 @@ export default function MemberView() {
       <Head title="Dashboard" />
       <div className="py-12">
         <div className="max-w-100 mx-auto sm:px-6 lg:px-8">
-          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-            <h1 className="welcome-text">
+          <div className="flex flex-col items-center justify-between gap-2 sm:flex-row">
+            <h1 className="welcome-text font-bold">
               Welcome, <span className="highlighted-name">{user.first_name}!</span>
             </h1>
-            <Link href="/application-form" className="add-table-button">
+            <TertiaryButton
+              onClick={() => (window.location.href = "/application-form")}
+              className="add-table-button"
+            >
               <span className="plus-icon">+</span> Apply for a Loan
-            </Link>
+            </TertiaryButton>
           </div>
           <div className="center-column">
             <WalletTabs />
@@ -37,23 +41,13 @@ export default function MemberView() {
               <Reminders
                 reminder="Get cashback when you complete your loan in advance."
                 title="Get Cashback"
-                icon="/img/building.png"
               />
-              <Reminders
-                reminder="Please settle your loan now."
-                title="Loan Reminder"
-                icon="/img/logo.png"
-              />
+              <Reminders reminder="Please settle your loan now." title="Loan Reminder" />
               <Reminders
                 reminder="Get cashback when you complete your loan in advance."
                 title="Get Cashback"
-                icon="/img/building.png"
               />
-              <Reminders
-                reminder="Please settle your loan now."
-                title="Loan Reminder"
-                icon="/img/logo.png"
-              />
+              <Reminders reminder="Please settle your loan now." title="Loan Reminder" />
             </div>
           </div>
         </div>

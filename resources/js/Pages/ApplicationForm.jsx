@@ -1,9 +1,36 @@
+import PrimaryButton from "@/Components/PrimaryButton";
+import SecondaryButton from "@/Components/SecondaryButton";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
-import { Head, Link } from "@inertiajs/react";
+import { Head } from "@inertiajs/react";
 import { useState } from "react";
 
 export default function LoanApplicationForm() {
   const [selectedLoanType, setSelectedLoanType] = useState(null);
+  const [amount, setAmount] = useState("");
+  const [purpose, setPurpose] = useState("");
+  const [term, setTerm] = useState("");
+  const [termUnit, setTermUnit] = useState("months");
+  const [agree, setAgree] = useState(false);
+  const [errors, setErrors] = useState({});
+
+  const handleApply = (e) => {
+    e.preventDefault();
+
+    const validationErrors = {};
+    if (!amount) validationErrors.amount = "Amount is required";
+    if (!purpose) validationErrors.purpose = "Purpose is required";
+    if (!term) validationErrors.term = "Term is required";
+    if (!selectedLoanType) validationErrors.loanType = "Loan type is required";
+    if (!agree) validationErrors.agree = "You must agree to the terms and conditions";
+
+    if (Object.keys(validationErrors).length > 0) {
+      setErrors(validationErrors);
+      return;
+    }
+
+    // Proceed to apply
+    window.location.href = "/success-loan";
+  };
 
   return (
     <AuthenticatedLayout>
@@ -13,7 +40,7 @@ export default function LoanApplicationForm() {
           <h1 className="mb-6 text-center text-2xl font-bold text-green-900">
             Loan Application Form
           </h1>
-          <form>
+          <form onSubmit={handleApply}>
             <div className="mb-4">
               <label className="mb-2 block font-bold text-green-900" htmlFor="amount">
                 How much do you want to borrow? <span className="text-red-500">*</span>
@@ -23,31 +50,78 @@ export default function LoanApplicationForm() {
                 id="amount"
                 className="w-full !rounded-lg border border-gray-300 px-4 py-2 focus:outline-none focus:ring focus:ring-green-300"
                 placeholder="Enter amount"
+                value={amount}
+                onChange={(e) => {
+                  setAmount(e.target.value);
+                  setErrors((prev) => ({ ...prev, amount: "" }));
+                }}
               />
+              {errors.amount && <p className="text-sm text-red-500">{errors.amount}</p>}
             </div>
 
             <div className="mb-4">
               <label className="mb-2 block font-bold text-green-900" htmlFor="purpose">
                 Purpose of Loan <span className="text-red-500">*</span>
               </label>
-              <input
-                type="text"
+              <select
                 id="purpose"
                 className="w-full !rounded-lg border border-gray-300 px-4 py-2 focus:outline-none focus:ring focus:ring-green-300"
-                placeholder="Enter purpose"
-              />
+                value={purpose}
+                onChange={(e) => {
+                  setPurpose(e.target.value);
+                  setErrors((prev) => ({ ...prev, purpose: "" }));
+                }}
+              >
+                <option value="">Select purpose</option>
+                <optgroup label="Personal">
+                  <option value="Emergency expenses">Emergency expenses</option>
+                  <option value="Education">Education</option>
+                  <option value="Medical bills">Medical bills</option>
+                  <option value="Travel">Travel</option>
+                  <option value="Household improvements">Household improvements</option>
+                </optgroup>
+                <optgroup label="Business">
+                  <option value="Startup capital">Startup capital</option>
+                  <option value="Operational expenses">Operational expenses</option>
+                  <option value="Equipment purchase">Equipment purchase</option>
+                  <option value="Inventory">Inventory</option>
+                  <option value="Marketing and advertising">Marketing and advertising</option>
+                </optgroup>
+                <optgroup label="Debt Consolidation">
+                  <option value="Vehicle Purchase">Vehicle Purchase</option>
+                  <option value="Real Estate or Home Purchase">Real Estate or Home Purchase</option>
+                </optgroup>
+                <option value="Other">Other (Please Specify)</option>
+              </select>
+              {errors.purpose && <p className="text-sm text-red-500">{errors.purpose}</p>}
             </div>
 
             <div className="mb-4">
               <label className="mb-2 block font-bold text-green-900" htmlFor="term">
-                Loan Term (Months/Years) <span className="text-red-500">*</span>
+                Loan Term <span className="text-red-500">*</span>
               </label>
-              <input
-                type="text"
-                id="term"
-                className="w-full !rounded-lg border border-gray-300 px-4 py-2 focus:outline-none focus:ring focus:ring-green-300"
-                placeholder="Enter term"
-              />
+              <div className="flex">
+                <input
+                  type="number"
+                  id="term"
+                  className="w-3/4 !rounded-lg border border-gray-300 px-4 py-2 focus:outline-none focus:ring focus:ring-green-300"
+                  placeholder="Enter term"
+                  value={term}
+                  onChange={(e) => {
+                    setTerm(e.target.value);
+                    setErrors((prev) => ({ ...prev, term: "" }));
+                  }}
+                />
+                <select
+                  className="ml-4 w-1/4 !rounded-lg border border-gray-300 px-4 py-2 focus:outline-none focus:ring focus:ring-green-300"
+                  value={termUnit}
+                  onChange={(e) => setTermUnit(e.target.value)}
+                >
+                  <option value="months">Months</option>
+                  <option value="years">Years</option>
+                </select>
+              </div>
+              {errors.term && <p className="text-sm text-red-500">{errors.term}</p>}
             </div>
 
             <div className="mb-6">
@@ -76,7 +150,10 @@ export default function LoanApplicationForm() {
                       borderImageSlice: 1,
                       borderWidth: "2px",
                     }}
-                    onClick={() => setSelectedLoanType(type.name)}
+                    onClick={() => {
+                      setSelectedLoanType(type.name);
+                      setErrors((prev) => ({ ...prev, loanType: "" }));
+                    }}
                   >
                     <h3 className="text-black-700 mb-2 text-lg font-bold">{type.name}</h3>
                     <p className="text-sm text-gray-600">{type.range}</p>
@@ -84,6 +161,7 @@ export default function LoanApplicationForm() {
                   </div>
                 ))}
               </div>
+              {errors.loanType && <p className="text-sm text-red-500">{errors.loanType}</p>}
             </div>
 
             {selectedLoanType && (
@@ -99,11 +177,16 @@ export default function LoanApplicationForm() {
                 <input
                   type="checkbox"
                   className="form-checkbox rounded text-green-700 focus:ring focus:ring-green-700"
+                  checked={agree}
+                  onChange={(e) => {
+                    setAgree(e.target.checked);
+                    setErrors((prev) => ({ ...prev, agree: "" }));
+                  }}
                 />
                 <span className="text-black-700 ml-2 text-sm font-bold">
                   I understand and agree with
                   <a href="#" className="ml-1 text-green-700 underline hover:text-green-600">
-                    Terms & Conditions
+                    Terms of Service
                   </a>
                   &nbsp;and
                   <a href="#" className="ml-1 text-green-700 underline hover:text-green-600">
@@ -112,23 +195,24 @@ export default function LoanApplicationForm() {
                   .
                 </span>
               </label>
+              {errors.agree && <p className="text-sm text-red-500">{errors.agree}</p>}
             </div>
 
             <div className="flex justify-center gap-4">
-              <Link
-                href="/success-loan"
+              <PrimaryButton
                 type="submit"
                 className="!rounded-lg bg-green-700 px-6 py-2 font-bold text-black hover:bg-green-600 focus:outline-none focus:ring focus:ring-green-500"
               >
                 <strong>Apply</strong>
-              </Link>
+              </PrimaryButton>
 
-              <button
+              <SecondaryButton
                 type="button"
                 className="!rounded-lg border-2 border-green-700 bg-white px-6 py-2 font-bold text-black hover:bg-green-100 focus:outline-none focus:ring focus:ring-green-700"
+                onClick={() => (window.location.href = "/")}
               >
                 Cancel
-              </button>
+              </SecondaryButton>
             </div>
           </form>
         </div>

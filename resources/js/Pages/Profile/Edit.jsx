@@ -8,21 +8,19 @@ import UpdateProfileInformationForm from "./Partials/UpdateProfileInformationFor
 
 export default function Edit({ mustVerifyEmail, status }) {
   return (
-    <AuthenticatedLayout
-      header={<h2 className="text-xl font-semibold leading-tight text-gray-800">Profile</h2>}
-    >
+    <AuthenticatedLayout header={<h2>Edit Profile</h2>}>
       <Head title="Edit Profile" />
 
       <div className="pb-12">
         <div className="flex justify-center p-5">
           <PrimaryButton>
             <a href={route("profile.show")} className="text-sm">
-              ← Back to Profile
+              <i className="fa-solid fa-chevron-left mr-2"></i> Back to Profile
             </a>
           </PrimaryButton>
         </div>
         <div className="max-w-100 mx-auto space-y-6 sm:px-6 lg:px-8">
-          <div className="bg-white p-4 shadow sm:rounded-lg sm:p-8">
+          <div className="bg-white bg-opacity-60 p-4 shadow sm:rounded-lg sm:p-8">
             <UpdateProfileInformationForm
               mustVerifyEmail={mustVerifyEmail}
               status={status}
@@ -30,11 +28,11 @@ export default function Edit({ mustVerifyEmail, status }) {
             />
           </div>
 
-          <div className="bg-white p-4 shadow sm:rounded-lg sm:p-8">
+          <div className="bg-white bg-opacity-60 p-4 shadow sm:rounded-lg sm:p-8">
             <UpdatePasswordForm className="max-w-xl" />
           </div>
 
-          <div className="bg-white p-4 shadow sm:rounded-lg sm:p-8">
+          <div className="bg-white bg-opacity-60 p-4 shadow sm:rounded-lg sm:p-8">
             <DeleteUserForm className="max-w-xl" />
           </div>
         </div>

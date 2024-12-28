@@ -6,14 +6,12 @@ export default function Show() {
   const user = usePage().props.auth.user;
 
   return (
-    <AuthenticatedLayout
-      header={<h2 className="text-xl font-semibold leading-tight text-gray-800">Profile</h2>}
-    >
+    <AuthenticatedLayout header={<h2>Profile</h2>}>
       <Head title="Profile" />
 
       <div className="py-12">
         <div className="max-w-100 mx-auto space-y-6 sm:px-6 lg:px-8">
-          <div className="bg-white p-4 shadow sm:rounded-lg sm:p-8">
+          <div className="bg-white bg-opacity-60 p-4 shadow sm:rounded-lg sm:p-8">
             <section>
               <header className="mb-6">
                 <h2 className="text-lg font-medium text-gray-900">Profile Information</h2>

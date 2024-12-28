@@ -1,5 +1,6 @@
-const Reminders = ({ reminder, title, icon }) => {
+const Reminders = ({ reminder, title }) => {
   return (
+    // , icon
     <div className="reminder-card">
       <div className="reminder-body">
         <div className="column-down">
