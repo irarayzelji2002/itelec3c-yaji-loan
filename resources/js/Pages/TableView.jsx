@@ -1,7 +1,7 @@
 // resources/js/Pages/TableView.jsx
+import DangerButton from "@/Components/DangerButton";
 import Modal from "@/Components/Modal";
 import PrimaryButton from "@/Components/PrimaryButton";
-import SecondaryButton from "@/Components/SecondaryButton";
 import Table from "@/Components/Table";
 import TertiaryButton from "@/Components/TertiaryButton";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
@@ -16,6 +16,7 @@ export default function UsersTableView() {
   const [showModal, setShowModal] = useState(false);
   const [disableAcceptBtn, setDisableAcceptBtn] = useState(false);
   const [disableDenyBtn, setDisableDenyBtn] = useState(false);
+  const [disableRoleBtn, setDisableRoleBtn] = useState(false);
 
   useEffect(() => {
     setLoading(true);
@@ -81,6 +82,9 @@ export default function UsersTableView() {
       label: "Role",
       sortable: true,
       minWidth: "100px",
+      render: (user) => (
+        <span className="flex flex-grow">{capitalizeFirstLetter(user.role_name)}</span>
+      ),
     },
     {
       id: "created_at",
@@ -239,27 +243,62 @@ export default function UsersTableView() {
       ),
     },
     {
-      id: "view_info",
-      label: "Actions",
+      id: "view_action",
+      label: "View",
       isAction: true,
       sortable: false,
-      minWidth: "100px",
+      minWidth: "80px",
       component: (user) => (
-        <div className="flex gap-3">
+        <div className="flex justify-center">
           <TertiaryButton onClick={() => handleViewDetails(user)}>View</TertiaryButton>
+        </div>
+      ),
+    },
+    {
+      id: "verification_actions",
+      label: "Change Verification Status",
+      isAction: true,
+      sortable: false,
+      minWidth: "200px",
+      component: (user) => (
+        <div className="flex justify-center gap-3">
           <PrimaryButton
             onClick={() => handleChangeVerificationStatus(user, "verified")}
             disabled={user.verification_status === "verified" || disableAcceptBtn}
           >
             Accept
           </PrimaryButton>
-          <SecondaryButton
+          <DangerButton
             onClick={() => handleChangeVerificationStatus(user, "denied")}
-            className="bg-white"
             disabled={user.verification_status === "denied" || disableDenyBtn}
           >
             Deny
-          </SecondaryButton>
+          </DangerButton>
+        </div>
+      ),
+    },
+    {
+      id: "role_action",
+      label: "Change Role",
+      isAction: true,
+      sortable: false,
+      minWidth: "150px",
+      component: (user) => (
+        <div className="flex justify-center">
+          <select
+            className="rounded-lg border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:border-green-700 focus:outline-none focus:ring-2 focus:ring-green-600 focus:ring-offset-2"
+            onChange={(e) => handleChangeRole(user, e.target.value)}
+            onClick={(e) => e.stopPropagation()}
+            disabled={disableRoleBtn}
+            value={user.role_name}
+          >
+            <option value="" disabled>
+              Change Role
+            </option>
+            <option value="member">Member</option>
+            <option value="employee">Employee</option>
+            <option value="admin">Admin</option>
+          </select>
         </div>
       ),
     },
@@ -290,6 +329,30 @@ export default function UsersTableView() {
       color: "black",
       bgColor: "#FF7D7D",
     },
+    {
+      id: "member",
+      label: "Member",
+      column: "role_name",
+      comparison: "===",
+      color: "black",
+      bgColor: "#62E19E",
+    },
+    {
+      id: "employee",
+      label: "Employee",
+      column: "role_name",
+      comparison: "===",
+      color: "black",
+      bgColor: "#38b876",
+    },
+    {
+      id: "admin",
+      label: "Admin",
+      column: "role_name",
+      comparison: "===",
+      color: "white",
+      bgColor: "#043C3C",
+    },
   ];
 
   const actions = [
@@ -316,13 +379,34 @@ export default function UsersTableView() {
       id: "deny",
       label: "Deny",
       render: (user) => (
-        <SecondaryButton
+        <DangerButton
           onClick={() => handleChangeVerificationStatus(user, "denied")}
-          className="bg-white"
           disabled={user.verification_status === "denied" || disableDenyBtn}
         >
           Deny
-        </SecondaryButton>
+        </DangerButton>
+      ),
+    },
+    {
+      id: "change_role",
+      label: "Change Role",
+      render: (user) => (
+        <div className="relative inline-block">
+          <select
+            className="rounded-lg border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:border-green-700 focus:outline-none focus:ring-2 focus:ring-green-600 focus:ring-offset-2"
+            onChange={(e) => handleChangeRole(user, e.target.value)}
+            onClick={(e) => e.stopPropagation()}
+            disabled={disableRoleBtn}
+            value={user.role_name}
+          >
+            <option value="" disabled>
+              Change Role
+            </option>
+            <option value="member">Member</option>
+            <option value="employee">Employee</option>
+            <option value="admin">Admin</option>
+          </select>
+        </div>
       ),
     },
   ];
@@ -339,18 +423,18 @@ export default function UsersTableView() {
   const handleChangeVerificationStatus = async (user, new_verification_status) => {
     try {
       setSelectedUser(user);
-      if (new_verification_status === "verified") {
-        setDisableAcceptBtn(true);
-      } else if (new_verification_status === "denied") {
-        setDisableDenyBtn(true);
-      }
+      if (new_verification_status === "verified") setDisableAcceptBtn(true);
+      else if (new_verification_status === "denied") setDisableDenyBtn(true);
+
+      const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute("content");
+      if (!csrfToken) throw new Error("CSRF token not found");
 
       console.log(`Sending request to: /api/admin/users/${user.id}/verification-status`);
       const response = await fetch(`/api/admin/users/${user.id}/verification-status`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
-          "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]').getAttribute("content"),
+          "X-CSRF-TOKEN": csrfToken,
         },
         body: JSON.stringify({ verification_status: new_verification_status }),
       });
@@ -379,6 +463,52 @@ export default function UsersTableView() {
       } else if (new_verification_status === "denied") {
         setDisableDenyBtn(false);
       }
+    }
+  };
+
+  const handleChangeRole = async (user, new_role) => {
+    try {
+      setSelectedUser(user);
+      setDisableRoleBtn(true);
+
+      const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute("content");
+      if (!csrfToken) throw new Error("CSRF token not found");
+
+      console.log("Making request to:", `/api/admin/users/${user.id}/role`);
+      console.log("CSRF Token:", csrfToken);
+
+      const response = await fetch(`/api/admin/users/${user.id}/role`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+          "X-CSRF-TOKEN": csrfToken,
+          "X-Requested-With": "XMLHttpRequest",
+        },
+        credentials: "include",
+        body: JSON.stringify({ role: new_role }),
+      });
+
+      if (!response.ok) {
+        if (response.status === 403) {
+          throw new Error("You do not have permission to perform this action");
+        }
+        throw new Error("Failed to update user role");
+      }
+
+      const data = await response.json();
+      console.log("Response data:", data);
+
+      // Update both the users list and the selected user
+      const updatedUser = { ...user, role_name: new_role };
+      setUsers((prevUsers) => prevUsers.map((u) => (u.id === user.id ? updatedUser : u)));
+      setSelectedUser(updatedUser);
+      showToast("success", `User role changed to ${new_role} successfully`);
+    } catch (error) {
+      console.error("Error:", error);
+      showToast("error", error.message);
+    } finally {
+      setDisableRoleBtn(false);
     }
   };
 

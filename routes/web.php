@@ -71,6 +71,12 @@ Route::middleware('auth')->group(function () {
         // Admin only routes (starts with /api/admin)
         Route::middleware(['role:admin'])->prefix('admin')->group(function () {
             Route::put('/users/{id}/verification-status', [UserController::class, 'updateVerificationStatus']);
+            Route::put('/users/{id}/role', [UserController::class, 'updateRole']);
+        });
+
+        // Member only routes (starts with /api/member)
+        Route::middleware(['role:member'])->prefix('member')->group(function () {
+            // Add member only routes here
         });
     });
 });
