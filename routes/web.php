@@ -6,6 +6,7 @@ use App\Models\User;
 use App\Models\LoanType;
 use App\Models\Payment;
 use App\Http\Controllers\ViewTable;
+use App\Http\Controllers\UserController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\LoanController;
 use App\Http\Controllers\PaymentController;
@@ -32,10 +33,6 @@ Route::middleware('auth')->group(function () {
     Route::get('/profile/edit', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::post( '/profile/update', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile/delete', [ProfileController::class, 'destroy'])->name('profile.destroy');
-    Route::get('/api/users', function () {
-        // abort_if(!Auth::user()->hasRole('admin'), 403);
-        return User::with('roles')->get();
-    });
     Route::get('/loan-requests', function () {
         return Inertia::render('LoanRequests');
     })->name('loan.requests');
@@ -63,6 +60,19 @@ Route::middleware('auth')->group(function () {
     Route::get('/employee-form', function () {
         return Inertia::render('EmployeeForm');
     })->name('employee.form');
+
+    // API routes (starts with /api)
+    Route::prefix('api')->group(function () {
+        Route::get('/users', function () {
+            // abort_if(!Auth::user()->hasRole('admin'), 403);
+            return User::with('roles')->get();
+        });
+
+        // Admin only routes (starts with /api/admin)
+        Route::middleware(['role:admin'])->prefix('admin')->group(function () {
+            Route::put('/users/{id}/verification-status', [UserController::class, 'updateVerificationStatus']);
+        });
+    });
 });
 
 Route::get('/loan', [ViewTable::class, 'ViewTables'])->name('view.loan');

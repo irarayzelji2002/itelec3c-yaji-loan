@@ -83,13 +83,20 @@ const Table = ({
   };
 
   const handleSort = (columnId) => {
-    const newDirection = sort[columnId] === "asc" ? "desc" : "asc";
+    let newDirection = sort[columnId];
+    if (activeSort.column !== columnId) {
+      // Keep the current direction when switching to a new column
+      newDirection = sort[columnId];
+    } else {
+      // Toggle direction only when clicking the same column
+      newDirection = sort[columnId] === "asc" ? "desc" : "asc";
+    }
+
     setSort({ ...sort, [columnId]: newDirection });
     setActiveSort({ column: columnId, direction: newDirection });
     const sorted = sortData(filteredData, columnId, newDirection);
     setFilteredData(sorted);
   };
-
   const sortData = (data, columnId, order) => {
     return [...data].sort((a, b) => {
       const column = columns.find((col) => col.id === columnId);
@@ -162,46 +169,50 @@ const Table = ({
               <i className="fa-solid fa-magnifying-glass"></i>
             </div>
           </div>
-          {isSearching && <div className="mt-1 text-sm">Searching {searchQuery}...</div>}
+          {isSearching && (
+            <div className="mt-1 text-sm text-green-800">Searching {searchQuery}...</div>
+          )}
         </div>
       )}
 
       {/* Status and Actions Bar */}
-      <div
-        className="flex min-h-[56px] items-center justify-between rounded-t-lg border-gray-300 bg-gray-50 px-4 py-2"
-        style={{ borderWidth: "1px" }}
-      >
-        <div className="flex gap-1">
-          {statuses.map((status) => (
-            <div
-              key={status.id}
-              onClick={() => handleStatusClick(status)}
-              className={`flex cursor-pointer items-center gap-2 px-2 pb-1 font-medium capitalize transition-all ${
-                selectedStatus?.id === status.id
-                  ? "border-b-2 border-green-800"
-                  : "hover:border-b-2 hover:border-green-800/50"
-              }`}
-            >
-              <span className="text-sm font-medium capitalize">{status.label}</span>
-
-              <span
-                className="rounded-full bg-gray-200 px-2 py-0.5 text-sm"
-                style={{ color: status.color, backgroundColor: status.bgColor }}
+      {!!showStatusBar && (
+        <div
+          className="flex min-h-[56px] flex-col items-center justify-between gap-2 rounded-t-lg border-gray-300 bg-gray-50 px-4 py-2 sm:flex-row"
+          style={{ borderWidth: "1px" }}
+        >
+          <div className="flex gap-1">
+            {statuses.map((status) => (
+              <div
+                key={status.id}
+                onClick={() => handleStatusClick(status)}
+                className={`flex cursor-pointer items-center gap-2 p-1 px-2 pt-1.5 font-medium capitalize transition-all ${
+                  selectedStatus?.id === status.id
+                    ? "border-b-2 border-green-800"
+                    : "hover:border-b-2 hover:border-green-800/50"
+                }`}
               >
-                {statusCounts[status.id]}
-              </span>
-            </div>
-          ))}
-        </div>
+                <span className="text-sm font-medium capitalize">{status.label}</span>
 
-        {selectedRow && (
-          <div className="flex gap-2">
-            {actions.map((action) => (
-              <div key={action.id}>{action.render(selectedRow)}</div>
+                <span
+                  className="rounded-full bg-gray-200 px-2 py-0.5 text-sm"
+                  style={{ color: status.color, backgroundColor: status.bgColor }}
+                >
+                  {statusCounts[status.id]}
+                </span>
+              </div>
             ))}
           </div>
-        )}
-      </div>
+
+          {selectedRow && (
+            <div className="flex gap-2">
+              {actions.map((action) => (
+                <div key={action.id}>{action.render(selectedRow)}</div>
+              ))}
+            </div>
+          )}
+        </div>
+      )}
 
       {/* Table */}
       <div className="overflow-x-auto">
@@ -216,7 +227,10 @@ const Table = ({
                   }`}
                   style={{ minWidth: column.minWidth }}
                 >
-                  <div className="flex items-center justify-between">
+                  <div
+                    className="flex cursor-pointer items-center justify-between"
+                    onClick={() => handleSort(column.id)}
+                  >
                     <span className={`${column.sortable && "mr-2"} flex flex-grow justify-center`}>
                       {column.label}
                     </span>
@@ -225,7 +239,6 @@ const Table = ({
                         className={`text-gray-500 ${
                           activeSort.column === column.id ? "text-white" : ""
                         }`}
-                        onClick={() => handleSort(column.id)}
                       >
                         {sort[column.id] === "asc" ? (
                           <i className="fa-solid fa-chevron-up" />
@@ -248,8 +261,23 @@ const Table = ({
               </tr>
             ) : paginatedData.length === 0 ? (
               <tr>
-                <td colSpan={columns.length} className="px-2 py-1 text-center">
-                  No results found
+                <td colSpan={columns.length}>
+                  <div className="absolute left-0 right-0 z-10 mx-2 my-4 flex h-64 flex-col items-center justify-center text-center">
+                    <img
+                      src="/img/empty-box.png"
+                      alt="No data found"
+                      className="mb-4 h-48 w-48 object-contain"
+                    />
+                    <div className="mt-[-10px] pb-4">
+                      <p className="text-lg text-gray-500">No results found</p>
+
+                      {searchQuery && (
+                        <p className="text-sm text-gray-400">
+                          Try adjusting your search or filters
+                        </p>
+                      )}
+                    </div>
+                  </div>
                 </td>
               </tr>
             ) : (
@@ -271,7 +299,7 @@ const Table = ({
                           <div
                             onClick={(e) => {
                               e.stopPropagation();
-                              handleRowSelection(item);
+                              handleRowClick(item);
                               column.component(item);
                             }}
                           >
