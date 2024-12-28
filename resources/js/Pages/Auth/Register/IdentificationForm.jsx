@@ -9,7 +9,14 @@ import { clearFieldError } from "@/utils/formFunctions";
 import { validateStep1 } from "@/utils/validationRules";
 import { useState } from "react";
 
-const IdentificationForm = ({ data, setData, errors: serverErrors, onNext, onCancel }) => {
+const IdentificationForm = ({
+  data,
+  setData,
+  errors: serverErrors,
+  setError: setServerError,
+  onNext,
+  onCancel,
+}) => {
   const [errors, setErrors] = useState({});
 
   const handleNext = (e) => {
@@ -68,6 +75,7 @@ const IdentificationForm = ({ data, setData, errors: serverErrors, onNext, onCan
               onChange={(e) => {
                 setData("first_name", e.target.value);
                 clearFieldError("first_name", setErrors);
+                setServerError("first_name", "");
               }}
               placeholder="First Name"
               required
@@ -87,6 +95,7 @@ const IdentificationForm = ({ data, setData, errors: serverErrors, onNext, onCan
               onChange={(e) => {
                 setData("middle_name", e.target.value);
                 clearFieldError("middle_name", setErrors);
+                setServerError("middle_name", "");
               }}
               placeholder="Middle Name"
               autoComplete="middle_name"
@@ -106,6 +115,7 @@ const IdentificationForm = ({ data, setData, errors: serverErrors, onNext, onCan
               onChange={(e) => {
                 setData("last_name", e.target.value);
                 clearFieldError("last_name", setErrors);
+                setServerError("last_name", "");
               }}
               placeholder="Last Name"
               required
@@ -123,8 +133,8 @@ const IdentificationForm = ({ data, setData, errors: serverErrors, onNext, onCan
               onChange={(e) => {
                 setData("gender", e.target.value);
                 clearFieldError("gender", setErrors);
+                setServerError("gender", "");
               }}
-              defaultValue=""
               required
             >
               <option value="" disabled>
@@ -148,6 +158,7 @@ const IdentificationForm = ({ data, setData, errors: serverErrors, onNext, onCan
               onChange={(e) => {
                 setData("birth_date", e.target.value);
                 clearFieldError("birth_date", setErrors);
+                setServerError("birth_date", "");
               }}
               required
             />
@@ -163,8 +174,8 @@ const IdentificationForm = ({ data, setData, errors: serverErrors, onNext, onCan
               onChange={(e) => {
                 setData("nationality", e.target.value);
                 clearFieldError("nationality", setErrors);
+                setServerError("nationality", "");
               }}
-              defaultValue=""
               required
             >
               <option value="" disabled>
@@ -195,6 +206,7 @@ const IdentificationForm = ({ data, setData, errors: serverErrors, onNext, onCan
               onChange={(e) => {
                 setData("email", e.target.value);
                 clearFieldError("email", setErrors);
+                setServerError("email", "");
               }}
               placeholder="Email Address"
               required
@@ -213,6 +225,7 @@ const IdentificationForm = ({ data, setData, errors: serverErrors, onNext, onCan
               onChange={(e) => {
                 setData("phone_number", e.target.value);
                 clearFieldError("phone_number", setErrors);
+                setServerError("phone_number", "");
               }}
               placeholder="09xxxxxxxxx"
               required
@@ -235,6 +248,7 @@ const IdentificationForm = ({ data, setData, errors: serverErrors, onNext, onCan
               onChange={(e) => {
                 setData("street", e.target.value);
                 clearFieldError("street", setErrors);
+                setServerError("street", "");
               }}
               placeholder="Street"
               required
@@ -252,6 +266,7 @@ const IdentificationForm = ({ data, setData, errors: serverErrors, onNext, onCan
               onChange={(e) => {
                 setData("barangay", e.target.value);
                 clearFieldError("barangay", setErrors);
+                setServerError("barangay", "");
               }}
               placeholder="Barangay (e.g., 143)"
               required
@@ -271,6 +286,7 @@ const IdentificationForm = ({ data, setData, errors: serverErrors, onNext, onCan
               onChange={(e) => {
                 setData("city", e.target.value);
                 clearFieldError("city", setErrors);
+                setServerError("city", "");
               }}
               placeholder="City"
               required
@@ -288,6 +304,7 @@ const IdentificationForm = ({ data, setData, errors: serverErrors, onNext, onCan
               onChange={(e) => {
                 setData("province", e.target.value);
                 clearFieldError("province", setErrors);
+                setServerError("province", "");
               }}
               placeholder="Province"
               required

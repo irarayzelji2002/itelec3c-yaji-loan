@@ -141,7 +141,6 @@ export default function UpdateProfileInformation({ mustVerifyEmail, status, clas
             className="mt-1 block w-full"
             value={data.gender}
             onChange={(e) => setData("gender", e.target.value)}
-            defaultValue=""
             required
           >
             <option value="" disabled>
@@ -173,7 +172,6 @@ export default function UpdateProfileInformation({ mustVerifyEmail, status, clas
             className="mt-1 block w-full"
             value={data.nationality}
             onChange={(e) => setData("nationality", e.target.value)}
-            defaultValue=""
             required
           >
             <option value="" disabled>
@@ -313,7 +311,6 @@ export default function UpdateProfileInformation({ mustVerifyEmail, status, clas
             className="mt-1 block w-full"
             value={data.security_question_1}
             onChange={(e) => setData("security_question_1", e.target.value)}
-            defaultValue=""
             required
           >
             <option value="" disabled>
@@ -353,7 +350,6 @@ export default function UpdateProfileInformation({ mustVerifyEmail, status, clas
             className="mt-1 block w-full"
             value={data.security_question_2}
             onChange={(e) => setData("security_question_2", e.target.value)}
-            defaultValue=""
             required
           >
             <option value="" disabled>

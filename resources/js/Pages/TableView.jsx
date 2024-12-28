@@ -517,12 +517,29 @@ export default function UsersTableView() {
   };
 
   return (
-    <AuthenticatedLayout>
+    <AuthenticatedLayout
+      header={
+        <div className="flex items-center justify-between gap-2 sm:flex-row">
+          <h2>Users Table</h2>
+          <TertiaryButton
+            onClick={() => (window.location.href = "/employee-form")}
+            className="whitespace-nowrap"
+          >
+            <i className="fa-solid fa-plus mr-2"></i> Add Employee
+          </TertiaryButton>
+        </div>
+      }
+    >
       <Head title="Dashboard" />
-      <button onClick={() => showToast("success", "Test Success")}>Click for Toast Success</button>
-      <button onClick={() => showToast("error", "Test Error")}>Click for Toast Error</button>
-      <button onClick={() => showToast("info", "Test Info")}>Click for Toast Info</button>
-      <div className="py-12">
+      <div className="flex hidden gap-4">
+        <button onClick={() => showToast("success", "Test Success")}>
+          Click for Toast Success
+        </button>
+        <button onClick={() => showToast("error", "Test Error")}>Click for Toast Error</button>
+        <button onClick={() => showToast("info", "Test Info")}>Click for Toast Info</button>
+        <button onClick={() => showToast("warn", "Test Warn")}>Click for Toast Warn</button>
+      </div>
+      <div className="py-6">
         <div className="max-w-100 mx-auto sm:px-6 lg:px-8">
           <div className="overflow-hidden shadow-sm sm:rounded-lg">
             <Table

@@ -9,7 +9,15 @@ import { clearFieldError } from "@/utils/formFunctions";
 import { validateStep3 } from "@/utils/validationRules";
 import { useState } from "react";
 
-const CreationForm = ({ data, setData, errors: serverErrors, onNext, onCancel, onBack }) => {
+const CreationForm = ({
+  data,
+  setData,
+  errors: serverErrors,
+  setError: setServerError,
+  onNext,
+  onCancel,
+  onBack,
+}) => {
   const [errors, setErrors] = useState({});
 
   const handleNext = (e) => {
@@ -59,7 +67,7 @@ const CreationForm = ({ data, setData, errors: serverErrors, onNext, onCancel, o
       <h3 className="text-md font-medium text-gray-900">Account Information</h3>
       <div className="form-group flex flex-col gap-4 md:flex-row">
         <div className="flex-1">
-          <InputLabel htmlFor="password" value="Password" />
+          <InputLabel htmlFor="password" value="Password" required={true} />
           <PassInput
             id="password"
             className="mt-1 block w-full"
@@ -67,6 +75,7 @@ const CreationForm = ({ data, setData, errors: serverErrors, onNext, onCancel, o
             onChange={(e) => {
               setData("password", e.target.value);
               clearFieldError("password", setErrors);
+              setServerError("password", "");
             }}
             placeholder="Password"
             required
@@ -74,7 +83,7 @@ const CreationForm = ({ data, setData, errors: serverErrors, onNext, onCancel, o
           <InputError message={errors.password || serverErrors.password} />
         </div>
         <div className="flex-1">
-          <InputLabel htmlFor="confirm_password" value="Confirm Password" />
+          <InputLabel htmlFor="confirm_password" value="Confirm Password" required={true} />
           <PassInput
             id="confirm_password"
             className="mt-1 block w-full"
@@ -102,8 +111,8 @@ const CreationForm = ({ data, setData, errors: serverErrors, onNext, onCancel, o
             onChange={(e) => {
               setData("security_question_1", e.target.value);
               clearFieldError("security_question_1", setErrors);
+              setServerError("security_question_1", "");
             }}
-            defaultValue=""
             required
           >
             <option value="" disabled>
@@ -135,6 +144,7 @@ const CreationForm = ({ data, setData, errors: serverErrors, onNext, onCancel, o
             onChange={(e) => {
               setData("security_answer_1", e.target.value);
               clearFieldError("security_answer_1", setErrors);
+              setServerError("security_answer_1", "");
             }}
             placeholder="Answer to Security Question 1"
             required
@@ -156,8 +166,8 @@ const CreationForm = ({ data, setData, errors: serverErrors, onNext, onCancel, o
             onChange={(e) => {
               setData("security_question_2", e.target.value);
               clearFieldError("security_question_2", setErrors);
+              setServerError("security_question_2", "");
             }}
-            defaultValue=""
             required
           >
             <option value="" disabled>
@@ -177,7 +187,11 @@ const CreationForm = ({ data, setData, errors: serverErrors, onNext, onCancel, o
         </div>
         {/* Security Question 2 Answer */}
         <div className="flex-1">
-          <InputLabel htmlFor="security_answer_2" value="Answer to Security Question 2" />
+          <InputLabel
+            htmlFor="security_answer_2"
+            value="Answer to Security Question 2"
+            required={true}
+          />
           <TextInput
             id="security_answer_2"
             type="text"
@@ -186,6 +200,7 @@ const CreationForm = ({ data, setData, errors: serverErrors, onNext, onCancel, o
             onChange={(e) => {
               setData("security_answer_2", e.target.value);
               clearFieldError("security_answer_2", setErrors);
+              setServerError("security_answer_2", "");
             }}
             placeholder="Answer to Security Question 2"
             required

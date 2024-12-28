@@ -2,6 +2,7 @@ import {
   CheckCircleGradientIcon as CheckCircleIcon,
   ErrorCircleGradientIcon as ErrorCircleIcon,
   InfoCircleGradientIcon as InfoCircleIcon,
+  WarningCircleGradientIcon as WarningCircleIcon,
 } from "@/Icons/GeneralIcons";
 import { toast } from "react-toastify";
 
@@ -61,6 +62,10 @@ export const showToast = (
     case "info":
       toastOptions.icon = InfoCircleIcon;
       toast.info(message, toastOptions);
+      break;
+    case "warn":
+      toastOptions.icon = WarningCircleIcon;
+      toast.warn(message, toastOptions);
       break;
     default:
       toast(message, toastOptions);

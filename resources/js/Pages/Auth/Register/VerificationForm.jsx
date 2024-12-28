@@ -12,6 +12,7 @@ const VerificationForm = ({
   data,
   setData,
   errors: serverErrors,
+  setError: setServerError,
   onNext,
   onCancel,
   onBack,
@@ -29,6 +30,7 @@ const VerificationForm = ({
     setSelectedType(selected);
     setData("verification_type", selectedValidId);
     clearFieldError("verification_type", setErrors);
+    setServerError("verification_type", "");
   };
 
   const handleNext = (e) => {
@@ -84,6 +86,7 @@ const VerificationForm = ({
     const file = e.target.files[0];
     setData(field, file);
     clearFieldError(field, setErrors);
+    setServerError(field, "");
     const hasError = handleValidation(field, file);
     if (!hasError) handlePreview(file, field);
   };
@@ -184,7 +187,6 @@ const VerificationForm = ({
           className="mt-1 block w-full"
           value={data.verification_type}
           onChange={handleVerificationTypeChange}
-          defaultValue=""
           required
         >
           <option value="" disabled>

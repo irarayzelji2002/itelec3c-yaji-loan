@@ -38,7 +38,7 @@ class RegisteredUserController extends Controller
             'middle_name' => 'nullable|string|max:255',
             'last_name' => 'required|string|max:255',
             'gender' => 'required|string|in:Male,Female,Other',
-            'birth_date' => 'required|date',
+            'birth_date' => 'required|date|before:today',
             'nationality' => 'required|string|max:255',
             'phone_number' => 'required|string|max:255',
             'email' => 'required|string|lowercase|email|max:255|unique:'.User::class,
@@ -116,5 +116,55 @@ class RegisteredUserController extends Controller
         // Auth::login($user);
 
         return redirect(route('dashboard', absolute: false));
+    }
+
+    /**
+     * Handle an incoming registration request for employee.
+     *
+     * @throws \Illuminate\Validation\ValidationException
+     */
+    public function storeEmployee(Request $request): RedirectResponse
+    {
+        $request->validate([
+            'first_name' => 'required|string|max:255',
+            'middle_name' => 'nullable|string|max:255',
+            'last_name' => 'required|string|max:255',
+            'gender' => 'required|string|in:Male,Female,Other',
+            'birth_date' => 'required|date|before:today',
+            'nationality' => 'required|string|max:255',
+            'phone_number' => 'required|string|max:255',
+            'email' => 'required|string|lowercase|email|max:255|unique:'.User::class,
+            'street' => 'required|string|max:255',
+            'barangay' => 'required|string|max:255',
+            'city' => 'required|string|max:255',
+            'province' => 'required|string|max:255',
+            'password' => ['required', Rules\Password::defaults()],
+            'role' => 'required|string|in:admin,employee,member',
+        ]);
+
+        $user = User::create([
+            'first_name' => $request->first_name,
+            'middle_name' => $request->middle_name,
+            'last_name' => $request->last_name,
+            'gender' => $request->gender,
+            'birth_date' => $request->birth_date,
+            'nationality' => $request->nationality,
+            'phone_number' => $request->phone_number,
+            'email' => $request->email,
+            'street' => $request->street,
+            'barangay' => $request->barangay,
+            'city' => $request->city,
+            'province' => $request->province,
+            'password' => Hash::make($request->password),
+            'role' => $request->role,
+            'verification_status' => 'verified'
+        ]);
+
+        // Assign role
+        $user->assignRole($request->role);
+
+        event(new Registered($user));
+
+        return redirect(route('view.users-table', absolute: false));
     }
 }

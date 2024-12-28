@@ -50,7 +50,7 @@ const Register = ({ verificationTypes = [] }) => {
     security_answer_2: "",
   };
 
-  const { data, setData, post, processing, errors } = useForm(blankData);
+  const { data, setData, post, processing, errors, setError } = useForm(blankData);
 
   const handleSubmit = () => {
     const formData = new FormData();
@@ -126,6 +126,7 @@ const Register = ({ verificationTypes = [] }) => {
           data={data}
           setData={setData}
           errors={errors}
+          setError={setError}
           onNext={handleNext}
           onCancel={handleCancel}
         />
@@ -135,6 +136,7 @@ const Register = ({ verificationTypes = [] }) => {
           data={data}
           setData={setData}
           errors={errors}
+          setError={setError}
           onNext={handleNext}
           onBack={handleBack}
           onCancel={handleCancel}
@@ -150,6 +152,7 @@ const Register = ({ verificationTypes = [] }) => {
           data={data}
           setData={setData}
           errors={errors}
+          setError={setError}
           onNext={handleNext}
           onBack={handleBack}
           onCancel={handleCancel}
