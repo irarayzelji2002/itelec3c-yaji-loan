@@ -25,6 +25,249 @@
   --color-dropdown-hover: #c0e5dc;
 }
 
+/* FONTS */
+.dm-sans-100 {
+  font-family: "DM Sans", serif;
+  font-optical-sizing: auto;
+  font-weight: 100;
+  font-style: normal;
+}
+.dm-sans-100-italic {
+  font-family: "DM Sans", serif;
+  font-optical-sizing: auto;
+  font-weight: 100;
+  font-style: italic;
+}
+.dm-sans-200 {
+  font-family: "DM Sans", serif;
+  font-optical-sizing: auto;
+  font-weight: 200;
+  font-style: normal;
+}
+.dm-sans-200-italic {
+  font-family: "DM Sans", serif;
+  font-optical-sizing: auto;
+  font-weight: 200;
+  font-style: italic;
+}
+.dm-sans-300 {
+  font-family: "DM Sans", serif;
+  font-optical-sizing: auto;
+  font-weight: 300;
+  font-style: normal;
+}
+.dm-sans-300-italic {
+  font-family: "DM Sans", serif;
+  font-optical-sizing: auto;
+  font-weight: 300;
+  font-style: italic;
+}
+.dm-sans-300 {
+  font-family: "DM Sans", serif;
+  font-optical-sizing: auto;
+  font-weight: 300;
+  font-style: normal;
+}
+.dm-sans-300-italic {
+  font-family: "DM Sans", serif;
+  font-optical-sizing: auto;
+  font-weight: 300;
+  font-style: italic;
+}
+.dm-sans-400 {
+  font-family: "DM Sans", serif;
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-style: normal;
+}
+.dm-sans-400-italic {
+  font-family: "DM Sans", serif;
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-style: italic;
+}
+.dm-sans-500 {
+  font-family: "DM Sans", serif;
+  font-optical-sizing: auto;
+  font-weight: 500;
+  font-style: normal;
+}
+.dm-sans-500-italic {
+  font-family: "DM Sans", serif;
+  font-optical-sizing: auto;
+  font-weight: 500;
+  font-style: italic;
+}
+.dm-sans-600 {
+  font-family: "DM Sans", serif;
+  font-optical-sizing: auto;
+  font-weight: 600;
+  font-style: normal;
+}
+.dm-sans-600-italic {
+  font-family: "DM Sans", serif;
+  font-optical-sizing: auto;
+  font-weight: 600;
+  font-style: italic;
+}
+.dm-sans-700 {
+  font-family: "DM Sans", serif;
+  font-optical-sizing: auto;
+  font-weight: 700;
+  font-style: normal;
+}
+.dm-sans-700-italic {
+  font-family: "DM Sans", serif;
+  font-optical-sizing: auto;
+  font-weight: 700;
+  font-style: italic;
+}
+.dm-sans-800 {
+  font-family: "DM Sans", serif;
+  font-optical-sizing: auto;
+  font-weight: 800;
+  font-style: normal;
+}
+.dm-sans-800-italic {
+  font-family: "DM Sans", serif;
+  font-optical-sizing: auto;
+  font-weight: 800;
+  font-style: italic;
+}
+.dm-sans-900 {
+  font-family: "DM Sans", serif;
+  font-optical-sizing: auto;
+  font-weight: 900;
+  font-style: normal;
+}
+.dm-sans-900-italic {
+  font-family: "DM Sans", serif;
+  font-optical-sizing: auto;
+  font-weight: 900;
+  font-style: italic;
+}
+
+.montserrat-100 {
+  font-family: "Montserrat", serif;
+  font-optical-sizing: auto;
+  font-weight: 100;
+  font-style: normal;
+}
+.montserrat-100-italic {
+  font-family: "Montserrat", serif;
+  font-optical-sizing: auto;
+  font-weight: 100;
+  font-style: italic;
+}
+.montserrat-200 {
+  font-family: "Montserrat", serif;
+  font-optical-sizing: auto;
+  font-weight: 200;
+  font-style: normal;
+}
+.montserrat-200-italic {
+  font-family: "Montserrat", serif;
+  font-optical-sizing: auto;
+  font-weight: 200;
+  font-style: italic;
+}
+.montserrat-300 {
+  font-family: "Montserrat", serif;
+  font-optical-sizing: auto;
+  font-weight: 300;
+  font-style: normal;
+}
+.montserrat-300-italic {
+  font-family: "Montserrat", serif;
+  font-optical-sizing: auto;
+  font-weight: 300;
+  font-style: italic;
+}
+.montserrat-300 {
+  font-family: "Montserrat", serif;
+  font-optical-sizing: auto;
+  font-weight: 300;
+  font-style: normal;
+}
+.montserrat-300-italic {
+  font-family: "Montserrat", serif;
+  font-optical-sizing: auto;
+  font-weight: 300;
+  font-style: italic;
+}
+.montserrat-400 {
+  font-family: "Montserrat", serif;
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-style: normal;
+}
+.montserrat-400-italic {
+  font-family: "Montserrat", serif;
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-style: italic;
+}
+.montserrat-500 {
+  font-family: "Montserrat", serif;
+  font-optical-sizing: auto;
+  font-weight: 500;
+  font-style: normal;
+}
+.montserrat-500-italic {
+  font-family: "Montserrat", serif;
+  font-optical-sizing: auto;
+  font-weight: 500;
+  font-style: italic;
+}
+.montserrat-600 {
+  font-family: "Montserrat", serif;
+  font-optical-sizing: auto;
+  font-weight: 600;
+  font-style: normal;
+}
+.montserrat-600-italic {
+  font-family: "Montserrat", serif;
+  font-optical-sizing: auto;
+  font-weight: 600;
+  font-style: italic;
+}
+.montserrat-700 {
+  font-family: "Montserrat", serif;
+  font-optical-sizing: auto;
+  font-weight: 700;
+  font-style: normal;
+}
+.montserrat-700-italic {
+  font-family: "Montserrat", serif;
+  font-optical-sizing: auto;
+  font-weight: 700;
+  font-style: italic;
+}
+.montserrat-800 {
+  font-family: "Montserrat", serif;
+  font-optical-sizing: auto;
+  font-weight: 800;
+  font-style: normal;
+}
+.montserrat-800-italic {
+  font-family: "Montserrat", serif;
+  font-optical-sizing: auto;
+  font-weight: 800;
+  font-style: italic;
+}
+.montserrat-900 {
+  font-family: "Montserrat", serif;
+  font-optical-sizing: auto;
+  font-weight: 900;
+  font-style: normal;
+}
+.montserrat-900-italic {
+  font-family: "Montserrat", serif;
+  font-optical-sizing: auto;
+  font-weight: 900;
+  font-style: italic;
+}
+
 .app {
   font-family: "DM Sans", Arial, sans-serif;
   padding: 20px;
@@ -39,6 +282,18 @@
     #edfcf4 53%,
     #eafbf2 66%,
     #81e7b2 94%,
+    #62e19e 97%,
+    #57df98 100%
+  );
+}
+
+.bg-green-gradient-horiz {
+  background-image: linear-gradient(
+    to left,
+    #f5fdf9 0%,
+    #edfcf4 20%,
+    #eafbf2 30%,
+    #81e7b2 80%,
     #62e19e 97%,
     #57df98 100%
   );

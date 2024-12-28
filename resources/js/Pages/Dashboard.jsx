@@ -12,13 +12,13 @@ export default function Dashboard() {
       <Head title="Dashboard" />
       <div className="py-12">
         <div className="max-w-100 mx-auto sm:px-6 lg:px-8">
-          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-            <h1 className="welcome-text font-bold">
+          <div className="flex flex-col items-center justify-between gap-2 sm:flex-row">
+            <h1 className="welcome-text text-center font-bold sm:text-left">
               Welcome, <span className="highlighted-name font-bold">{user.first_name}!</span>
             </h1>
             <TertiaryButton
               onClick={() => (window.location.href = "/employee-form")}
-              className="add-table-button"
+              className="add-table-button whitespace-nowrap"
             >
               <span className="plus-icon">+</span> Add Employee
             </TertiaryButton>

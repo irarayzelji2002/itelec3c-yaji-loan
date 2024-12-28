@@ -16,8 +16,8 @@ export default function MemberView() {
       <Head title="Dashboard" />
       <div className="py-12">
         <div className="max-w-100 mx-auto sm:px-6 lg:px-8">
-          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-            <h1 className="welcome-text">
+          <div className="flex flex-col items-center justify-between gap-2 sm:flex-row">
+            <h1 className="welcome-text font-bold">
               Welcome, <span className="highlighted-name">{user.first_name}!</span>
             </h1>
             <TertiaryButton

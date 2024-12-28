@@ -1,17 +1,17 @@
 import Dropdown from "@/Components/Dropdown";
 import NavLink from "@/Components/NavLink";
 import ResponsiveNavLink from "@/Components/ResponsiveNavLink";
-import { Link, usePage } from "@inertiajs/react";
+import { Link } from "@inertiajs/react";
 import { useState } from "react";
 
 export default function AuthenticatedLayout({ header, children }) {
-  const user = usePage().props.auth.user;
+  //   const user = usePage().props.auth.user;
 
   const [showingNavigationDropdown, setShowingNavigationDropdown] = useState(false);
 
   return (
     <div className="bg-green-gradient min-h-screen bg-gray-100">
-      <nav className="nav-bar-logged">
+      <nav className="nav-bar-logged z-100 sticky top-0">
         <div className="nav-bar-logged max-w-100 mx-auto px-4 sm:px-6 lg:px-8">
           <div className="nav-bar-logged flex h-16 justify-between">
             <div className="flex flex-grow justify-between">
@@ -24,25 +24,25 @@ export default function AuthenticatedLayout({ header, children }) {
               <div
                 className={
                   (!showingNavigationDropdown ? "flex" : "hidden") +
-                  " flex justify-end space-x-8 sm:-my-px sm:ms-10 sm:flex"
+                  " flex justify-end gap-5 sm:-my-px sm:ms-10 sm:flex"
                 }
               >
                 <NavLink
-                  style={{ color: "aliceblue" }}
+                  style={{ color: "aliceblue", whiteSpace: "nowrap" }}
                   href={route("dashboard")}
                   active={route().current("dashboard")}
                 >
                   Dashboard
                 </NavLink>
                 <NavLink
-                  style={{ color: "aliceblue" }}
+                  style={{ color: "aliceblue", whiteSpace: "nowrap" }}
                   href={route("loan.requests")}
                   active={route().current("loan.requests")}
                 >
                   Loan Requests
                 </NavLink>
                 <NavLink
-                  style={{ color: "aliceblue" }}
+                  style={{ color: "aliceblue", whiteSpace: "nowrap" }}
                   href={route("member.view")}
                   active={route().current("member.view")}
                 >
@@ -58,21 +58,9 @@ export default function AuthenticatedLayout({ header, children }) {
                     <span className="inline-flex !rounded-lg">
                       <button
                         type="button"
-                        className="inline-flex items-center !rounded-lg border border-transparent bg-white px-3 py-2 text-sm font-medium leading-4 text-gray-500 transition duration-150 ease-in-out hover:text-gray-700 focus:outline-none"
+                        className="inline-flex items-center !rounded-lg border border-transparent px-3 py-2 text-sm font-medium leading-4 text-white transition duration-150 ease-in-out hover:text-white focus:outline-none"
                       >
-                        {user.full_name}
-                        <svg
-                          className="-me-0.5 ms-2 h-4 w-4"
-                          xmlns="http://www.w3.org/2000/svg"
-                          viewBox="0 0 20 20"
-                          fill="currentColor"
-                        >
-                          <path
-                            fillRule="evenodd"
-                            d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
-                            clipRule="evenodd"
-                          />
-                        </svg>
+                        <i className="fa-solid fa-user"></i>
                       </button>
                     </span>
                   </Dropdown.Trigger>
@@ -146,8 +134,10 @@ export default function AuthenticatedLayout({ header, children }) {
       </nav>
 
       {header && (
-        <header className="bg-white shadow">
-          <div className="max-w-100 mx-auto px-4 py-6 sm:px-6 lg:px-8">{header}</div>
+        <header className="z-100 sticky top-[64px] bg-white shadow">
+          <div className="max-w-100 montserrat-700 bg-green-gradient-horiz mx-auto px-4 py-4 text-lg font-bold leading-tight text-gray-800 sm:px-6 lg:px-8">
+            {header}
+          </div>
         </header>
       )}
 
