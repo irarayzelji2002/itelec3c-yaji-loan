@@ -195,7 +195,7 @@ const Table = ({
                 <span className="text-sm font-medium capitalize">{status.label}</span>
 
                 <span
-                  className="rounded-full bg-gray-200 px-2 py-0.5 text-sm"
+                  className="min-w-[24px] rounded-full bg-gray-200 px-2 py-0.5 text-center text-sm"
                   style={{ color: status.color, backgroundColor: status.bgColor }}
                 >
                   {statusCounts[status.id]}

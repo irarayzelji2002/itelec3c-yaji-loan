@@ -342,8 +342,8 @@ export default function UsersTableView() {
       label: "Employee",
       column: "role_name",
       comparison: "===",
-      color: "black",
-      bgColor: "#38b876",
+      color: "white",
+      bgColor: "#31896b",
     },
     {
       id: "admin",
@@ -453,7 +453,11 @@ export default function UsersTableView() {
           u.id === user.id ? { ...u, verification_status: new_verification_status } : u
         )
       );
-      showToast("success", `User verification ${new_verification_status} successfully`);
+      showToast(
+        "success",
+        `User "${user.full_name}"'s verification status changed to ${new_verification_status}`,
+        5000
+      );
     } catch (error) {
       console.error("Error:", error);
       showToast("error", error.message);
