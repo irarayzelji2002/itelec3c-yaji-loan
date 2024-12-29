@@ -26,7 +26,8 @@ class Loan extends Model
         'payment_status',
         'approved_by',
         'disbursed_by',
-        'image_path'
+        'purpose',
+        'purpose_details'
     ];
 
     protected $casts = [

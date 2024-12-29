@@ -13,6 +13,7 @@ class LoanType extends Model
         'loan_type_name',
         'description',
         'image_path',
+        'min_loan_amount',
         'max_loan_amount',
         'default_interest_rate',
         'default_loan_term_unit',
