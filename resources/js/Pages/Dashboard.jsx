@@ -36,7 +36,11 @@ export default function Dashboard() {
               img="/img/loan-type-table.png"
               link="/users-table"
             />
-            <TableContainer table="Verification Types Table" img="" link="/users-table" />
+            <TableContainer
+              table="Verification Types Table"
+              img="/img/verification-type.png"
+              link="/users-table"
+            />
           </div>
         </div>
       </div>
