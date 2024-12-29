@@ -8,13 +8,22 @@ import TextInput from "@/Components/TextInput";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 import { numberWithCommas, showToast } from "@/utils/displayFunctions";
 import { Head, useForm } from "@inertiajs/react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 export default function LoanApplicationForm({ loanTypes }) {
   const [errors, setErrors] = useState({});
   const [previews, setPreviews] = useState({});
   const [showOtherPurpose, setShowOtherPurpose] = useState(false);
   const [selectedLoanType, setSelectedLoanType] = useState(null);
+  const [estimationData, setEstimationData] = useState({
+    interestRate: 0,
+    monthlyPayment: 0,
+    totalPayback: 0,
+    approvalDate: "",
+    disbursementDate: "",
+    firstPaymentDate: "",
+    finalDueDate: "",
+  });
 
   const blankData = {
     loan_type_id: "",
@@ -37,7 +46,6 @@ export default function LoanApplicationForm({ loanTypes }) {
   } = useForm(blankData);
 
   // Handle loan type selection and set defaults
-
   const handleLoanTypeSelect = (loanType) => {
     setSelectedLoanType(loanType);
     setData({
@@ -177,6 +185,63 @@ export default function LoanApplicationForm({ loanTypes }) {
     setServerError("purpose", "");
   };
 
+  // Calculate estimation data
+  const calculateEstimation = (formData) => {
+    if (
+      !formData.loan_type_id ||
+      !formData.loan_amount ||
+      !formData.loan_term_period ||
+      !formData.loan_term_unit
+    ) {
+      return;
+    }
+
+    const selectedLoanType = loanTypes.find((lt) => lt.loan_type_id === formData.loan_type_id);
+    if (!selectedLoanType) return;
+
+    const totalAmount = parseFloat(formData.loan_amount);
+    const interestRate = parseFloat(formData.interest_rate);
+    const monthlyInterest = interestRate / 12 / 100;
+    const numberOfPayments = parseInt(formData.loan_term_period);
+
+    // Calculate monthly payment using amortization formula
+    const monthlyPayment = selectedLoanType.is_amortized
+      ? (totalAmount * monthlyInterest * Math.pow(1 + monthlyInterest, numberOfPayments)) /
+        (Math.pow(1 + monthlyInterest, numberOfPayments) - 1)
+      : totalAmount * (1 + interestRate / 100);
+
+    const totalPayback = selectedLoanType.is_amortized
+      ? monthlyPayment * numberOfPayments
+      : totalAmount * (1 + interestRate / 100);
+
+    // Calculate dates
+    const today = new Date();
+    const approvalDate = new Date(today.getTime() + 2 * 24 * 60 * 60 * 1000); // 2 days from now
+    const disbursementDate = new Date(today.getTime() + 3 * 24 * 60 * 60 * 1000); // 3 days from now
+    const firstPaymentDate = new Date(today.getTime() + 30 * 24 * 60 * 60 * 1000); // 30 days from now
+    const finalDueDate = new Date(today.getTime() + numberOfPayments * 30 * 24 * 60 * 60 * 1000);
+
+    setEstimationData({
+      interestRate,
+      monthlyPayment,
+      totalPayback,
+      approvalDate: approvalDate.toLocaleDateString(),
+      disbursementDate: disbursementDate.toLocaleDateString(),
+      firstPaymentDate: firstPaymentDate.toLocaleDateString(),
+      finalDueDate: finalDueDate.toLocaleDateString(),
+    });
+  };
+
+  useEffect(() => {
+    calculateEstimation(data);
+  }, [
+    data.loan_type_id,
+    data.loan_amount,
+    data.loan_term_period,
+    data.loan_term_unit,
+    data.interest_rate,
+  ]);
+
   // Validation
   const validate = (data) => {
     const errors = {};
@@ -223,21 +288,51 @@ export default function LoanApplicationForm({ loanTypes }) {
         formData.append(key, data[key]);
       }
     });
-
     console.log("Submitting form with data:", Object.fromEntries(formData));
 
     post(route("loan.store"), {
       data: formData,
       forceFormData: true,
-      onSuccess: () => {
-        console.log("Form submitted successfully");
-        window.location.href = "/success-loan";
+      onSuccess: (response) => {
+        console.log("Response: ", response);
+        showToast("success", "Loan application submitted successfully");
+
+        // Store summary data in localStorage before redirect
+        const loan = response?.props?.flash?.messsage?.loan || {};
+        const selectedLoanTypeDetails = loanTypes.find(
+          (lt) => lt.loan_type_id === data.loan_type_id
+        );
+        const summaryData = {
+          accountName: `${response.props.auth.user.first_name} ${response.props.auth.user.last_name}`,
+          loanType: selectedLoanTypeDetails.loan_type_name,
+          purpose: data.purpose,
+          purposeDetails: data.purpose_details,
+          loanAmount: parseFloat(data.loan_amount),
+          interestRate: estimationData.interestRate,
+          loanTerm: `${data.loan_term_period} ${data.loan_term_unit}`,
+          monthlyPayment: estimationData.monthlyPayment,
+          numberOfPayments: parseInt(data.loan_term_period),
+          totalPayback: estimationData.totalPayback,
+          estimatedApprovalDate: estimationData.approvalDate,
+          estimatedDisbursementDate: estimationData.disbursementDate,
+          estimatedFirstPaymentDate: estimationData.firstPaymentDate,
+          estimatedFinalDueDate: estimationData.finalDueDate,
+          referenceNumber: `L-${String(loan?.loan_id).padStart(7, "0")}`,
+          createdAt: loan?.created_at,
+        };
+        console.log("Summary Data:", summaryData);
+        localStorage.setItem("loanSummary", JSON.stringify(summaryData));
+
+        // Redirect to success page
+        // window.location.href = route("success.loan");
       },
       onError: (errors) => {
         console.error("Form submission failed:", errors);
+        showToast("error", "Failed to submit loan application. Please try again.");
       },
     });
   };
+
   return (
     <AuthenticatedLayout header={<h2>Loan Application Form</h2>}>
       <Head title="Loan Application Form" />
@@ -473,7 +568,7 @@ export default function LoanApplicationForm({ loanTypes }) {
               </PrimaryButton>
               <SecondaryButton
                 type="button"
-                onClick={() => (window.location.href = route("member.view"))}
+                onClick={() => (window.location.href = route("member.dashboard"))}
                 className="min-w-[150px]"
               >
                 Cancel
@@ -492,41 +587,59 @@ export default function LoanApplicationForm({ loanTypes }) {
                     <td className="py-2 text-sm font-medium text-black">
                       Estimated Interest Rate:
                     </td>
-                    <td className="py-2 pl-4 text-sm text-black">-</td>
+                    <td className="py-2 pl-4 text-sm text-black">
+                      {estimationData.interestRate ? `${estimationData.interestRate}%` : "-"}
+                    </td>
                   </tr>
                   <tr>
                     <td className="py-2 text-sm font-medium text-black">
                       Estimated Approval Date:
                     </td>
-                    <td className="py-2 pl-4 text-sm text-black">-</td>
+                    <td className="py-2 pl-4 text-sm text-black">
+                      {estimationData.approvalDate || "-"}
+                    </td>
                   </tr>
                   <tr>
                     <td className="py-2 text-sm font-medium text-black">
                       Estimated Disbursement Date:
                     </td>
-                    <td className="py-2 pl-4 text-sm text-black">-</td>
+                    <td className="py-2 pl-4 text-sm text-black">
+                      {estimationData.disbursementDate || "-"}
+                    </td>
                   </tr>
                   <tr>
                     <td className="py-2 text-sm font-medium text-black">
                       Estimated First Payment Due Date:
                     </td>
-                    <td className="py-2 pl-4 text-sm text-black">-</td>
+                    <td className="py-2 pl-4 text-sm text-black">
+                      {estimationData.firstPaymentDate || "-"}
+                    </td>
                   </tr>
                   <tr>
                     <td className="py-2 text-sm font-medium text-black">
-                      Estimated First Payment Amount:
+                      Estimated Monthly Payment:
                     </td>
-                    <td className="py-2 pl-4 text-sm text-black">-</td>
+                    <td className="py-2 pl-4 text-sm text-black">
+                      {estimationData.monthlyPayment
+                        ? `₱${numberWithCommas(estimationData.monthlyPayment.toFixed(2))}`
+                        : "-"}
+                    </td>
                   </tr>
                   <tr>
                     <td className="py-2 text-sm font-medium text-black">
                       Estimated Final Due Date:
                     </td>
-                    <td className="py-2 pl-4 text-sm text-black">-</td>
+                    <td className="py-2 pl-4 text-sm text-black">
+                      {estimationData.finalDueDate || "-"}
+                    </td>
                   </tr>
                   <tr>
                     <td className="py-2 text-sm font-medium text-black">Total Due Amount:</td>
-                    <td className="py-2 pl-4 text-sm text-black">-</td>
+                    <td className="py-2 pl-4 text-sm text-black">
+                      {estimationData.totalPayback
+                        ? `₱${numberWithCommas(estimationData.totalPayback.toFixed(2))}`
+                        : "-"}
+                    </td>
                   </tr>
                 </tbody>
               </table>

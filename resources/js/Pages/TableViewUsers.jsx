@@ -533,7 +533,7 @@ export default function UsersTableView() {
       }
     >
       <Head title="Dashboard" />
-      <div className="flex hidden gap-4">
+      <div className="flex gap-4">
         <button onClick={() => showToast("success", "Test Success")}>
           Click for Toast Success
         </button>

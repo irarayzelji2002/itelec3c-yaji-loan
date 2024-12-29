@@ -39,7 +39,7 @@ Route::middleware('auth')->group(function () {
     })->name('loan.requests');
     Route::get('/member-dashboard', function () {
         return Inertia::render('MemberView');
-    })->name('member.view');
+    })->name('member.dashboard');
     Route::get('/loan-breakdown', function () {
         return Inertia::render('LoanBreakdown');
     })->name('loan.breakdown');

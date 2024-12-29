@@ -175,7 +175,22 @@ class LoanController extends Controller
 
                 DB::commit();
                 Log::info('Loan application completed successfully', ['loan_id' => $loan->loan_id]);
-                return redirect()->route('dashboard')->with('success', 'Loan application submitted successfully!');
+                if (request()->wantsJson()) {
+                    return response()->json([
+                        'message' => 'Loan application submitted successfully!',
+                        'loan' => [
+                            'loan_id' => $loan->loan_id,
+                            'created_at' => $loan->created_at->format('M d, Y g:iA')
+                        ]
+                    ]);
+                }
+
+                return redirect()->route('success.loan')
+                    ->with('success', 'Loan application submitted successfully!')
+                    ->with('loan', [
+                        'loan_id' => $loan->loan_id,
+                        'created_at' => $loan->created_at->format('M d, Y g:iA')
+                    ]);
             } catch (\Exception $e) {
                 DB::rollBack();
                 Log::error('Error creating loan record', [

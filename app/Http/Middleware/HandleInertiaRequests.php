@@ -34,6 +34,13 @@ class HandleInertiaRequests extends Middleware
             'auth' => [
                 'user' => $request->user(),
             ],
+            'flash' => [
+                'messsage'=> $request->session()->all()
+            ],
+            // Share 'loan' only when accessing the loan application page
+            'loan' => fn () => $request->routeIs('loan.application')
+                ? $request->session()->get('loan')
+                : null,
         ];
     }
 }

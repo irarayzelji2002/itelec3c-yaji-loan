@@ -3,8 +3,6 @@ import NavLink from "@/Components/NavLink";
 import ResponsiveNavLink from "@/Components/ResponsiveNavLink";
 import { Link } from "@inertiajs/react";
 import { useState } from "react";
-import { ToastContainer } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
 
 export default function MemberLayout({ header, children }) {
   //   const user = usePage().props.auth.user;
@@ -13,23 +11,11 @@ export default function MemberLayout({ header, children }) {
 
   return (
     <>
-      <ToastContainer
-        position="top-right"
-        autoClose={5000}
-        hideProgressBar={false}
-        newestOnTop={false}
-        closeOnClick
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
-        theme="light"
-      />
       {/* Fixed gradient background */}
       <div className="bg-green-gradient fixed inset-0 z-0" />
       {/* Main content container */}
       <div className="relative min-h-screen bg-transparent">
-        <nav className="nav-bar-logged sticky top-0 z-100">
+        <nav className="nav-bar-logged sticky top-0 z-100" data-html2canvas-ignore="true">
           <div className="nav-bar-logged max-w-100 mx-auto px-4 sm:px-6 lg:px-8">
             <div className="nav-bar-logged flex h-16 justify-between">
               <div className="flex flex-grow justify-between">
@@ -47,8 +33,8 @@ export default function MemberLayout({ header, children }) {
                 >
                   <NavLink
                     style={{ color: "aliceblue", whiteSpace: "nowrap" }}
-                    href={route("member.view")}
-                    active={route().current("member.view")}
+                    href={route("member.dashboard")}
+                    active={route().current("member.dashboard")}
                   >
                     Home
                   </NavLink>
@@ -127,8 +113,8 @@ export default function MemberLayout({ header, children }) {
                 Loan Requests
               </ResponsiveNavLink>
               <ResponsiveNavLink
-                href={route("member.view")}
-                active={route().current("member.view")}
+                href={route("member.dashboard")}
+                active={route().current("member.dashboard")}
               >
                 Member View
               </ResponsiveNavLink>
@@ -151,7 +137,7 @@ export default function MemberLayout({ header, children }) {
         </nav>
 
         {header && (
-          <header className="sticky top-[64px] z-90 bg-white shadow">
+          <header className="sticky top-[64px] z-90 bg-white shadow" data-html2canvas-ignore="true">
             <div className="max-w-100 montserrat-700 bg-green-gradient-horiz mx-auto px-4 py-4 text-lg font-bold leading-tight text-gray-800 sm:px-6 lg:px-8">
               {header}
             </div>
