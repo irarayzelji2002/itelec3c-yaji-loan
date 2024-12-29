@@ -152,7 +152,7 @@ export default function Show() {
                 <div className="flex items-center gap-4">
                   <Link
                     href={route("profile.edit")}
-                    className="inline-flex items-center !rounded-lg border border-transparent bg-green-700 px-4 py-2 text-xs font-semibold uppercase tracking-widest text-black transition duration-150 ease-in-out hover:bg-green-500 focus:bg-green-500 focus:outline-none focus:ring-2 focus:ring-green-600 focus:ring-offset-2 active:bg-green-800"
+                    className="text-md inline-flex items-center !rounded-lg border border-transparent bg-green-700 px-4 py-2 font-semibold text-black transition duration-150 ease-in-out hover:bg-green-500 focus:bg-green-500 focus:outline-none focus:ring-2 focus:ring-green-600 focus:ring-offset-2 active:bg-green-800"
                   >
                     Edit Profile
                   </Link>

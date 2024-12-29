@@ -22,7 +22,9 @@ class RegisteredUserController extends Controller
     public function create(): Response
     {
         return Inertia::render('Auth/Register/Register', [
-            'verificationTypes' => VerificationType::orderBy('order')->get()
+            'verificationTypes' => VerificationType::where('status', 'active')
+                ->orderBy('order')
+                ->get()
         ]);
     }
 

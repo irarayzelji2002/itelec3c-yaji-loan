@@ -33,7 +33,7 @@ class ProfileUpdateRequest extends FormRequest
             $rules['first_name'] = ['required', 'string', 'max:255'];
             $rules['middle_name'] = ['nullable', 'string', 'max:255'];
             $rules['last_name'] = ['required', 'string', 'max:255'];
-            $rules['email'] = ['required', 'string', 'lowercase', 'email', 'max:255', Rule::unique(User::class)->ignore($this->user()->user_id)];
+            $rules['email'] = ['required', 'string', 'lowercase', 'email', 'max:255', Rule::unique(User::class)->ignore($this->user()->user_id, 'user_id')];
             $rules['gender'] = ['required', 'string', Rule::in(['Male', 'Female', 'Other'])];
             $rules['birth_date'] = ['required', 'date', 'before:today'];
             $rules['nationality'] = ['required', 'string', 'max:255'];
