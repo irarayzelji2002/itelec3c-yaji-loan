@@ -12,7 +12,7 @@ class LoanStatusHistory extends Model
     protected $primaryKey = 'loan_status_history_id';
     protected $fillable = [
         'loan_id',
-        'status',
+        'status', //pending, approved, disapproved, discontinued, canceled
         'changed_by',
         'remarks'
     ];

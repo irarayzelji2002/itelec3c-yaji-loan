@@ -97,6 +97,7 @@ const Table = ({
     setActiveSort({ column: columnId, direction: newDirection });
     const sorted = sortData(filteredData, columnId, newDirection);
     setFilteredData(sorted);
+    setCurrentPage(1);
   };
   const sortData = (data, columnId, order) => {
     return [...data].sort((a, b) => {

@@ -57,7 +57,7 @@ class LoanController extends Controller
                 'loan_term_period' => $loan->loan_term_period,
                 'date_applied' => $loan->date_applied,
                 'date_status_changed' => $loan->date_status_changed,
-                'current_status' => $loan->statusHistory->last()->loan_status ?? '-',
+                'current_status' => $loan->statusHistory->last()->status ?? '-',
                 'current_remarks' => $loan->statusHistory->last()->remarks ?? '-',
                 'date_disbursed' => $loan->date_disbursed,
                 'outstanding_balance' => $loan->outstanding_balance,
