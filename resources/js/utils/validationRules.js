@@ -49,8 +49,8 @@ export const validateStep1 = (data) => {
 export const validateStep2 = (data, selectedType) => {
   const errors = {};
 
-  if (!data.verification_type) {
-    errors.verification_type = "Please select a verification type";
+  if (!data.verification_type_id) {
+    errors.verification_type_id = "Please select a verification type";
   }
 
   if (selectedType?.is_pdf) {

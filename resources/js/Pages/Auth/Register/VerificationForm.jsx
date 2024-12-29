@@ -28,19 +28,13 @@ const VerificationForm = ({
     const selectedValidId = e.target.value;
     const selected = verificationTypes.find((type) => type.valid_id === selectedValidId);
     setSelectedType(selected);
-    setData("verification_type", selectedValidId);
-    clearFieldError("verification_type", setErrors);
-    setServerError("verification_type", "");
+    setData("verification_type_id", selectedValidId);
+    clearFieldError("verification_type_id", setErrors);
+    setServerError("verification_type_id", "");
   };
 
   const handleNext = (e) => {
     e.preventDefault();
-
-    const trimmedData = {
-      ...data,
-      verification_type: data.verification_type?.trim(),
-    };
-    setData(trimmedData);
 
     // Validation
     const { isValid, errors: validationErrors } = validateStep2(trimmedData, selectedType);
@@ -181,11 +175,11 @@ const VerificationForm = ({
       <input placeholder="How would you like to verify? *" /> */}
 
       <div className="mb-4 mt-4">
-        <InputLabel htmlFor="verification_type" value="Valid ID" required={true} />
+        <InputLabel htmlFor="verification_type_id" value="Valid ID" required={true} />
         <SelectInput
-          id="verification_type"
+          id="verification_type_id"
           className="mt-1 block w-full"
-          value={data.verification_type}
+          value={data.verification_type_id}
           onChange={handleVerificationTypeChange}
           required
         >
@@ -193,14 +187,14 @@ const VerificationForm = ({
             Select a Valid ID
           </option>
           {verificationTypes.map((type) => (
-            <option key={type.id} value={type.valid_id}>
+            <option key={type.verification_type_id} value={type.verification_type_id}>
               {type.valid_id}
             </option>
           ))}
         </SelectInput>
         <InputError
           className="mt-2"
-          message={errors.verification_type || serverErrors.verification_type}
+          message={errors.verification_type_id || serverErrors.verification_type_id}
         />
       </div>
 

@@ -7,6 +7,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 use Spatie\Permission\Traits\HasRoles;
+use App\Models\VerificationType;
 
 class User extends Authenticatable
 {
@@ -18,7 +19,9 @@ class User extends Authenticatable
      *
      * @var array<int, string>
      */
-        protected $fillable = [
+    protected $primaryKey = 'user_id';
+
+    protected $fillable = [
 
         // Basic Information
         'first_name',
@@ -37,7 +40,7 @@ class User extends Authenticatable
         'province',
 
         // Verification
-        'verification_type',
+        'verification_type_id',
         'id_photo_front',
         'id_photo_back',
         'id_file',
@@ -100,6 +103,12 @@ class User extends Authenticatable
     public function getRoleNameAttribute()
     {
         return $this->roles->first()->name ?? 'No Role';
+    }
+
+    // VerificationType
+    public function verificationType()
+    {
+        return $this->belongsTo(VerificationType::class, 'verification_type_id');
     }
 
     // Hash the password when creating a user

@@ -159,6 +159,7 @@ export default function UsersTableView() {
       label: "Verification",
       sortable: true,
       minWidth: "120px",
+      render: (user) => user.verificationType?.valid_id || "-",
     },
     {
       id: "id_photo_front",
@@ -429,8 +430,8 @@ export default function UsersTableView() {
       const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute("content");
       if (!csrfToken) throw new Error("CSRF token not found");
 
-      console.log(`Sending request to: /api/admin/users/${user.id}/verification-status`);
-      const response = await fetch(`/api/admin/users/${user.id}/verification-status`, {
+      console.log(`Sending request to: /api/admin/users/${user.user_id}/verification-status`);
+      const response = await fetch(`/api/admin/users/${user.user_id}/verification-status`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
@@ -450,7 +451,7 @@ export default function UsersTableView() {
 
       setUsers((prevUsers) =>
         prevUsers.map((u) =>
-          u.id === user.id ? { ...u, verification_status: new_verification_status } : u
+          u.user_id === user.user_id ? { ...u, verification_status: new_verification_status } : u
         )
       );
       showToast(
@@ -478,10 +479,10 @@ export default function UsersTableView() {
       const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute("content");
       if (!csrfToken) throw new Error("CSRF token not found");
 
-      console.log("Making request to:", `/api/admin/users/${user.id}/role`);
+      console.log("Making request to:", `/api/admin/users/${user.user_id}/role`);
       console.log("CSRF Token:", csrfToken);
 
-      const response = await fetch(`/api/admin/users/${user.id}/role`, {
+      const response = await fetch(`/api/admin/users/${user.user_id}/role`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
@@ -505,7 +506,7 @@ export default function UsersTableView() {
 
       // Update both the users list and the selected user
       const updatedUser = { ...user, role_name: new_role };
-      setUsers((prevUsers) => prevUsers.map((u) => (u.id === user.id ? updatedUser : u)));
+      setUsers((prevUsers) => prevUsers.map((u) => (u.id === user.user_id ? updatedUser : u)));
       setSelectedUser(updatedUser);
       showToast("success", `User role changed to ${new_role} successfully`);
     } catch (error) {
@@ -708,7 +709,7 @@ export function UserDetailsModal({ showModal, closeModal, user }) {
                     Verification Type
                   </label>
                   <div className="mt-1 !rounded-lg bg-gray-50 p-2 ring-1 ring-gray-300">
-                    {user.verification_type || "-"}
+                    {user.verificationType?.valid_id || "-"}
                   </div>
                 </div>
                 <div className="flex flex-col justify-center">

@@ -35,7 +35,7 @@ const Register = ({ verificationTypes = [] }) => {
     province: "",
 
     // Verification
-    verification_type: "",
+    verification_type_id: "",
     id_photo_front: null,
     id_photo_back: null,
     id_file: null,

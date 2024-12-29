@@ -6,8 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class Loan extends Model
 {
-    //
     protected $table = 'loans';
+    protected $primaryKey = 'loan_id';
     protected $fillable = [
         'loan_id',
         'borrower_id',
@@ -20,4 +20,8 @@ class Loan extends Model
         'outstanding_balance',
         'image_path' // Add this line
     ];
+    public function borrower()
+    {
+        return $this->belongsTo(User::class, 'borrower_id', 'user_id');
+    }
 }

@@ -65,14 +65,13 @@ Route::middleware('auth')->group(function () {
     // API routes (starts with /api)
     Route::prefix('api')->group(function () {
         Route::get('/users', function () {
-            // abort_if(!Auth::user()->hasRole('admin'), 403);
-            return User::with('roles')->get();
+            return User::with(['roles', 'verificationType'])->get();
         });
 
         // Admin only routes (starts with /api/admin)
         Route::middleware(['role:admin'])->prefix('admin')->group(function () {
-            Route::put('/users/{id}/verification-status', [UserController::class, 'updateVerificationStatus']);
-            Route::put('/users/{id}/role', [UserController::class, 'updateRole']);
+            Route::put('/users/{user_id}/verification-status', [UserController::class, 'updateVerificationStatus']);
+            Route::put('/users/{user_id}/role', [UserController::class, 'updateRole']);
             Route::post('/register-employee', [RegisteredUserController::class, 'storeEmployee'])->name('register.employee');
         });
 

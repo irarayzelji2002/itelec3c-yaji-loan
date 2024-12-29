@@ -41,7 +41,7 @@ class UserFactory extends Factory
             'province' => fake()->state(),
 
             // Verification
-            'verification_type' => null,
+            'verification_type_id' => null,
             'id_photo_front' => null,
             'id_photo_back' => null,
             'id_file' => null,

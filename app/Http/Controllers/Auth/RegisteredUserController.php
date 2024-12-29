@@ -46,7 +46,7 @@ class RegisteredUserController extends Controller
             'barangay' => 'required|string|max:255',
             'city' => 'required|string|max:255',
             'province' => 'required|string|max:255',
-            'verification_type' => 'required|string|max:255',
+            'verification_type_id' => 'required|exists:verification_types,verification_type_id',
             'id_photo_front' => 'nullable|image|mimes:jpeg,png,jpg|max:2048', // 2MB
             'id_photo_back' => 'nullable|image|mimes:jpeg,png,jpg|max:2048', // 2MB
             'id_file' => 'nullable|file|mimes:pdf|max:10240', // 10MB
@@ -95,7 +95,7 @@ class RegisteredUserController extends Controller
             'barangay' => $request->barangay,
             'city' => $request->city,
             'province' => $request->province,
-            'verification_type' => $request->verification_type,
+            'verification_type_id' => $request->verification_type_id,
             'id_photo_front' => $idPhotoFrontPath,
             'id_photo_back' => $idPhotoBackPath,
             'id_file' => $idFilePath,
