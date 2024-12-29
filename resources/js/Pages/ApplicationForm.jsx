@@ -593,7 +593,7 @@ export default function LoanApplicationForm({ loanTypes }) {
               </PrimaryButton>
               <SecondaryButton
                 type="button"
-                onClick={() => (window.location.href = route("member.dashboard"))}
+                onClick={() => (window.location.href = route("home"))}
                 className="min-w-[150px]"
               >
                 Cancel
