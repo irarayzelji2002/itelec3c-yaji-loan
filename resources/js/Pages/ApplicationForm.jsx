@@ -7,7 +7,7 @@ import SelectInput from "@/Components/SelectInput";
 import TextInput from "@/Components/TextInput";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 import { numberWithCommas, showToast } from "@/utils/displayFunctions";
-import { Head, useForm } from "@inertiajs/react";
+import { Head, Link, useForm } from "@inertiajs/react";
 import { useState } from "react";
 
 export default function LoanApplicationForm({ loanTypes }) {
@@ -453,13 +453,23 @@ export default function LoanApplicationForm({ loanTypes }) {
                 />
                 <span className="text-black-700 ml-2 text-sm font-bold">
                   I understand and agree with
-                  <a href="#" className="ml-1 text-green-800 underline hover:text-green-600">
+                  <Link
+                    href="/terms-of-service"
+                    className="ml-1 text-green-800 underline hover:text-green-600"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
                     Terms of Service
-                  </a>
+                  </Link>
                   &nbsp;and
-                  <a href="#" className="ml-1 text-green-800 underline hover:text-green-600">
+                  <Link
+                    href="/privacy-policy"
+                    className="ml-1 text-green-800 underline hover:text-green-600"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
                     Privacy Policy
-                  </a>
+                  </Link>
                   .
                 </span>
               </label>
