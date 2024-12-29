@@ -48,7 +48,8 @@ Route::middleware('auth')->group(function () {
     })->name('payment.page');
     Route::get('/application-form', function () {
         return Inertia::render('ApplicationForm');
-    })->name('application.form');
+    })->name('loan.application-form');
+    Route::post('/application-form', [LoanController::class, 'store'])->name('loan.store');
     Route::get('/success', function () {
         return Inertia::render('SuccessPage');
     })->name('success.page');
@@ -62,38 +63,36 @@ Route::middleware('auth')->group(function () {
         return Inertia::render('EmployeeForm');
     })->name('employee.form');
 
+
     // API routes (starts with /api)
     Route::prefix('api')->group(function () {
         Route::get('/users', function () {
             return User::with(['roles', 'verificationType'])->get();
         });
 
-        // Admin only routes (starts with /api/admin)
-        Route::middleware(['role:admin'])->prefix('admin')->group(function () {
+        Route::get('/loans/{loan_id}/files', [LoanController::class, 'getLoanFiles'])->name('loans.files');
+        Route::get('/loans/{loan}/status-history', [LoanController::class, 'getStatusHistory'])->name('loans.status-history');
+
+        // Admin/Employee only routes (starts with /api/employee)
+        Route::middleware(['role:admin,employee'])->prefix('employee')->group(function () {
+            Route::get('/loans', [LoanController::class, 'index'])->name('loans.index');
             Route::put('/users/{user_id}/verification-status', [UserController::class, 'updateVerificationStatus']);
             Route::put('/users/{user_id}/role', [UserController::class, 'updateRole']);
             Route::post('/register-employee', [RegisteredUserController::class, 'storeEmployee'])->name('register.employee');
-        });
-
-        // Member only routes (starts with /api/member)
-        Route::middleware(['role:member'])->prefix('member')->group(function () {
-            // Add member only routes here
+            Route::put('/loans/{loan_id}/status', [LoanController::class, 'updateStatus'])->name('loans.update-status');
         });
     });
 
     // Role page routes
-    // Admin only page routes
-    Route::middleware(['role:admin'])->group(function () {
+    // Admin/Employee only page routes
+    Route::middleware(['role:admin,employee'])->group(function () {
         Route::get('/users-table', function () {
             return Inertia::render('TableViewUsers');
         })->name('view.users-table');
+        Route::get('/loans-table', function () {
+            return Inertia::render('TableViewLoans');
+        })->name('view.loans-table');
     });
-
-    // Member only page routes
-    Route::middleware(['role:member'])->group(function () {
-        // Add member only routes here
-    });
-
 });
 
 Route::get('/loan', [ViewTable::class, 'ViewTables'])->name('view.loan');

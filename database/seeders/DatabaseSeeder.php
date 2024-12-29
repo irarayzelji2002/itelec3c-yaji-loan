@@ -169,7 +169,6 @@ class DatabaseSeeder extends Seeder
                 'date_status_changed' => now(),
                 'outstanding_balance' => 20000,
                 'payment_status' => 'unpaid',
-                'image_path' => 'images/loan1.jpg'
             ]
         ];
 

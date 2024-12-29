@@ -431,8 +431,8 @@ export default function UsersTableView() {
       const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute("content");
       if (!csrfToken) throw new Error("CSRF token not found");
 
-      console.log(`Sending request to: /api/admin/users/${user.user_id}/verification-status`);
-      const response = await fetch(`/api/admin/users/${user.user_id}/verification-status`, {
+      console.log(`Sending request to: /api/employee/users/${user.user_id}/verification-status`);
+      const response = await fetch(`/api/employee/users/${user.user_id}/verification-status`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
@@ -480,10 +480,10 @@ export default function UsersTableView() {
       const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute("content");
       if (!csrfToken) throw new Error("CSRF token not found");
 
-      console.log("Making request to:", `/api/admin/users/${user.user_id}/role`);
+      console.log("Making request to:", `/api/employee/users/${user.user_id}/role`);
       console.log("CSRF Token:", csrfToken);
 
-      const response = await fetch(`/api/admin/users/${user.user_id}/role`, {
+      const response = await fetch(`/api/employee/users/${user.user_id}/role`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
