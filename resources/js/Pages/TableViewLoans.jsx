@@ -8,10 +8,10 @@ import Table from "@/Components/Table";
 import TertiaryButton from "@/Components/TertiaryButton";
 import { HistoryIcon, VisibilityIcon } from "@/Icons/GeneralIcons";
 import { capitalizeFirstLetter, numberWithCommas } from "@/utils/displayFunctions";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
-export default function TableViewLoans({ auth, loans: fetchedLoans, statusCounts }) {
-  const [loans, setLoans] = useState(fetchedLoans || []);
+export default function TableViewLoans() {
+  const [loans, setLoans] = useState([]);
   const [loading, setLoading] = useState(false);
   const [selectedLoan, setSelectedLoan] = useState(null);
   const [showStatusHistoryModal, setShowStatusHistoryModal] = useState(false);
@@ -21,6 +21,21 @@ export default function TableViewLoans({ auth, loans: fetchedLoans, statusCounts
     nextDueStatus: null,
     finalDueStatus: null,
   });
+
+  useEffect(() => {
+    setLoading(true);
+    fetch("/api/employee/loans")
+      .then((res) => res.json())
+      .then((data) => {
+        setLoans(data);
+        console.log("Loans:", data);
+        setLoading(false);
+      })
+      .catch((err) => {
+        console.error(err);
+        setLoading(false);
+      });
+  }, []);
 
   const columns = [
     {
