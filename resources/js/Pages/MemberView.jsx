@@ -3,7 +3,7 @@ import ProgressBar from "@/Components/ProgressBar";
 import Reminders from "@/Components/Reminders";
 import TertiaryButton from "@/Components/TertiaryButton";
 import WalletTabs from "@/Components/WalletTabs";
-import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
+import MemberLayout from "@/Layouts/MemberLayout";
 import { Head, usePage } from "@inertiajs/react";
 
 export default function MemberView() {
@@ -12,7 +12,7 @@ export default function MemberView() {
   console.log("user?.roles:", user?.roles);
 
   return (
-    <AuthenticatedLayout>
+    <MemberLayout>
       <Head title="Dashboard" />
       <div className="py-12">
         <div className="max-w-100 mx-auto sm:px-6 lg:px-8">
@@ -52,6 +52,6 @@ export default function MemberView() {
           </div>
         </div>
       </div>
-    </AuthenticatedLayout>
+    </MemberLayout>
   );
 }
