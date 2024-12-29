@@ -17,7 +17,17 @@ export const capitalizeFirstLetter = (val) => {
 };
 
 export const numberWithCommas = (x) => {
-  return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+  // First convert to float and fix to 2 decimal places
+  const withDecimals = parseFloat(x).toFixed(2);
+
+  // Split the number into whole and decimal parts
+  const [wholePart, decimalPart] = withDecimals.split(".");
+
+  // Add commas to the whole part only
+  const wholeWithCommas = wholePart.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+
+  // Return the formatted number with decimal part
+  return `${wholeWithCommas}.${decimalPart}`;
 };
 
 export const showToast = (

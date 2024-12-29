@@ -5,13 +5,16 @@ import IconButton from "@/Components/IconButton";
 import Modal from "@/Components/Modal";
 import PrimaryButton from "@/Components/PrimaryButton";
 import Table from "@/Components/Table";
+import Tag from "@/Components/Tag";
 import TertiaryButton from "@/Components/TertiaryButton";
+import Tooltip from "@/Components/Tooltip";
 import { HistoryIcon, VisibilityIcon } from "@/Icons/GeneralIcons";
 import { capitalizeFirstLetter, numberWithCommas } from "@/utils/displayFunctions";
 import { useEffect, useState } from "react";
 
 export default function TableViewLoans() {
   const [loans, setLoans] = useState([]);
+  const [statusCount, setStatusCount] = useState({});
   const [loading, setLoading] = useState(false);
   const [selectedLoan, setSelectedLoan] = useState(null);
   const [showStatusHistoryModal, setShowStatusHistoryModal] = useState(false);
@@ -21,18 +24,43 @@ export default function TableViewLoans() {
     nextDueStatus: null,
     finalDueStatus: null,
   });
+  const [disableChangeStatusBtn, setDisableChangeStatusBtn] = useState(false);
 
   useEffect(() => {
     setLoading(true);
-    fetch(route("loans.index"))
-      .then((res) => res.json())
+    console.log("Starting fetch request to loans.index");
+
+    fetch("/api/employee/loans")
+      .then((res) => {
+        console.log("Received response:", {
+          status: res.status,
+          statusText: res.statusText,
+          headers: Object.fromEntries(res.headers.entries()),
+        });
+
+        if (!res.ok) {
+          throw new Error(`HTTP error! status: ${res.status}`);
+        }
+
+        const contentType = res.headers.get("content-type");
+        if (contentType && contentType.includes("application/json")) {
+          return res.json();
+        } else {
+          throw new Error(`Expected JSON, but received ${contentType || "unknown content type"}`);
+        }
+      })
       .then((data) => {
+        console.log("Successfully parsed JSON:", data);
         setLoans(data.loans);
-        console.log("Loans:", data);
+        setStatusCount(data.statusCount);
         setLoading(false);
       })
       .catch((err) => {
-        console.error(err);
+        console.error("Fetch error:", {
+          name: err.name,
+          message: err.message,
+          stack: err.stack,
+        });
         setLoading(false);
       });
   }, []);
@@ -103,10 +131,10 @@ export default function TableViewLoans() {
       minWidth: "100px",
       component: (loan) => (
         <div className="flex items-center">
-          <Tag color={getStatusColor(loan.current_status)}>
+          <Tag color="black" bgColor={getStatusColor(loan.current_status)}>
             {capitalizeFirstLetter(loan.current_status)}
           </Tag>
-          <Tooltip title="View Status History">
+          <Tooltip content="View Status History">
             <IconButton onClick={() => showStatusHistory(loan.getStatusHistory())}>
               <HistoryIcon />
             </IconButton>
@@ -132,7 +160,7 @@ export default function TableViewLoans() {
             className="rounded-lg border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:border-green-700 focus:outline-none focus:ring-2 focus:ring-green-600 focus:ring-offset-2"
             onChange={(e) => handleChangeStatus(loan, e.target.value)}
             onClick={(e) => e.stopPropagation()}
-            disabled={disableRoleBtn}
+            disabled={disableChangeStatusBtn}
             value={loan.current_status}
           >
             <option value="" disabled>
@@ -226,7 +254,7 @@ export default function TableViewLoans() {
       sortable: false,
       minWidth: "80px",
       component: (loan) => (
-        <Tooltip title="View Loan Files">
+        <Tooltip content="View Loan Files">
           <IconButton onClick={() => handleViewFiles(loan.getLoanFiles())}>
             <VisibilityIcon />
           </IconButton>
@@ -354,10 +382,10 @@ export default function TableViewLoans() {
       label: "View Status History",
       render: (loan) => (
         <div className="flex items-center">
-          <Tag color={getStatusColor(loan.current_status)}>
+          <Tag color="black" bgColor={getStatusColor(loan.current_status)}>
             {capitalizeFirstLetter(loan.current_status)}
           </Tag>
-          <Tooltip title="View Status History">
+          <Tooltip content="View Status History">
             <IconButton onClick={() => showStatusHistory(loan.getStatusHistory())}>
               <HistoryIcon />
             </IconButton>
@@ -374,7 +402,7 @@ export default function TableViewLoans() {
             className="rounded-lg border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:border-green-700 focus:outline-none focus:ring-2 focus:ring-green-600 focus:ring-offset-2"
             onChange={(e) => handleChangeStatus(loan, e.target.value)}
             onClick={(e) => e.stopPropagation()}
-            disabled={disableRoleBtn}
+            disabled={disableChangeStatusBtn}
             value={loan.current_status}
           >
             <option value="" disabled>
@@ -391,7 +419,7 @@ export default function TableViewLoans() {
       id: "view_loan_files",
       label: "View Loan Files",
       component: (loan) => (
-        <Tooltip title="View Loan Files">
+        <Tooltip content="View Loan Files">
           <IconButton onClick={() => handleViewFiles(loan.getLoanFiles())}>
             <VisibilityIcon />
           </IconButton>
@@ -418,7 +446,7 @@ export default function TableViewLoans() {
         </div>
       }
     >
-      <Head title="Loans Table" />
+      <Head content="Loans Table" />
 
       <div className="py-6">
         <div className="max-w-100 mx-auto sm:px-6 lg:px-8">
@@ -451,7 +479,7 @@ export default function TableViewLoans() {
 
 export function StatusHistoryModal({ showModal, closeModal, statusHistory }) {
   return (
-    <Modal show={showModal} onClose={closeModal} maxWidth="2xl" title="Status History">
+    <Modal show={showModal} onClose={closeModal} maxWidth="2xl" content="Status History">
       {/* Status history content */}
       <div className="mt-6 flex justify-center">
         <PrimaryButton onClick={closeModal}>Close</PrimaryButton>

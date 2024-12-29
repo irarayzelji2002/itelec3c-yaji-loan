@@ -17,6 +17,7 @@ class LoanController extends Controller
 {
     public function index(Request $request)
     {
+        Log::info('Starting loans index method');
         $query = Loan::with([
             'borrower:user_id,first_name,middle_name,last_name',
             'loanType:loan_type_id,loan_type_name,is_amortized',
@@ -25,9 +26,11 @@ class LoanController extends Controller
             'statusHistory',
             'loanFiles'
         ]);
+        Log::info('Initial query built', ['query' => $query->toSql()]);
 
         // Apply filters if provided
         if ($request->loan_status) {
+            Log::info('Applying loan status filter', ['status' => $request->loan_status]);
             $query->whereHas('statusHistory', function($q) use ($request) {
                 $q->where('status', $request->loan_status)
                   ->latest();
@@ -35,31 +38,36 @@ class LoanController extends Controller
         }
 
         if ($request->payment_status) {
+            Log::info('Applying payment status filter', ['status' => $request->payment_status]);
             $query->where('payment_status', $request->payment_status);
         }
 
         // Get the loans
-        $loans = $query->get()->map(function($loan) {
+        $formattedLoans = $query->get();
+        Log::info('Retrieved loans count: ' . $formattedLoans->count());
+        $formattedLoans = $formattedLoans->map(function($loan) {
+            Log::info('Formatting loan', ['loan_id' => $loan->loan_id]);
+
             return [
                 'loan_id' => $loan->loan_id,
-                'borrower_name' => $loan->borrower->full_name,
+                'borrower_name' => $loan->borrower->full_name ?? '-',
                 'loan_amount' => $loan->loan_amount,
                 'interest_rate' => $loan->interest_rate,
                 'loan_term_unit' => $loan->loan_term_unit,
                 'loan_term_period' => $loan->loan_term_period,
                 'date_applied' => $loan->date_applied,
                 'date_status_changed' => $loan->date_status_changed,
-                'current_status' => $loan->statusHistory->last()->loan_status,
-                'current_remarks' => $loan->statusHistory->last()->remarks,
+                'current_status' => $loan->statusHistory->last()->loan_status ?? '-',
+                'current_remarks' => $loan->statusHistory->last()->remarks ?? '-',
                 'date_disbursed' => $loan->date_disbursed,
                 'outstanding_balance' => $loan->outstanding_balance,
                 'created_at' => $loan->created_at,
                 'updated_at' => $loan->updated_at,
-                'loan_type_name' => $loan->loanType->loan_type_name,
-                'is_amortized' => $loan->loanType->is_amortized,
+                'loan_type_name' => $loan->loanType->loan_type_name ?? '-',
+                'is_amortized' => $loan->loanType->is_amortized ?? false,
                 'payment_status' => $loan->payment_status,
-                'approved_by' => $loan->approvedBy?->full_name,
-                'disbursed_by' => $loan->disbursedBy?->full_name,
+                'approved_by' => $loan->approvedBy?->full_name ?? '-',
+                'disbursed_by' => $loan->disbursedBy?->full_name ?? '-',
                 'loan_files' => $loan->loanFiles,
                 'next_due_date' => $loan->calculateNextDueDate(),
                 'remaining_time_before_next_due' => $loan->calculateRemainingTimeBeforeNextDue(),
@@ -68,6 +76,11 @@ class LoanController extends Controller
                 'remaining_time_before_final_due' => $loan->calculateRemainingTimeBeforeFinalDue(),
             ];
         });
+
+        Log::info('Formatted loans data', [
+            'count' => $formattedLoans->count(),
+            'sample' => $formattedLoans->first()
+        ]);
 
         // Get status counts
         $statusCounts = [
@@ -88,8 +101,8 @@ class LoanController extends Controller
             // Add due date status counts
         ];
 
-        return Inertia::render('TableViewLoans', [
-            'loans' => $loans,
+        return response()->json([
+            'loans' => $formattedLoans,
             'statusCounts' => $statusCounts
         ]);
     }
