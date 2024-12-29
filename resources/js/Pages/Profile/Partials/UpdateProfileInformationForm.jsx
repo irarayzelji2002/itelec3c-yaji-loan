@@ -64,7 +64,7 @@ export default function UpdateProfileInformation({ mustVerifyEmail, status, clas
   return (
     <section className={className}>
       <header>
-        <h2 className="text-lg font-medium text-gray-900">Profile Information</h2>
+        <h2 className="text-lg font-bold text-green-900">Profile Information</h2>
 
         <p className="mt-1 text-sm text-gray-600">
           Update your account's profile information here.
@@ -73,10 +73,10 @@ export default function UpdateProfileInformation({ mustVerifyEmail, status, clas
 
       <form onSubmit={submit} className="mt-6 space-y-6" encType="multipart/form-data">
         {/* BASIC INFORMATION */}
-        <h3 className="text-md font-medium text-gray-900">Basic Information</h3>
+        <h3 className="text-md font-semibold text-gray-900">Basic Information</h3>
         {/* Profile picture */}
         <div className="mb-6">
-          <label className="block text-sm font-medium text-gray-700">Profile Picture</label>
+          <label className="block text-sm font-medium text-black">Profile Picture</label>
           <input
             type="file"
             onChange={(e) => setData("profile_picture", e.target.files[0])}
@@ -188,7 +188,7 @@ export default function UpdateProfileInformation({ mustVerifyEmail, status, clas
         </div>
 
         {/* CONTACT INFORMATION */}
-        <h3 className="text-md font-medium text-gray-900">Contact Information</h3>
+        <h3 className="text-md font-semibold text-gray-900">Contact Information</h3>
         {/* Email */}
         <div>
           <InputLabel htmlFor="email" value="Email Addresss" required={true} />
@@ -302,7 +302,7 @@ export default function UpdateProfileInformation({ mustVerifyEmail, status, clas
         </div>
 
         {/* SECURITY QUESTION */}
-        <h3 className="text-md font-medium text-gray-900">Security Questions</h3>
+        <h3 className="text-md font-semibold text-gray-900">Security Questions</h3>
         {/* Security Question 1 */}
         <div className="mt-4">
           <InputLabel htmlFor="security_question_1" value="Security Question 1" required={true} />
