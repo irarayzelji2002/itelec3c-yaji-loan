@@ -317,7 +317,7 @@ export default function UsersTableView() {
     },
     {
       id: "verified",
-      label: "verified",
+      label: "Verified",
       column: "verification_status",
       comparison: "===",
       color: "black",
@@ -532,8 +532,8 @@ export default function UsersTableView() {
         </div>
       }
     >
-      <Head title="Dashboard" />
-      <div className="flex gap-4">
+      <Head title="Users Table" />
+      <div className="flex hidden gap-4">
         <button onClick={() => showToast("success", "Test Success")}>
           Click for Toast Success
         </button>

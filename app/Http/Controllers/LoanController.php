@@ -53,6 +53,7 @@ class LoanController extends Controller
                 'current_remarks' => $loan->statusHistory->last()->remarks,
                 'date_disbursed' => $loan->date_disbursed,
                 'outstanding_balance' => $loan->outstanding_balance,
+                'created_at' => $loan->created_at,
                 'updated_at' => $loan->updated_at,
                 'loan_type_name' => $loan->loanType->loan_type_name,
                 'is_amortized' => $loan->loanType->is_amortized,
