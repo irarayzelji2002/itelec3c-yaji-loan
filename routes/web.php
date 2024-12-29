@@ -4,6 +4,7 @@ use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use App\Models\User;
 use App\Models\LoanType;
+use App\Models\Loan;
 use App\Models\Payment;
 use App\Http\Controllers\ViewTable;
 use App\Http\Controllers\UserController;
@@ -92,7 +93,18 @@ Route::middleware('auth')->group(function () {
             return Inertia::render('TableViewUsers');
         })->name('view.users-table');
         Route::get('/loans-table', function () {
-            return Inertia::render('TableViewLoans');
+            $loans = Loan::with([
+                'borrower:user_id,first_name,middle_name,last_name',
+                'loanType:loan_type_id,loan_type_name,is_amortized',
+                'approvedBy:user_id,first_name,middle_name,last_name',
+                'disbursedBy:user_id,first_name,middle_name,last_name',
+                'statusHistory',
+                'loanFiles'
+            ])->get();
+
+            return Inertia::render('TableViewLoans', [
+                'loans' => $loans
+            ]);
         })->name('view.loans-table');
     });
 });

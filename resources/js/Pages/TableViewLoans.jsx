@@ -24,10 +24,10 @@ export default function TableViewLoans() {
 
   useEffect(() => {
     setLoading(true);
-    fetch("/api/employee/loans")
+    fetch(route("loans.index"))
       .then((res) => res.json())
       .then((data) => {
-        setLoans(data);
+        setLoans(data.loans);
         console.log("Loans:", data);
         setLoading(false);
       })

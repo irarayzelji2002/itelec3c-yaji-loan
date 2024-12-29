@@ -29,7 +29,7 @@ class LoanController extends Controller
         // Apply filters if provided
         if ($request->loan_status) {
             $query->whereHas('statusHistory', function($q) use ($request) {
-                $q->where('loan_status', $request->loan_status)
+                $q->where('status', $request->loan_status)
                   ->latest();
             });
         }
@@ -73,10 +73,10 @@ class LoanController extends Controller
         $statusCounts = [
             'loan_status' => [
                 'pending' => Loan::whereHas('statusHistory', function($q) {
-                    $q->where('loan_status', 'Pending')->latest();
+                    $q->where('status', 'pending')->latest();
                 })->count(),
                 'approved' => Loan::whereHas('statusHistory', function($q) {
-                    $q->where('loan_status', 'Approved')->latest();
+                    $q->where('status', 'approved')->latest();
                 })->count(),
                 // Add other status counts
             ],
