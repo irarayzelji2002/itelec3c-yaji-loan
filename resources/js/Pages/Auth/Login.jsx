@@ -122,10 +122,6 @@ export default function Login({ status, canResetPassword }) {
         <div className="center-column">
           <PrimaryButton
             style={{
-              backgroundColor: "var(--color-light-green)",
-              color: "black",
-              padding: "10px 20px",
-              borderRadius: "5px",
               width: "100%",
               marginLeft: "0px",
               marginTop: "20px",
