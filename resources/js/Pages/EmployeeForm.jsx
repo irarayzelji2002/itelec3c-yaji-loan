@@ -5,6 +5,7 @@ import PassInput from "@/Components/PassInput";
 import PrimaryButton from "@/Components/PrimaryButton";
 import SecondaryButton from "@/Components/SecondaryButton";
 import SelectInput from "@/Components/SelectInput";
+import TertiaryButton from "@/Components/TertiaryButton";
 import TextInput from "@/Components/TextInput";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 import { showToast } from "@/utils/displayFunctions";
@@ -12,7 +13,6 @@ import { clearFieldError } from "@/utils/formFunctions";
 import { validateDateIsBeforeToday } from "@/utils/validationRules";
 import { Head, useForm } from "@inertiajs/react";
 import { useState } from "react";
-
 export default function EmployeeForm() {
   const [errors, setErrors] = useState({});
   const blankData = {
@@ -127,8 +127,23 @@ export default function EmployeeForm() {
   };
 
   return (
-    <AuthenticatedLayout header={<h2>Employee Form</h2>}>
+    <AuthenticatedLayout
+      header={
+        <div className="flex items-center justify-between gap-2 sm:flex-row">
+          <h2>Employee Form</h2>
+          <TertiaryButton
+            onClick={() => (window.location.href = "/dashboard")}
+            className="whitespace-nowrap"
+          >
+            <a href={route("dashboard")} className="text-sm">
+              <i className="fa-solid fa-chevron-left mr-2"></i> Back
+            </a>
+          </TertiaryButton>
+        </div>
+      }
+    >
       <Head title="Employee Form" />
+
       <div className="mx-auto my-10 max-w-4xl rounded-lg bg-white bg-opacity-60 p-8 shadow-lg">
         <form onSubmit={handleSubmit}>
           {/* BASIC INFORMATION */}

@@ -4,6 +4,7 @@ import InputLabel from "@/Components/InputLabel";
 import PrimaryButton from "@/Components/PrimaryButton";
 import SecondaryButton from "@/Components/SecondaryButton";
 import SelectInput from "@/Components/SelectInput";
+import TertiaryButton from "@/Components/TertiaryButton";
 import TextInput from "@/Components/TextInput";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 import { numberWithCommas, showToast } from "@/utils/displayFunctions";
@@ -334,7 +335,21 @@ export default function LoanApplicationForm({ loanTypes }) {
   };
 
   return (
-    <AuthenticatedLayout header={<h2>Loan Application Form</h2>}>
+    <AuthenticatedLayout
+      header={
+        <div className="flex items-center justify-between gap-2 sm:flex-row">
+          <h2>Loan Application Form</h2>
+          <TertiaryButton
+            onClick={() => (window.location.href = "/member-dashboard")}
+            className="whitespace-nowrap"
+          >
+            <a href={route("member.dashboard")} className="text-sm">
+              <i className="fa-solid fa-chevron-left mr-2"></i> Back
+            </a>
+          </TertiaryButton>
+        </div>
+      }
+    >
       <Head title="Loan Application Form" />
       <div className="w-90 mx-auto my-5 flex flex-col justify-center lg:flex-row">
         {/* Application Form */}
