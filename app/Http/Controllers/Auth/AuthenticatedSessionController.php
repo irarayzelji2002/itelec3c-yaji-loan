@@ -54,7 +54,12 @@ class AuthenticatedSessionController extends Controller
             $request->authenticate();
             $request->session()->regenerate();
 
-            return redirect()->intended(route('dashboard', absolute: false));
+            // Redirect based on user role
+            if ($user->hasRole('member')) {
+                return redirect()->intended(route('member.dashboard', absolute: false));
+            } else {
+                return redirect()->intended(route('dashboard', absolute: false));
+            }
         } catch (\Exception $e) {
             return Redirect::back()->withErrors([
                 'general' => 'Incorrect credentials provided.',

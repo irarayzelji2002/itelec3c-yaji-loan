@@ -2,6 +2,7 @@ import Checkbox from "@/Components/Checkbox";
 import InputError from "@/Components/InputError";
 import InputLabel from "@/Components/InputLabel";
 import PassInput from "@/Components/PassInput";
+import PrimaryButton from "@/Components/PrimaryButton";
 import TextInput from "@/Components/TextInput";
 import GuestLayout from "@/Layouts/GuestLayout";
 import { clearFieldError } from "@/utils/formFunctions";
@@ -119,7 +120,7 @@ export default function Login({ status, canResetPassword }) {
         <InputError message={serverErrors.general || errors.general} className="mt-2" />
 
         <div className="center-column">
-          <button
+          <PrimaryButton
             style={{
               backgroundColor: "var(--color-light-green)",
               color: "black",
@@ -133,7 +134,7 @@ export default function Login({ status, canResetPassword }) {
             disabled={processing}
           >
             Login
-          </button>
+          </PrimaryButton>
 
           <span className="ms-2 text-sm text-gray-600" style={{ marginTop: "20px" }}>
             Don't have an account?{" "}

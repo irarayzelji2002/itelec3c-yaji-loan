@@ -16,7 +16,13 @@ class RedirectIfAuthenticated
 
         foreach ($guards as $guard) {
             if (Auth::guard($guard)->check()) {
-                return redirect()->intended(route('dashboard', absolute: false));
+                if (collect(['member'])->contains(function($role) use ($request) {
+                    return $request->user()->hasRole($role);
+                })) {
+                    return redirect()->intended(route('member.dashboard', absolute: false));
+                } else {
+                    return redirect()->intended(route('dashboard', absolute: false));
+                }
             }
         }
 
