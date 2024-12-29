@@ -184,7 +184,7 @@ export default function LoanApplicationForm() {
             <h2 className="mb-2 text-center font-bold text-green-800">
               <span className="text-3xl">Congrats!</span>
               <p className="text-xl font-bold text-green-900">
-                Your loan application is successfull.
+                Your loan application is successful.
               </p>
             </h2>
 
