@@ -6,7 +6,7 @@ function PrivacyPolicy({ auth }) {
     <div>
       <Head title="Privacy Policy" />
       <Navbar auth={auth} />
-      <section className="container">
+      <section className="container-1">
         <div className="content">
           <h1 className="heading" style={{ fontSize: "4rem" }}>
             Privacy <span className="subheading">Policy</span>

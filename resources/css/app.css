@@ -279,8 +279,22 @@ body {
 .app {
   font-family: "DM Sans", Arial, sans-serif;
   padding: 20px;
-  max-width: 600px;
-  margin: auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  height: 100%;
+  width: 100% !important;
+  max-width: 100% !important;
+  background-image: linear-gradient(
+    to bottom,
+    #f5fdf9 0%,
+    #edfcf4 53%,
+    #eafbf2 66%,
+    #81e7b2 94%,
+    #62e19e 97%,
+    #57df98 100%
+  );
 }
 
 .bg-green-gradient {
@@ -316,7 +330,7 @@ body {
 .circle {
   width: 100px;
   text-align: center;
-  padding: 10px;
+
   border-bottom: 3px solid var(--color-gray);
 }
 
@@ -330,6 +344,8 @@ body {
   border-radius: 8px;
   box-shadow: 0px 4px 12px var(--color-overlay);
   margin-bottom: 20px;
+  width: 100%;
+  max-width: 600px !important;
 }
 
 .form-group {
@@ -366,13 +382,23 @@ body {
 }
 .content {
   display: flex;
-
   align-items: center;
   flex-direction: column;
-  height: 80vh;
-  background-color: #f5fdf5;
+  padding: 20px;
+  width: 100%;
+  height: 100vh;
   font-family: "DM Sans", Arial, sans-serif;
   color: #333;
+  /* Apply bg-green-gradient style */
+  background-image: linear-gradient(
+    to bottom,
+    #f5fdf9 0%,
+    #edfcf4 53%,
+    #eafbf2 66%,
+    #81e7b2 94%,
+    #62e19e 97%,
+    #57df98 100%
+  );
 }
 
 .terms-content {
@@ -389,9 +415,14 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: var(--color-home-bg);
+  /* background-color: var(--color-home-bg); */
   padding: 60px;
   min-width: 100%;
+  font-family: "DM Sans", Arial, sans-serif;
+}
+.container-1 {
+  display: flex;
+
   font-family: "DM Sans", Arial, sans-serif;
 }
 
@@ -1049,7 +1080,7 @@ option:first {
 }
 
 .steps {
-  background-color: #f5fdf5;
+  /* background-color: #f5fdf5; */
 }
 
 /* Steps Section */
@@ -1147,7 +1178,7 @@ option:first {
   display: flex;
   justify-content: center;
 
-  background-color: #f5fdf5;
+  /* background-color: #f5fdf5; */
 }
 
 /* Progress Bar */
@@ -1191,7 +1222,7 @@ option:first {
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: #f5fdf5;
+  /* background-color: #f5fdf5; */
   padding: 40px;
   border-radius: 12px;
 }
@@ -1277,7 +1308,7 @@ option:first {
 /* Overall Section */
 .card-section {
   font-family: Arial, sans-serif;
-  background: linear-gradient(180deg, #f5fdf5 0%, #d6f7d8 100%);
+  /* background: linear-gradient(180deg, #f5fdf5 0%, #d6f7d8 100%); */
   padding: 20px;
   text-align: center;
 }
