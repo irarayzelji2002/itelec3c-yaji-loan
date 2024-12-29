@@ -19,6 +19,8 @@ class Loan extends Model
         'interest_rate',
         'loan_term_period',
         'loan_term_unit',
+        'purpose',
+        'purpose_details',
         'date_applied',
         'date_status_changed',
         'date_disbursed',
@@ -26,8 +28,6 @@ class Loan extends Model
         'payment_status',
         'approved_by',
         'disbursed_by',
-        'purpose',
-        'purpose_details'
     ];
 
     protected $casts = [

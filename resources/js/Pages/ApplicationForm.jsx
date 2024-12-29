@@ -201,9 +201,14 @@ export default function LoanApplicationForm({ loanTypes }) {
   // Form submission
   const handleSubmit = (e) => {
     e.preventDefault();
+    console.log("Form submission started");
+    console.log("Form data:", data);
 
     const { isValid, errors: validationErrors } = validate(data);
+    console.log("Validation result:", { isValid, errors: validationErrors });
+
     if (!isValid) {
+      console.log("Validation failed:", validationErrors);
       setErrors(validationErrors);
       return;
     }
@@ -219,15 +224,20 @@ export default function LoanApplicationForm({ loanTypes }) {
       }
     });
 
+    console.log("Submitting form with data:", Object.fromEntries(formData));
+
     post(route("loan.store"), {
       data: formData,
       forceFormData: true,
       onSuccess: () => {
+        console.log("Form submitted successfully");
         window.location.href = "/success-loan";
+      },
+      onError: (errors) => {
+        console.error("Form submission failed:", errors);
       },
     });
   };
-
   return (
     <AuthenticatedLayout header={<h2>Loan Application Form</h2>}>
       <Head title="Loan Application Form" />
