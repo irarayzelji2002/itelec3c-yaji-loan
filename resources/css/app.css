@@ -457,6 +457,7 @@ body {
   font-size: 14px;
   cursor: pointer;
   text-decoration: underline;
+  align-self: center;
 }
 
 .right-section {

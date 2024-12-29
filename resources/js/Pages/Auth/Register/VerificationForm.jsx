@@ -25,10 +25,12 @@ const VerificationForm = ({
   const [errors, setErrors] = useState({});
 
   const handleVerificationTypeChange = (e) => {
-    const selectedValidId = e.target.value;
-    const selected = verificationTypes.find((type) => type.valid_id === selectedValidId);
+    const selectedTypeId = e.target.value;
+    const selected = verificationTypes.find(
+      (type) => type.verification_type_id === parseInt(selectedTypeId)
+    );
     setSelectedType(selected);
-    setData("verification_type_id", selectedValidId);
+    setData("verification_type_id", selectedTypeId);
     clearFieldError("verification_type_id", setErrors);
     setServerError("verification_type_id", "");
   };
@@ -37,7 +39,7 @@ const VerificationForm = ({
     e.preventDefault();
 
     // Validation
-    const { isValid, errors: validationErrors } = validateStep2(trimmedData, selectedType);
+    const { isValid, errors: validationErrors } = validateStep2(data, selectedType);
     if (!isValid) {
       setErrors(validationErrors);
       return;

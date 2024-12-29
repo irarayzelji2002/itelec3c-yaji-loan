@@ -3,12 +3,13 @@
 namespace Database\Seeders;
 
 use App\Models\User;
-// use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Spatie\Permission\Models\Role;
 use App\Models\LoanType;
 use App\Models\Payment;
 use App\Models\Loan;
+use App\Models\LoanStatusHistory;
+use App\Models\LoanFile;
 
 class DatabaseSeeder extends Seeder
 {
@@ -17,6 +18,11 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
+        // Call VerificationTypeSeeder
+        $this->call([
+            VerificationTypeSeeder::class,
+        ]);
+
         // Create roles
         $adminRole = Role::firstOrCreate(['name' => 'admin']);
         $employeeRole = Role::firstOrCreate(['name' => 'employee']);
@@ -77,127 +83,131 @@ class DatabaseSeeder extends Seeder
         $memberUser->assignRole($memberRole);
 
         // Create loan types
-        LoanType::create([
-            'loan_type_name' => 'Personal Loan',
-            'description' => 'A loan for personal use.',
-            'image_path' => 'images/loan_type1.jpg'
-        ]);
+        $loanTypes = [
+            [
+                'loan_type_name' => 'Personal Loan',
+                'description' => 'A loan for personal use.',
+                'image_path' => 'images/loan_type1.jpg',
+                'max_loan_amount' => 50000,
+                'default_interest_rate' => 12.00,
+                'default_loan_term_period' => 12,
+                'default_loan_term_unit' => 'months',
+                'is_amortized' => true,
+                'status' => 'active'
+            ],
+            [
+                'loan_type_name' => 'Home Loan',
+                'description' => 'A loan for home purchase.',
+                'image_path' => 'images/loan_type2.jpg',
+                'max_loan_amount' => 500000,
+                'default_interest_rate' => 10.00,
+                'default_loan_term_period' => 36,
+                'default_loan_term_unit' => 'months',
+                'is_amortized' => true,
+                'status' => 'active'
+            ],
+            [
+                'loan_type_name' => 'Car Loan',
+                'description' => 'A loan for car purchase.',
+                'image_path' => 'images/loan_type3.jpg',
+                'max_loan_amount' => 300000,
+                'default_interest_rate' => 8.00,
+                'default_loan_term_period' => 24,
+                'default_loan_term_unit' => 'months',
+                'is_amortized' => true,
+                'status' => 'active'
+            ],
+            [
+                'loan_type_name' => 'Education Loan',
+                'description' => 'A loan for education purposes.',
+                'image_path' => 'images/loan_type4.jpg',
+                'max_loan_amount' => 200000,
+                'default_interest_rate' => 7.00,
+                'default_loan_term_period' => 48,
+                'default_loan_term_unit' => 'months',
+                'is_amortized' => true,
+                'status' => 'active'
+            ],
+            [
+                'loan_type_name' => 'Business Loan',
+                'description' => 'A loan for business purposes.',
+                'image_path' => 'images/loan_type5.jpg',
+                'max_loan_amount' => 1000000,
+                'default_interest_rate' => 15.00,
+                'default_loan_term_period' => 60,
+                'default_loan_term_unit' => 'months',
+                'is_amortized' => true,
+                'status' => 'active'
+            ],
+            [
+                'loan_type_name' => 'Short-term Business Loan',
+                'description' => 'A non-amortized short-term loan for business purposes with lump sum payment.',
+                'image_path' => 'images/loan_type6.jpg',
+                'max_loan_amount' => 100000,
+                'default_interest_rate' => 18.00,
+                'default_loan_term_period' => 6,
+                'default_loan_term_unit' => 'months',
+                'is_amortized' => false,
+                'status' => 'active'
+            ]
+        ];
 
-        LoanType::create([
-            'loan_type_name' => 'Home Loan',
-            'description' => 'A loan for home purchase.',
-            'image_path' => 'images/loan_type2.jpg'
-        ]);
-
-        LoanType::create([
-            'loan_type_name' => 'Car Loan',
-            'description' => 'A loan for car purchase.',
-            'image_path' => 'images/loan_type3.jpg'
-        ]);
-
-        LoanType::create([
-            'loan_type_name' => 'Education Loan',
-            'description' => 'A loan for education purposes.',
-            'image_path' => 'images/loan_type4.jpg'
-        ]);
-
-        LoanType::create([
-            'loan_type_name' => 'Business Loan',
-            'description' => 'A loan for business purposes.',
-            'image_path' => 'images/loan_type5.jpg'
-        ]);
-
-        // Create payments
-        Payment::create([
-            'loan_id' => 1,
-            'payment_amount' => 5000,
-            'payment_date' => '2021-12-01',
-            'image_path' => 'images/payment1.jpg'
-        ]);
-        Payment::create([
-            'loan_id' => 2,
-            'payment_amount' => 6000,
-            'payment_date' => '2021-12-02',
-            'image_path' => 'images/payment2.jpg'
-        ]);
-        Payment::create([
-            'loan_id' => 3,
-            'payment_amount' => 7000,
-            'payment_date' => '2021-12-03',
-            'image_path' => 'images/payment3.jpg'
-        ]);
-        Payment::create([
-            'loan_id' => 4,
-            'payment_amount' => 8000,
-            'payment_date' => '2021-12-04',
-            'image_path' => 'images/payment4.jpg'
-        ]);
-        Payment::create([
-            'loan_id' => 5,
-            'payment_amount' => 9000,
-            'payment_date' => '2021-12-05',
-            'image_path' => 'images/payment5.jpg'
-        ]);
+        foreach ($loanTypes as $loanType) {
+            LoanType::create($loanType);
+        }
 
         // Create loans
-        Loan::create([
-            'borrower_id' => 1,
-            'loan_amount' => 10000,
-            'interest_rate' => 0.1,
-            'loan_term' => 12,
-            'date_applied' => '2021-11-01',
-            'date_approved' => '2021-11-05',
-            'date_disbursed' => '2021-11-10',
-            'outstanding_balance' => 9000,
-            'image_path' => 'images/loan1.jpg'
-        ]);
-        Loan::create([
-            'borrower_id' => 2,
-            'loan_amount' => 20000,
-            'interest_rate' => 0.15,
-            'loan_term' => 24,
-            'date_applied' => '2021-11-02',
-            'date_approved' => '2021-11-06',
-            'date_disbursed' => '2021-11-11',
-            'outstanding_balance' => 18000,
-            'image_path' => 'images/loan2.jpg'
-        ]);
-        Loan::create([
-            'borrower_id' => 3,
-            'loan_amount' => 30000,
-            'interest_rate' => 0.2,
-            'loan_term' => 36,
-            'date_applied' => '2021-11-03',
-            'date_approved' => '2021-11-07',
-            'date_disbursed' => '2021-11-12',
-            'outstanding_balance' => 27000,
-            'image_path' => 'images/loan3.jpg'
-        ]);
-        Loan::create([
-            'borrower_id' => 4,
-            'loan_amount' => 40000,
-            'interest_rate' => 0.25,
-            'loan_term' => 48,
-            'date_applied' => '2021-11-04',
-            'date_approved' => '2021-11-08',
-            'date_disbursed' => '2021-11-13',
-            'outstanding_balance' => 36000,
-            'image_path' => 'images/loan4.jpg'
-        ]);
-        Loan::create([
-            'borrower_id' => 5,
-            'loan_amount' => 50000,
-            'interest_rate' => 0.3,
-            'loan_term' => 60,
-            'date_applied' => '2021-11-05',
-            'date_approved' => '2021-11-09',
-            'date_disbursed' => '2021-11-14',
-            'outstanding_balance' => 45000,
-            'image_path' => 'images/loan5.jpg'
-        ]);
+        $loans = [
+            [
+                'borrower_id' => $memberUser->user_id,
+                'loan_type_id' => 1,
+                'loan_amount' => 20000,
+                'interest_rate' => 12.00,
+                'loan_term_period' => 12,
+                'loan_term_unit' => 'months',
+                'date_applied' => now(),
+                'date_status_changed' => now(),
+                'outstanding_balance' => 20000,
+                'payment_status' => 'unpaid',
+                'image_path' => 'images/loan1.jpg'
+            ]
+        ];
 
-        $this->call([
-            VerificationTypeSeeder::class,
-        ]);
+        foreach ($loans as $loan) {
+            $createdLoan = Loan::create($loan);
+
+            // Create loan status history
+            LoanStatusHistory::create([
+                'loan_id' => $createdLoan->loan_id,
+                'status' => 'pending',
+                'changed_by' => $employeeUser->user_id,
+                'remarks' => 'Initial loan application'
+            ]);
+
+            // Create loan files
+            LoanFile::create([
+                'loan_id' => $createdLoan->loan_id,
+                'file_type' => 'application_form',
+                'file_path' => 'files/loan1_application.pdf',
+                'uploaded_by' => $memberUser->user_id
+            ]);
+        }
+
+        // Create payments
+        $payments = [
+            [
+                'loan_id' => 1,
+                'payment_amount' => 2000,
+                'payment_date' => now(),
+                'proof_of_payment' => 'images/payment1.jpg',
+                'payment_method' => 'bank_transfer',
+                'payment_reference' => 'REF123456',
+                'is_confirmed' => false
+            ]
+        ];
+
+        foreach ($payments as $payment) {
+            Payment::create($payment);
+        }
     }
 }

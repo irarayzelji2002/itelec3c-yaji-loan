@@ -24,6 +24,7 @@ export default function UsersTableView() {
       .then((res) => res.json())
       .then((data) => {
         setUsers(data);
+        console.log("Users:", data);
         setLoading(false);
       })
       .catch((err) => {
@@ -555,6 +556,7 @@ export default function UsersTableView() {
               actions={actions}
               selectedRow={selectedUser}
               setSelectedRow={setSelectedUser}
+              idField="user_id"
             />
           </div>
         </div>

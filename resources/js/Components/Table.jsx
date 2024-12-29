@@ -14,6 +14,7 @@ const Table = ({
   actions = [], // Array of action objects { id, label, render }
   selectedRow,
   setSelectedRow,
+  idField = "id",
 }) => {
   const [data, setData] = useState([]);
   const [filteredData, setFilteredData] = useState([]);
@@ -149,7 +150,7 @@ const Table = ({
 
   // Handle row selection
   const handleRowClick = (row) => {
-    setSelectedRow(selectedRow?.id === row.id ? null : row);
+    setSelectedRow(selectedRow?.[idField] === row[idField] ? null : row);
   };
 
   return (
@@ -283,10 +284,10 @@ const Table = ({
             ) : (
               paginatedData.map((item) => (
                 <tr
-                  key={item.id}
+                  key={item[idField]}
                   onClick={() => handleRowClick(item)}
                   className={`cursor-pointer transition-colors ${
-                    selectedRow?.id === item.id
+                    selectedRow?.[idField] === item[idField]
                       ? "!border-b-2 !border-t-2 !border-green-500 bg-green-400"
                       : "hover:bg-gray-100"
                   }`}

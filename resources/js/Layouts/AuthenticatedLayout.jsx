@@ -29,7 +29,7 @@ export default function AuthenticatedLayout({ header, children }) {
       <div className="bg-green-gradient fixed inset-0 z-0" />
       {/* Main content container */}
       <div className="relative min-h-screen bg-transparent">
-        <nav className="nav-bar-logged z-100 sticky top-0">
+        <nav className="nav-bar-logged sticky top-0 z-100">
           <div className="nav-bar-logged max-w-100 mx-auto px-4 sm:px-6 lg:px-8">
             <div className="nav-bar-logged flex h-16 justify-between">
               <div className="flex flex-grow justify-between">
@@ -83,9 +83,19 @@ export default function AuthenticatedLayout({ header, children }) {
                       </span>
                     </Dropdown.Trigger>
 
-                    <Dropdown.Content>
-                      <Dropdown.Link href={route("profile.show")}>Profile</Dropdown.Link>
-                      <Dropdown.Link href={route("logout")} method="post" as="button">
+                    <Dropdown.Content containerClasses="z-200 mt-4" contentClasses="bg-green-900">
+                      <Dropdown.Link
+                        href={route("profile.show")}
+                        className="rounded-t-lg bg-green-800 bg-opacity-25 text-white hover:bg-green-800 hover:bg-opacity-50 focus:bg-green-800"
+                      >
+                        Profile
+                      </Dropdown.Link>
+                      <Dropdown.Link
+                        href={route("logout")}
+                        method="post"
+                        as="button"
+                        className="rounded-b-lg bg-green-800 bg-opacity-25 text-white hover:bg-green-800 hover:bg-opacity-50 focus:bg-green-800"
+                      >
                         Log Out
                       </Dropdown.Link>
                     </Dropdown.Content>
@@ -155,7 +165,7 @@ export default function AuthenticatedLayout({ header, children }) {
         </nav>
 
         {header && (
-          <header className="z-100 sticky top-[64px] bg-white shadow">
+          <header className="sticky top-[64px] z-90 bg-white shadow">
             <div className="max-w-100 montserrat-700 bg-green-gradient-horiz mx-auto px-4 py-4 text-lg font-bold leading-tight text-gray-800 sm:px-6 lg:px-8">
               {header}
             </div>
