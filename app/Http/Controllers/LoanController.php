@@ -11,6 +11,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
+use Illuminate\Support\Facades\Log;
 
 class LoanController extends Controller
 {
@@ -94,71 +95,104 @@ class LoanController extends Controller
 
     public function store(Request $request)
     {
-        $request->validate([
-            'loan_type_id' => 'required|exists:loan_types,loan_type_id',
-            'loan_amount' => 'required|numeric|min:0',
-            'loan_term_period' => 'required|numeric|min:1',
-            'loan_term_unit' => 'required|in:days,weeks,months,years',
-            'purpose' => 'required|string|max:500',
-            'loan_files.*' => 'required|file|mimes:jpg,jpeg,png,pdf|max:2048',
-            'loan_files' => 'max:5'
-        ]);
-
-        // Validate loan amount against loan type's range
-        $loanType = LoanType::findOrFail($request->loan_type_id);
-        if ($request->loan_amount < $loanType->min_loan_amount ||
-            $request->loan_amount > $loanType->max_loan_amount) {
-            return back()->withErrors([
-                'loan_amount' => "Loan amount must be between ₱{$loanType->min_loan_amount} and ₱{$loanType->max_loan_amount} for this loan type."
-            ]);
-        }
-
-        // Start a database transaction
-        DB::beginTransaction();
-
         try {
-            $user = Auth::user();
-            // Create the loan record
-            $loan = Loan::create([
-                'borrower_id' => $user->user_id,
-                'loan_type_id' => $request->loan_type_id,
-                'loan_amount' => $request->loan_amount,
-                'loan_term_period' => $request->loan_term_period,
-                'loan_term_unit' => $request->loan_term_unit,
-                'date_applied' => now(),
-                'date_status_changed' => now(),
-                'payment_status' => 'unpaid',
-                'outstanding_balance' => $request->loan_amount, // Initial balance is the loan amount
+            Log::info('Loan application received', [
+                'request_data' => $request->all(),
+                'files' => $request->hasFile('loan_files') ? 'Yes' : 'No'
             ]);
-
-            // Create initial loan status history (pending)
-            LoanStatusHistory::create([
-                'loan_id' => $loan->loan_id,
-                'status' => 'pending',
-                'remarks' => 'Loan application submitted',
-                'changed_by' => $user->user_id
+            $request->validate([
+                'loan_type_id' => 'required|exists:loan_types,loan_type_id',
+                'loan_amount' => 'required|numeric|min:0',
+                'loan_term_period' => 'required|numeric|min:1',
+                'loan_term_unit' => 'required|in:days,weeks,months,years',
+                'purpose' => 'required|string|max:500',
+                'loan_files.*' => 'required|file|mimes:jpg,jpeg,png,pdf|max:2048',
+                'loan_files' => 'max:5'
             ]);
+            Log::info('Validation passed');
 
-            // Handle file uploads
-            if ($request->hasFile('loan_files')) {
-                foreach ($request->file('loan_files') as $file) {
-                    $path = $file->store('loan-files', 'public');
-
-                    LoanFile::create([
-                        'loan_id' => $loan->loan_id,
-                        'file_path' => $path,
-                        'file_type' => $file->getClientOriginalExtension(),
-                        'file_name' => $file->getClientOriginalName(),
-                        'uploaded_by' => $user->user_id
-                    ]);
-                }
+            // Validate loan amount against loan type's range
+            $loanType = LoanType::findOrFail($request->loan_type_id);
+            if ($request->loan_amount < $loanType->min_loan_amount ||
+                $request->loan_amount > $loanType->max_loan_amount) {
+                Log::warning('Loan amount validation failed', [
+                    'amount' => $request->loan_amount,
+                    'min' => $loanType->min_loan_amount,
+                    'max' => $loanType->max_loan_amount
+                ]);
+                return back()->withErrors([
+                    'loan_amount' => "Loan amount must be between ₱{$loanType->min_loan_amount} and ₱{$loanType->max_loan_amount} for this loan type."
+                ]);
             }
 
-            DB::commit();
-            return redirect()->route('dashboard')->with('success', 'Loan application submitted successfully!');
+            // Start a database transaction
+            DB::beginTransaction();
+
+            try {
+                $user = Auth::user();
+                Log::info('Creating loan record for user', ['user_id' => $user->user_id]);
+                // Create the loan record
+                $loan = Loan::create([
+                    'borrower_id' => $user->user_id,
+                    'loan_type_id' => $request->loan_type_id,
+                    'loan_amount' => $request->loan_amount,
+                    'loan_term_period' => $request->loan_term_period,
+                    'loan_term_unit' => $request->loan_term_unit,
+                    'interest_rate' => $request->interest_rate,
+                    'purpose' => $request->purpose,
+                    'purpose_details' => $request->purpose_details,
+                    'date_applied' => now(),
+                    'date_status_changed' => now(),
+                    'payment_status' => 'unpaid',
+                    'outstanding_balance' => $request->loan_amount,
+                ]);
+                Log::info('Loan record created', ['loan_id' => $loan->loan_id]);
+
+                // Create initial loan status history (pending)
+                LoanStatusHistory::create([
+                    'loan_id' => $loan->loan_id,
+                    'status' => 'pending',
+                    'remarks' => 'Loan application submitted',
+                    'changed_by' => $user->user_id
+                ]);
+
+                // Handle file uploads
+                if ($request->hasFile('loan_files')) {
+                    Log::info('Processing file uploads', [
+                        'file_count' => count($request->file('loan_files'))
+                    ]);
+                    foreach ($request->file('loan_files') as $file) {
+                        $path = $file->store('loan-files', 'public');
+                        LoanFile::create([
+                            'loan_id' => $loan->loan_id,
+                            'file_path' => $path,
+                            'file_type' => $file->getClientOriginalExtension(),
+                            'file_name' => $file->getClientOriginalName(),
+                            'uploaded_by' => $user->user_id
+                        ]);
+                    }
+                }
+
+                DB::commit();
+                Log::info('Loan application completed successfully', ['loan_id' => $loan->loan_id]);
+                return redirect()->route('dashboard')->with('success', 'Loan application submitted successfully!');
+            } catch (\Exception $e) {
+                DB::rollBack();
+                Log::error('Error creating loan record', [
+                    'error' => $e->getMessage(),
+                    'trace' => $e->getTraceAsString()
+                ]);
+                return back()->withErrors(['error' => 'Failed to submit loan application. Please try again.']);
+            }
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            Log::warning('Validation failed', ['errors' => $e->errors()]);
+            throw $e;
         } catch (\Exception $e) {
-            DB::rollBack();
-            return back()->withErrors(['error' => 'Failed to submit loan application. Please try again.']);
+            Log::error('Unexpected error', [
+                'error' => $e->getMessage(),
+                'trace' => $e->getTraceAsString()
+            ]);
+            throw $e;
         }
     }
 
