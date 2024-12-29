@@ -8,26 +8,28 @@
 .progress-bar {
   display: flex;
   justify-content: space-around;
-  margin-bottom: 20px;
+  margin-top: 30px;
+  margin-bottom: 30px;
 }
 
 .circle {
   width: 100px;
   text-align: center;
-  padding: 10px;
+
   border-bottom: 3px solid var(--color-gray);
 }
 
 .circle.active {
-  border-color: var(--color-green);
+  border-color: var(--color-dark-green);
 }
 
 .form-container {
-  background: #fff;
+  background: rgba(255, 255, 255, 0.6); /* White background with 0.6 opacity */
   padding: 20px;
   border-radius: 8px;
   box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
   margin-bottom: 20px;
+  margin-top: 20px;
 }
 
 .form-group {
