@@ -100,13 +100,17 @@ class LoanController extends Controller
             'loan_term_period' => 'required|numeric|min:1',
             'loan_term_unit' => 'required|in:days,weeks,months,years',
             'purpose' => 'required|string|max:500',
-            'loan_files.*' => 'required|file|mimes:jpg,jpeg,png,pdf|max:2048'
+            'loan_files.*' => 'required|file|mimes:jpg,jpeg,png,pdf|max:2048',
+            'loan_files' => 'max:5'
         ]);
 
-        // Validate interest rate against loan type's maximum
+        // Validate loan amount against loan type's range
         $loanType = LoanType::findOrFail($request->loan_type_id);
-        if ($request->interest_rate > $loanType->max_interest_rate) {
-            return back()->withErrors(['interest_rate' => 'Interest rate exceeds maximum allowed rate for this loan type.']);
+        if ($request->loan_amount < $loanType->min_loan_amount ||
+            $request->loan_amount > $loanType->max_loan_amount) {
+            return back()->withErrors([
+                'loan_amount' => "Loan amount must be between ₱{$loanType->min_loan_amount} and ₱{$loanType->max_loan_amount} for this loan type."
+            ]);
         }
 
         // Start a database transaction

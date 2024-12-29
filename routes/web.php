@@ -37,7 +37,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/loan-requests', function () {
         return Inertia::render('LoanRequests');
     })->name('loan.requests');
-    Route::get('/member-view', function () {
+    Route::get('/member-dashboard', function () {
         return Inertia::render('MemberView');
     })->name('member.view');
     Route::get('/loan-breakdown', function () {
@@ -47,8 +47,10 @@ Route::middleware('auth')->group(function () {
         return Inertia::render('PaymentPage');
     })->name('payment.page');
     Route::get('/application-form', function () {
-        return Inertia::render('ApplicationForm');
-    })->name('loan.application-form');
+        return Inertia::render('ApplicationForm', [
+            'loanTypes' => LoanType::where('status', 'active')->get()
+        ]);
+    })->name('loan.application');
     Route::post('/application-form', [LoanController::class, 'store'])->name('loan.store');
     Route::get('/success', function () {
         return Inertia::render('SuccessPage');

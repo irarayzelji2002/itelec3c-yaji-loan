@@ -12,6 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('loan_types', function (Blueprint $table) {
+            $table->decimal('min_loan_amount', 15, 2);
             $table->decimal('max_loan_amount', 15, 2);
             $table->decimal('default_interest_rate', 5, 2);
             $table->string('default_loan_term_unit')->default('months');
@@ -28,6 +29,7 @@ return new class extends Migration
     {
         Schema::table('loan_types', function (Blueprint $table) {
             // Drop newly added columns
+            $table->dropColumn('min_loan_amount');
             $table->dropColumn('max_loan_amount');
             $table->dropColumn('default_interest_rate');
             $table->dropColumn('default_loan_term_unit');
