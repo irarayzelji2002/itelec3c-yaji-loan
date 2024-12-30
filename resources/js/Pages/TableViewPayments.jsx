@@ -51,7 +51,7 @@ const TableViewPayments = ({ auth }) => {
       })
       .then((data) => {
         console.log("Successfully parsed JSON:", data);
-        setPayments(response.data);
+        setPayments(data.payments);
         setLoading(false);
       })
       .catch((err) => {
@@ -65,7 +65,6 @@ const TableViewPayments = ({ auth }) => {
   }, [filters, statusUpdateCounter]);
 
   useEffect(() => {
-    setLoading(true);
     fetch("/api/users")
       .then((res) => res.json())
       .then((data) => {
@@ -76,6 +75,10 @@ const TableViewPayments = ({ auth }) => {
         console.error(err);
       });
   }, []);
+
+  useEffect(() => {
+    console.log("loading", loading);
+  }, [loading]);
 
   useEffect(() => {
     console.log("payments:", payments);
@@ -335,7 +338,7 @@ const TableViewPayments = ({ auth }) => {
               data={payments}
               loading={loading}
               showSearch={true}
-              showStatusBar={false}
+              showStatusBar={true}
               itemsPerPage={10}
               defaultSort={{ column: "created_at", direction: "desc" }}
               statusGroups={statusGroups}
