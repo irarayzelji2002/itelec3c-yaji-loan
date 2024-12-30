@@ -11,7 +11,13 @@ export default function PaymentPage({ loan }) {
   const [inputAmount, setInputAmount] = useState("");
   const [warning, setWarning] = useState("");
   const amountDue = parseFloat(loan.outstanding_balance || 0);
+  const InitoutstandingBalance =
+    parseFloat(loan.loan_amount) +
+    parseFloat(loan.loan_amount) * (parseFloat(loan.interest_rate) / 100);
 
+  const outstandingBalance =
+    parseFloat(loan.outstanding_balance) +
+    parseFloat(loan.loan_amount) * (parseFloat(loan.interest_rate) / 100);
   useEffect(() => {
     // Fetch all loans for the user and calculate the total outstanding balance
     axios
@@ -34,10 +40,12 @@ export default function PaymentPage({ loan }) {
     const amount = parseFloat(inputAmount);
     if (amount > walletBalance) {
       setWarning("Insufficient Balance");
+    } else if (amount > outstandingBalance) {
+      setWarning(`Amount exceeds the outstanding balance of ₱${outstandingBalance.toFixed(2)}`);
     } else {
       setWarning("");
     }
-  }, [inputAmount, walletBalance]);
+  }, [inputAmount, walletBalance, outstandingBalance]);
 
   const calculateDueDate = (dateApplied) => {
     const appliedDate = new Date(dateApplied);
@@ -75,6 +83,8 @@ export default function PaymentPage({ loan }) {
     const amount = parseFloat(inputAmount);
     if (amount > walletBalance) {
       setWarning("Insufficient Balance");
+    } else if (amount > outstandingBalance) {
+      setWarning(`Amount exceeds the outstanding balance of ₱${outstandingBalance.toFixed(2)}`);
     } else {
       axios
         .post(route("payment.store"), {
@@ -113,7 +123,7 @@ export default function PaymentPage({ loan }) {
     loan.loan_term_period,
     loan.loan_term_unit
   );
-  const monthlyPayment = calculateMonthlyPayment(loan.loan_amount, loan.loan_term_period);
+  const monthlyPayment = calculateMonthlyPayment(InitoutstandingBalance, loan.loan_term_period);
 
   console.log("User props:", user);
   console.log("Loan props:", loan);
@@ -153,7 +163,7 @@ export default function PaymentPage({ loan }) {
               <div>
                 <div className="request-row">
                   <div className="request-label">Amount Due: </div>
-                  <div className="request-value"> &nbsp;₱{amountDue.toFixed(2)}</div>
+                  <div className="request-value"> &nbsp;₱{outstandingBalance.toFixed(2)}</div>
                 </div>
                 <div className="request-row" style={{ marginBottom: "0" }}>
                   <div className="request-label">Due on : </div>
