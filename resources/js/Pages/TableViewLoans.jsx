@@ -122,6 +122,17 @@ export default function TableViewLoans() {
       ),
     },
     {
+      id: "payment_frequency",
+      label: "Payment Frequency",
+      sortable: true,
+      minWidth: "120px",
+      render: (loan) => (
+        <span className="flex flex-grow justify-center">
+          {underscoreToTitleCase(loan.payment_frequency)}
+        </span>
+      ),
+    },
+    {
       id: "interest_rate",
       label: "Interest Rate",
       sortable: true,
@@ -228,7 +239,10 @@ export default function TableViewLoans() {
           <select
             className="min-w-[140px] rounded-lg border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:border-green-700 focus:outline-none focus:ring-2 focus:ring-green-600 focus:ring-offset-2"
             onChange={(e) => handleChangeStatus(loan, e.target.value)}
-            onClick={(e) => e.stopPropagation()}
+            onClick={(e) => {
+              e.stopPropagation();
+              setSelectedLoan(loan);
+            }}
             disabled={disableChangeStatusBtn}
             value={loan.current_status}
           >
@@ -411,13 +425,10 @@ export default function TableViewLoans() {
       id: "remaining_time_before_next_due",
       label: "Remaining Time Before Next Due",
       sortable: true,
-      type: "date",
       minWidth: "150px",
       render: (loan) => (
         <span className="flex flex-grow justify-end">
-          {loan.remaining_time_before_next_due
-            ? new Date(loan.remaining_time_before_next_due).toLocaleDateString()
-            : "-"}
+          {loan.remaining_time_before_next_due || "-"}
         </span>
       ),
     },
@@ -451,13 +462,10 @@ export default function TableViewLoans() {
       id: "remaining_time_before_final_due",
       label: "Remaining Time Before Final Due",
       sortable: true,
-      type: "date",
       minWidth: "150px",
       render: (loan) => (
         <span className="flex flex-grow justify-end">
-          {loan.remaining_time_before_final_due
-            ? new Date(loan.remaining_time_before_final_due).toLocaleDateString()
-            : "-"}
+          {loan.remaining_time_before_final_due || "-"}
         </span>
       ),
     },
@@ -686,7 +694,10 @@ export default function TableViewLoans() {
             <select
               className="min-w-[140px] rounded-lg border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:border-green-700 focus:outline-none focus:ring-2 focus:ring-green-600 focus:ring-offset-2"
               onChange={(e) => handleChangeStatus(loan, e.target.value)}
-              onClick={(e) => e.stopPropagation()}
+              onClick={(e) => {
+                e.stopPropagation();
+                setSelectedLoan(loan);
+              }}
               disabled={disableChangeStatusBtn}
               value={loan.current_status}
             >

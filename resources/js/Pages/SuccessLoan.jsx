@@ -18,7 +18,7 @@ export default function LoanApplicationForm() {
     interestRate: 0,
     loanTerm: "-",
     paymentFrequency: "-",
-    monthlyPayment: 0,
+    periodicPayment: 0,
     numberOfPayments: 0,
     totalPayback: 0,
     estimatedApprovalDate: "-",
@@ -45,7 +45,7 @@ export default function LoanApplicationForm() {
         interestRate: loanData?.interestRate || 0,
         loanTerm: loanData?.loanTerm || "-",
         paymentFrequency: loanData?.paymentFrequency || "-",
-        monthlyPayment: loanData?.monthlyPayment || 0,
+        periodicPayment: loanData?.periodicPayment || 0,
         numberOfPayments: loanData?.numberOfPayments || 0,
         totalPayback: loanData?.totalPayback || 0,
         estimatedApprovalDate: loanData?.estimatedApprovalDate || "-",
@@ -234,11 +234,11 @@ export default function LoanApplicationForm() {
                   <span className="text-gray-600">{summaryData?.interestRate}%</span>
                 </li>
                 <li className="flex justify-between">
-                  <span className="font-medium text-gray-800">Monthly Payment</span>
+                  <span className="font-medium text-gray-800">Periodic Payment</span>
                   <span className="text-gray-600">
                     ₱
-                    {summaryData?.monthlyPayment
-                      ? numberWithCommas(summaryData?.monthlyPayment.toFixed(2))
+                    {summaryData?.periodicPayment
+                      ? numberWithCommas(summaryData?.periodicPayment.toFixed(2))
                       : ""}
                   </span>
                 </li>
