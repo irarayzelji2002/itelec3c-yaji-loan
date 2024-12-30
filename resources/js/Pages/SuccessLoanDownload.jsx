@@ -1,6 +1,6 @@
 import PrimaryButton from "@/Components/PrimaryButton";
 import SecondaryButton from "@/Components/SecondaryButton";
-import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
+import MemberLayout from "@/Layouts/MemberLayout";
 import { Head } from "@inertiajs/react";
 import { useState } from "react";
 
@@ -8,7 +8,7 @@ export default function SuccessLoanDownload() {
   const [selectedLoanType, setSelectedLoanType] = useState(null);
 
   return (
-    <AuthenticatedLayout>
+    <MemberLayout>
       <Head title="Success Loan" />
       <div className="flex min-h-screen items-center justify-center bg-gradient-to-b from-green-50 to-white">
         <div className="w-full max-w-md rounded-lg bg-white p-6 shadow-lg">
@@ -89,6 +89,6 @@ export default function SuccessLoanDownload() {
           </div>
         </div>
       </div>
-    </AuthenticatedLayout>
+    </MemberLayout>
   );
 }

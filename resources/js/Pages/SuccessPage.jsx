@@ -1,11 +1,11 @@
 import PrimaryButton from "@/Components/PrimaryButton";
 import SecondaryButton from "@/Components/SecondaryButton";
-import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
+import MemberLayout from "@/Layouts/MemberLayout";
 import { Head } from "@inertiajs/react";
 
 export default function SuccessPage() {
   return (
-    <AuthenticatedLayout>
+    <MemberLayout>
       <Head title="Loan Payment Success" />
       <div className="flex min-h-screen items-center justify-center bg-gradient-to-b from-green-50 to-white">
         <div className="w-full max-w-md rounded-lg bg-white p-6 shadow-lg">
@@ -69,6 +69,6 @@ export default function SuccessPage() {
           </div>
         </div>
       </div>
-    </AuthenticatedLayout>
+    </MemberLayout>
   );
 }
