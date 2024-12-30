@@ -1,23 +1,54 @@
 import Checkbox from "@/Components/Checkbox";
 import InputError from "@/Components/InputError";
 import InputLabel from "@/Components/InputLabel";
+import PassInput from "@/Components/PassInput";
+import PrimaryButton from "@/Components/PrimaryButton";
 import TextInput from "@/Components/TextInput";
 import GuestLayout from "@/Layouts/GuestLayout";
+import { clearFieldError } from "@/utils/formFunctions";
 import { Head, Link, useForm } from "@inertiajs/react";
+import { useState } from "react";
 
 export default function Login({ status, canResetPassword }) {
-  const { data, setData, post, processing, errors, reset } = useForm({
+  const {
+    data,
+    setData,
+    post,
+    processing,
+    errors: serverErrors,
+    setError: setServerError,
+    reset,
+  } = useForm({
     email: "",
     password: "",
     remember: false,
   });
+  const [errors, setErrors] = useState({});
 
-  const submit = (e) => {
+  const submit = async (e) => {
     e.preventDefault();
 
-    post(route("login"), {
-      onFinish: () => reset("password"),
-    });
+    try {
+      await post(route("login"), {
+        onSuccess: () => {
+          reset("password");
+          console.log("Login success");
+        },
+        onError: (errors) => {
+          reset("password");
+          console.log("Login onError:", errors);
+          if (errors.message) {
+            setError("email", errors.message);
+          }
+        },
+        onFinish: () => {
+          reset("password");
+          console.log("Login onFinish");
+        },
+      });
+    } catch (error) {
+      console.error("Login catched error:", error);
+    }
   };
 
   return (
@@ -29,7 +60,6 @@ export default function Login({ status, canResetPassword }) {
       <form onSubmit={submit}>
         <div>
           <InputLabel htmlFor="email" value="Email" />
-
           <TextInput
             id="email"
             type="email"
@@ -38,26 +68,30 @@ export default function Login({ status, canResetPassword }) {
             className="mt-1 block w-full border-green-900"
             autoComplete="username"
             isFocused={true}
-            onChange={(e) => setData("email", e.target.value)}
+            onChange={(e) => {
+              setData("email", e.target.value);
+              clearFieldError("email", setErrors);
+              setServerError("email", "");
+            }}
           />
-
-          <InputError message={errors.email} className="mt-2" />
+          <InputError message={serverErrors.email || errors.email} className="mt-2" />
         </div>
 
         <div className="mt-4">
           <InputLabel htmlFor="password" value="Password" />
-
-          <TextInput
+          <PassInput
             id="password"
-            type="password"
             name="password"
             value={data.password}
             className="mt-1 block w-full border-green-900"
             autoComplete="current-password"
-            onChange={(e) => setData("password", e.target.value)}
+            onChange={(e) => {
+              setData("password", e.target.value);
+              clearFieldError("password", setErrors);
+              setServerError("password", "");
+            }}
           />
-
-          <InputError message={errors.password} className="mt-2" />
+          <InputError message={serverErrors.password || errors.password} className="mt-2" />
         </div>
 
         <div className="mt-4 block" style={{ display: "flex", justifyContent: "space-between" }}>
@@ -65,7 +99,11 @@ export default function Login({ status, canResetPassword }) {
             <Checkbox
               name="remember"
               checked={data.remember}
-              onChange={(e) => setData("remember", e.target.checked)}
+              onChange={(e) => {
+                setData("remember", e.target.checked);
+                clearFieldError("remember", setErrors);
+                setServerError("remember", "");
+              }}
             />
             <span className="ms-2 text-sm text-gray-600">Remember me</span>
           </label>{" "}
@@ -79,13 +117,11 @@ export default function Login({ status, canResetPassword }) {
           )}
         </div>
 
+        <InputError message={serverErrors.general || errors.general} className="mt-2" />
+
         <div className="center-column">
-          <button
+          <PrimaryButton
             style={{
-              backgroundColor: "var(--color-light-green)",
-              color: "black",
-              padding: "10px 20px",
-              borderRadius: "5px",
               width: "100%",
               marginLeft: "0px",
               marginTop: "20px",
@@ -94,7 +130,7 @@ export default function Login({ status, canResetPassword }) {
             disabled={processing}
           >
             Login
-          </button>
+          </PrimaryButton>
 
           <span className="ms-2 text-sm text-gray-600" style={{ marginTop: "20px" }}>
             Don't have an account?{" "}

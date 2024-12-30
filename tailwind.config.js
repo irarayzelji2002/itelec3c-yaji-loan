@@ -26,6 +26,7 @@ export default {
           600: "#62E19E", // Emerald (lighter 1)
           700: "#57DF98", // Emerald (lighter 2)
           800: "#38b876", // Emerald (darker)
+          850: "#25975c", // Emerald (darker 2)
           900: "#043C3C", // Midnight green
         },
       },

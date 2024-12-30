@@ -6,10 +6,10 @@ function TermsOfService({ auth }) {
     <div>
       <Head title="Terms of Service" />
       <Navbar auth={auth} />
-      <section className="container">
+      <section className="container-1">
         <div className="content">
           <h1 className="heading" style={{ fontSize: "4rem" }}>
-            Terms & <span className="subheading">Conditions</span>
+            Terms of<span className="subheading"> Service</span>
           </h1>
           <p className="description">
             Welcome to YAJI Loan App. By using our services, you agree to comply with the following

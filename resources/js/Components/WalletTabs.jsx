@@ -1,21 +1,30 @@
 import { useState } from "react";
 
-const WalletTabs = () => {
+const WalletTabs = ({ loans }) => {
   const [activeTab, setActiveTab] = useState("loan");
+
+  const totalLoanAmount = loans.reduce((sum, loan) => sum + (parseFloat(loan.loan_amount) || 0), 0);
+  const totalWallet = loans.reduce(
+    (sum, loan) => sum + (parseFloat(loan.outstanding_balance) || 0),
+    0
+  );
+  const usedAmount = loans.length;
 
   const renderContent = () => {
     if (activeTab === "loan") {
       return (
         <div className="tab-content">
-          <h3>BORROW UP TO</h3>
-          <h1>₱ 0.00</h1>
+          <h3>Your overall loan is</h3>
+          <h1>₱ {totalLoanAmount.toFixed(2)}</h1>
           <h2>Fully pay your loans to borrow again!</h2>
         </div>
       );
     } else if (activeTab === "wallet") {
       return (
         <div className="tab-content">
-          <p>Fully pay your loans to borrow again!</p>
+          <h3>Your Wallet Amount is</h3>
+          <h1>₱ {totalWallet.toFixed(2)}</h1>
+          <h2>Fully pay your loans to borrow again!</h2>
         </div>
       );
     }

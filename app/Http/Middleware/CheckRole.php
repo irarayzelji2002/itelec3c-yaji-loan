@@ -6,9 +6,11 @@ use Illuminate\Http\Request;
 
 class CheckRole
 {
-    public function handle(Request $request, Closure $next, $role)
+    public function handle(Request $request, Closure $next, ...$roles)
     {
-        if (!$request->user() || !$request->user()->hasRole($role)) {
+        if (!$request->user() || !collect($roles)->contains(function($role) use ($request) {
+            return $request->user()->hasRole($role);
+        })) {
             abort(403, 'Unauthorized action.');
         }
 

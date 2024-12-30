@@ -1,18 +1,42 @@
+import ErrorBoundary from "@/Components/ErrorBoundary";
 import MyLoan from "@/Components/MyLoan";
 import ProgressBar from "@/Components/ProgressBar";
 import Reminders from "@/Components/Reminders";
 import TertiaryButton from "@/Components/TertiaryButton";
 import WalletTabs from "@/Components/WalletTabs";
-import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
+import MemberLayout from "@/Layouts/MemberLayout";
 import { Head, usePage } from "@inertiajs/react";
+import axios from "axios";
+import { useEffect, useState } from "react";
 
 export default function MemberView() {
   const user = usePage().props.auth.user;
-  console.log("User props:", user);
-  console.log("user?.roles:", user?.roles);
+  const [loans, setLoans] = useState([]);
+  const [totalLoanAmount, setTotalLoanAmount] = useState(0);
+
+  useEffect(() => {
+    axios
+      .get(route("user.loans"))
+      .then((response) => {
+        console.log("API response:", response.data);
+        const loans = response.data.loans || [];
+        setLoans(loans);
+
+        const totalLoanAmount = loans.reduce((sum, loan) => {
+          const outstandingBalance =
+            parseFloat(loan.outstanding_balance) +
+            parseFloat(loan.loan_amount) * (parseFloat(loan.interest_rate) / 100);
+          return sum + (outstandingBalance || 0);
+        }, 0);
+        setTotalLoanAmount(totalLoanAmount);
+      })
+      .catch((error) => {
+        console.error("Error fetching loans:", error);
+      });
+  }, []);
 
   return (
-    <AuthenticatedLayout>
+    <MemberLayout>
       <Head title="Dashboard" />
       <div className="py-12">
         <div className="max-w-100 mx-auto sm:px-6 lg:px-8">
@@ -28,14 +52,15 @@ export default function MemberView() {
             </TertiaryButton>
           </div>
           <div className="center-column">
-            <WalletTabs />
+            <WalletTabs loans={loans} />
           </div>
-          <ProgressBar percentage={50} label={1} usedAmount={10000} />
-          <MyLoan loanNo={1} />
-          <MyLoan loanNo={2} />
-          <MyLoan loanNo={3} />
+          <ProgressBar percentage={50} label={loans.length} usedAmount={totalLoanAmount} />
+          <ErrorBoundary>
+            {loans.map((loan) => (
+              <MyLoan key={loan.loan_id} loan={loan} />
+            ))}
+          </ErrorBoundary>
           <div className="column-down">
-            {" "}
             <h2>Reminders</h2>
             <div className="reminders-container">
               <Reminders
@@ -52,6 +77,6 @@ export default function MemberView() {
           </div>
         </div>
       </div>
-    </AuthenticatedLayout>
+    </MemberLayout>
   );
 }

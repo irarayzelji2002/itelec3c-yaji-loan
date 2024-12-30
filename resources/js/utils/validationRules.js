@@ -1,3 +1,14 @@
+export const validateDateIsBeforeToday = (dateString) => {
+  const inputDate = new Date(dateString); // Parse input date
+  const today = new Date(); // Get today's date
+
+  // Remove time components for accurate comparison
+  inputDate.setHours(0, 0, 0, 0);
+  today.setHours(0, 0, 0, 0);
+
+  return inputDate < today; // Returns true if inputDate is before today
+};
+
 export const validateStep1 = (data) => {
   const errors = {};
 
@@ -6,6 +17,8 @@ export const validateStep1 = (data) => {
   if (!data.last_name) errors.last_name = "Last name is required";
   if (!data.gender) errors.gender = "Gender is required";
   if (!data.birth_date) errors.birth_date = "Birth date is required";
+  else if (!validateDateIsBeforeToday(data.birth_date))
+    errors.birth_date = "The date must be a date before today.";
   if (!data.nationality) errors.nationality = "Nationality is required";
 
   // Contact Information validation
@@ -36,8 +49,8 @@ export const validateStep1 = (data) => {
 export const validateStep2 = (data, selectedType) => {
   const errors = {};
 
-  if (!data.verification_type) {
-    errors.verification_type = "Please select a verification type";
+  if (!data.verification_type_id) {
+    errors.verification_type_id = "Please select a verification type";
   }
 
   if (selectedType?.is_pdf) {

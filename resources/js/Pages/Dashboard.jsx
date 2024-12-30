@@ -24,10 +24,23 @@ export default function Dashboard() {
             </TertiaryButton>
           </div>
           <div className="center-column">
-            <TableContainer table={"Loan Table"} img={"/img/loan-table.png"} />
-            <TableContainer table={"Member Table"} img={"/img/member-table.png"} />
-            <TableContainer table={"Payment Table"} img={"/img/payment-table.png"} />
-            <TableContainer table={"Loan Type Table"} img={"/img/loan-type-table.png"} />
+            <TableContainer table="Loans Table" img="/img/loan-table.png" link="/loans-table" />
+            <TableContainer
+              table="Payments Table"
+              img="/img/payment-table.png"
+              link="/payments-table"
+            />
+            <TableContainer table="Members Table" img="/img/member-table.png" link="/users-table" />
+            {/* <TableContainer
+              table="Loan Types Table"
+              img="/img/loan-type-table.png"
+              link="/users-table"
+            />
+            <TableContainer
+              table="Verification Types Table"
+              img="/img/verification-type.png"
+              link="/users-table"
+            /> */}
           </div>
         </div>
       </div>

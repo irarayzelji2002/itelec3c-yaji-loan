@@ -4,6 +4,7 @@ use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use App\Models\User;
 use App\Models\LoanType;
+use App\Models\Loan;
 use App\Models\Payment;
 use App\Http\Controllers\ViewTable;
 use App\Http\Controllers\UserController;
@@ -11,6 +12,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\LoanController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\LoanTypeController;
+use App\Http\Controllers\Auth\RegisteredUserController;
 use Inertia\Inertia;
 use Illuminate\Support\Facades\Auth;
 
@@ -21,7 +23,7 @@ Route::get('/', function () {
         'laravelVersion' => Application::VERSION,
         'phpVersion' => PHP_VERSION,
     ]);
-});
+})->name('home');
 
 Route::get('/dashboard', function () {
     return Inertia::render('Dashboard');
@@ -36,18 +38,24 @@ Route::middleware('auth')->group(function () {
     Route::get('/loan-requests', function () {
         return Inertia::render('LoanRequests');
     })->name('loan.requests');
-    Route::get('/member-view', function () {
+    Route::get('/member-dashboard', function () {
         return Inertia::render('MemberView');
-    })->name('member.view');
-    Route::get('/loan-breakdown', function () {
-        return Inertia::render('LoanBreakdown');
+    })->name('member.dashboard');
+    Route::get('/loan-breakdown/{loan_id}', function ($loan_id) {
+        $loan = Loan::with(['borrower', 'loanType', 'statusHistory', 'loanFiles'])
+                    ->findOrFail($loan_id);
+        return Inertia::render('LoanBreakdown', ['loan' => $loan]);
     })->name('loan.breakdown');
-    Route::get('/payment', function () {
-        return Inertia::render('PaymentPage');
+    Route::get('/payment/{loan_id}', function ($loan_id) {
+        $loan = Loan::findOrFail($loan_id);
+        return Inertia::render('PaymentPage', ['loan' => $loan]);
     })->name('payment.page');
     Route::get('/application-form', function () {
-        return Inertia::render('ApplicationForm');
-    })->name('application.form');
+        return Inertia::render('ApplicationForm', [
+            'loanTypes' => LoanType::where('status', 'active')->get()
+        ]);
+    })->name('loan.application');
+    Route::post('/application-form', [LoanController::class, 'store'])->name('loan.store');
     Route::get('/success', function () {
         return Inertia::render('SuccessPage');
     })->name('success.page');
@@ -60,24 +68,59 @@ Route::middleware('auth')->group(function () {
     Route::get('/employee-form', function () {
         return Inertia::render('EmployeeForm');
     })->name('employee.form');
+    Route::get('/my-loans', [LoanController::class, 'getUserLoans'])->name('user.loans');
+    Route::post('/payment', [PaymentController::class, 'store'])->name('payment.store');
 
     // API routes (starts with /api)
     Route::prefix('api')->group(function () {
         Route::get('/users', function () {
-            // abort_if(!Auth::user()->hasRole('admin'), 403);
-            return User::with('roles')->get();
+            return User::with(['roles', 'verificationType'])->get();
         });
 
-        // Admin only routes (starts with /api/admin)
-        Route::middleware(['role:admin'])->prefix('admin')->group(function () {
-            Route::put('/users/{id}/verification-status', [UserController::class, 'updateVerificationStatus']);
-            Route::put('/users/{id}/role', [UserController::class, 'updateRole']);
+        Route::get('/loans/{loan_id}/files', [LoanController::class, 'getLoanFiles'])->name('loans.files');
+        Route::get('/loans/{loan}/status-history', [LoanController::class, 'getStatusHistory'])->name('loans.status-history');
+
+        // Admin/Employee only routes (starts with /api/employee)
+        Route::middleware(['role:admin,employee'])->prefix('employee')->group(function () {
+            Route::get('/loans', [LoanController::class, 'index'])->name('loans.index');
+            Route::get('/payments', [PaymentController::class, 'index'])->name('payments.index');
+            Route::get('/payments/{payment}', [PaymentController::class, 'show']);
+            Route::get('/users', function () {
+                return User::with(['roles', 'verificationType'])->get();
+            });
+            Route::put('/users/{user_id}/verification-status', [UserController::class, 'updateVerificationStatus']);
+            Route::put('/users/{user_id}/role', [UserController::class, 'updateRole']);
+            Route::post('/register-employee', [RegisteredUserController::class, 'storeEmployee'])->name('register.employee');
+            Route::put('/loans/{loan_id}/status', [LoanController::class, 'updateStatus'])->name('loans.update-status');
         });
 
-        // Member only routes (starts with /api/member)
-        Route::middleware(['role:member'])->prefix('member')->group(function () {
-            // Add member only routes here
-        });
+        // Add this route to fetch loans
+        Route::get('/my-loans', [LoanController::class, 'index'])->name('myloans.index');
+    });
+
+    // Role page routes
+    // Admin/Employee only page routes
+    Route::middleware(['role:admin,employee,member'])->group(function () {
+        Route::get('/users-table', function () {
+            return Inertia::render('TableViewUsers');
+        })->name('view.users-table');
+        Route::get('/loans-table', function () {
+            $loans = Loan::with([
+                'borrower:user_id,first_name,middle_name,last_name',
+                'loanType:loan_type_id,loan_type_name,is_amortized',
+                'approvedBy:user_id,first_name,middle_name,last_name',
+                'disbursedBy:user_id,first_name,middle_name,last_name',
+                'statusHistory',
+                'loanFiles'
+            ])->get();
+
+            return Inertia::render('TableViewLoans', [
+                'loans' => $loans
+            ]);
+        })->name('view.loans-table');
+        Route::get('/payments-table', function () {
+            return Inertia::render('TableViewPayments');
+        })->name('view.payments-table');
     });
 });
 
@@ -86,20 +129,12 @@ Route::get('/loans', [LoanController::class, 'index'])->name('loans.index');
 Route::get('/payments', [PaymentController::class, 'index'])->name('payments.index');
 Route::get('/loan-types', [LoanTypeController::class, 'index'])->name('loan-types.index');
 
+// Public routes
 Route::get('/landing', [ViewTable::class, 'showLanding']);
 Route::get('/signUp', [ViewTable::class, 'register']);
-
-// Add the new route for TableView
-Route::get('/table-view', function () {
-    return Inertia::render('TableView');
-})->middleware(['auth', 'verified'])->name('table.view');
-
-// Add the new route for Terms of Service page
 Route::get('/terms-of-service', function () {
     return Inertia::render('TermsofService');
 })->name('terms.of.service');
-
-// Add the new route for Privacy Policy page
 Route::get('/privacy-policy', function () {
     return Inertia::render('PrivacyPolicy');
 })->name('privacy.policy');

@@ -1,10 +1,12 @@
 const ProgressBar = ({ percentage, label, usedAmount }) => {
+  const formattedUsedAmount = parseFloat(usedAmount || 0).toFixed(2);
+
   return (
     <div className="progress-bar-container">
       {/* Label and Used Amount */}
       <div className="column-down">
-        <h1>{label} Loan Available</h1>
-        <h2>₱ {usedAmount} used</h2>
+        <h1>{label} Loans Made</h1>
+        <h2>₱ {formattedUsedAmount} left to pay</h2>
       </div>
 
       {/* Progress Bar */}

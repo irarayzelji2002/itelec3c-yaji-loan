@@ -35,7 +35,7 @@ const Register = ({ verificationTypes = [] }) => {
     province: "",
 
     // Verification
-    verification_type: "",
+    verification_type_id: "",
     id_photo_front: null,
     id_photo_back: null,
     id_file: null,
@@ -50,7 +50,7 @@ const Register = ({ verificationTypes = [] }) => {
     security_answer_2: "",
   };
 
-  const { data, setData, post, processing, errors } = useForm(blankData);
+  const { data, setData, post, processing, errors, setError } = useForm(blankData);
 
   const handleSubmit = () => {
     const formData = new FormData();
@@ -126,6 +126,7 @@ const Register = ({ verificationTypes = [] }) => {
           data={data}
           setData={setData}
           errors={errors}
+          setError={setError}
           onNext={handleNext}
           onCancel={handleCancel}
         />
@@ -135,6 +136,7 @@ const Register = ({ verificationTypes = [] }) => {
           data={data}
           setData={setData}
           errors={errors}
+          setError={setError}
           onNext={handleNext}
           onBack={handleBack}
           onCancel={handleCancel}
@@ -150,6 +152,7 @@ const Register = ({ verificationTypes = [] }) => {
           data={data}
           setData={setData}
           errors={errors}
+          setError={setError}
           onNext={handleNext}
           onBack={handleBack}
           onCancel={handleCancel}

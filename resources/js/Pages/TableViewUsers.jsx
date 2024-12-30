@@ -1,5 +1,6 @@
 // resources/js/Pages/TableView.jsx
 import DangerButton from "@/Components/DangerButton";
+import IconButton from "@/Components/IconButton";
 import Modal from "@/Components/Modal";
 import PrimaryButton from "@/Components/PrimaryButton";
 import Table from "@/Components/Table";
@@ -17,6 +18,11 @@ export default function UsersTableView() {
   const [disableAcceptBtn, setDisableAcceptBtn] = useState(false);
   const [disableDenyBtn, setDisableDenyBtn] = useState(false);
   const [disableRoleBtn, setDisableRoleBtn] = useState(false);
+  const [isDetailsExpanded, setIsDetailsExpanded] = useState(false);
+  const [filters, setFilters] = useState({
+    verificationStatus: "all_verification",
+    role: "all_roles",
+  });
 
   useEffect(() => {
     setLoading(true);
@@ -24,13 +30,14 @@ export default function UsersTableView() {
       .then((res) => res.json())
       .then((data) => {
         setUsers(data);
+        console.log("Users:", data);
         setLoading(false);
       })
       .catch((err) => {
         console.error(err);
         setLoading(false);
       });
-  }, []);
+  }, [filters]);
 
   const columns = [
     {
@@ -90,9 +97,23 @@ export default function UsersTableView() {
       id: "created_at",
       label: "Created At",
       sortable: true,
+      type: "timestamp",
       minWidth: "130px",
       render: (user) =>
         new Date(user.created_at).toLocaleString("en-US", {
+          dateStyle: "short",
+          timeStyle: "short",
+          hour12: true,
+        }),
+    },
+    {
+      id: "updated_at",
+      label: "Updated At",
+      sortable: true,
+      type: "timestamp",
+      minWidth: "130px",
+      render: (user) =>
+        new Date(user.updated_at).toLocaleString("en-US", {
           dateStyle: "short",
           timeStyle: "short",
           hour12: true,
@@ -122,6 +143,7 @@ export default function UsersTableView() {
       id: "phone_number",
       label: "Phone",
       sortable: true,
+      type: "number",
       minWidth: "120px",
     },
     {
@@ -159,6 +181,7 @@ export default function UsersTableView() {
       label: "Verification",
       sortable: true,
       minWidth: "120px",
+      render: (user) => user.verificationType?.valid_id || "-",
     },
     {
       id: "id_photo_front",
@@ -304,56 +327,76 @@ export default function UsersTableView() {
     },
   ];
 
-  const statuses = [
-    {
-      id: "pending",
-      label: "Pending",
-      column: "verification_status",
-      comparison: "===",
-      color: "black",
-      bgColor: "#FFD563",
+  const statusGroups = {
+    verificationStatus: {
+      label: "Verification Status",
+      defaultSelected: "all_verification",
+      statuses: [
+        {
+          id: "all_verification",
+          label: "All",
+          column: "verification_status",
+          color: "black",
+          bgColor: "#c4c4c4",
+        },
+        {
+          id: "pending",
+          label: "Pending",
+          column: "verification_status",
+          color: "black",
+          bgColor: "#FFD563",
+        },
+        {
+          id: "verified",
+          label: "Verified",
+          column: "verification_status",
+          color: "black",
+          bgColor: "#7FE5B0",
+        },
+        {
+          id: "denied",
+          label: "Denied",
+          column: "verification_status",
+          color: "black",
+          bgColor: "#FF7D7D",
+        },
+      ],
     },
-    {
-      id: "verified",
-      label: "verified",
-      column: "verification_status",
-      comparison: "===",
-      color: "black",
-      bgColor: "#7FE5B0",
+    role: {
+      label: "Role",
+      defaultSelected: "all_roles",
+      statuses: [
+        {
+          id: "all_roles",
+          label: "All",
+          column: "role_name",
+          color: "black",
+          bgColor: "#c4c4c4",
+        },
+        {
+          id: "member",
+          label: "Member",
+          column: "role_name",
+          color: "black",
+          bgColor: "#62E19E",
+        },
+        {
+          id: "employee",
+          label: "Employee",
+          column: "role_name",
+          color: "white",
+          bgColor: "#31896b",
+        },
+        {
+          id: "admin",
+          label: "Admin",
+          column: "role_name",
+          color: "white",
+          bgColor: "#043C3C",
+        },
+      ],
     },
-    {
-      id: "denied",
-      label: "Denied",
-      column: "verification_status",
-      comparison: "===",
-      color: "black",
-      bgColor: "#FF7D7D",
-    },
-    {
-      id: "member",
-      label: "Member",
-      column: "role_name",
-      comparison: "===",
-      color: "black",
-      bgColor: "#62E19E",
-    },
-    {
-      id: "employee",
-      label: "Employee",
-      column: "role_name",
-      comparison: "===",
-      color: "black",
-      bgColor: "#38b876",
-    },
-    {
-      id: "admin",
-      label: "Admin",
-      column: "role_name",
-      comparison: "===",
-      color: "white",
-      bgColor: "#043C3C",
-    },
-  ];
+  };
 
   const actions = [
     {
@@ -420,6 +463,10 @@ export default function UsersTableView() {
     setShowModal(false);
   };
 
+  const handleFilterChange = (newFilters) => {
+    setFilters(newFilters);
+  };
+
   const handleChangeVerificationStatus = async (user, new_verification_status) => {
     try {
       setSelectedUser(user);
@@ -429,8 +476,8 @@ export default function UsersTableView() {
       const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute("content");
       if (!csrfToken) throw new Error("CSRF token not found");
 
-      console.log(`Sending request to: /api/admin/users/${user.id}/verification-status`);
-      const response = await fetch(`/api/admin/users/${user.id}/verification-status`, {
+      console.log(`Sending request to: /api/employee/users/${user.user_id}/verification-status`);
+      const response = await fetch(`/api/employee/users/${user.user_id}/verification-status`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
@@ -450,10 +497,14 @@ export default function UsersTableView() {
 
       setUsers((prevUsers) =>
         prevUsers.map((u) =>
-          u.id === user.id ? { ...u, verification_status: new_verification_status } : u
+          u.user_id === user.user_id ? { ...u, verification_status: new_verification_status } : u
         )
       );
-      showToast("success", `User verification ${new_verification_status} successfully`);
+      showToast(
+        "success",
+        `User "${user.full_name}"'s verification status changed to ${new_verification_status}`,
+        5000
+      );
     } catch (error) {
       console.error("Error:", error);
       showToast("error", error.message);
@@ -474,10 +525,10 @@ export default function UsersTableView() {
       const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute("content");
       if (!csrfToken) throw new Error("CSRF token not found");
 
-      console.log("Making request to:", `/api/admin/users/${user.id}/role`);
+      console.log("Making request to:", `/api/employee/users/${user.user_id}/role`);
       console.log("CSRF Token:", csrfToken);
 
-      const response = await fetch(`/api/admin/users/${user.id}/role`, {
+      const response = await fetch(`/api/employee/users/${user.user_id}/role`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
@@ -501,7 +552,7 @@ export default function UsersTableView() {
 
       // Update both the users list and the selected user
       const updatedUser = { ...user, role_name: new_role };
-      setUsers((prevUsers) => prevUsers.map((u) => (u.id === user.id ? updatedUser : u)));
+      setUsers((prevUsers) => prevUsers.map((u) => (u.id === user.user_id ? updatedUser : u)));
       setSelectedUser(updatedUser);
       showToast("success", `User role changed to ${new_role} successfully`);
     } catch (error) {
@@ -513,14 +564,31 @@ export default function UsersTableView() {
   };
 
   return (
-    <AuthenticatedLayout>
-      <Head title="Dashboard" />
-      <button onClick={() => showToast("success", "Test Success")}>Click for Toast Success</button>
-      <button onClick={() => showToast("error", "Test Error")}>Click for Toast Error</button>
-      <button onClick={() => showToast("info", "Test Info")}>Click for Toast Info</button>
-      <div className="py-12">
+    <AuthenticatedLayout
+      header={
+        <div className="flex items-center justify-between gap-2 sm:flex-row">
+          <h2>Users Table</h2>
+          <TertiaryButton
+            onClick={() => (window.location.href = "/employee-form")}
+            className="whitespace-nowrap"
+          >
+            <i className="fa-solid fa-plus mr-2"></i> Add Employee
+          </TertiaryButton>
+        </div>
+      }
+    >
+      <Head title="Users Table" />
+      <div className="flex hidden gap-4">
+        <button onClick={() => showToast("success", "Test Success")}>
+          Click for Toast Success
+        </button>
+        <button onClick={() => showToast("error", "Test Error")}>Click for Toast Error</button>
+        <button onClick={() => showToast("info", "Test Info")}>Click for Toast Info</button>
+        <button onClick={() => showToast("warn", "Test Warn")}>Click for Toast Warn</button>
+      </div>
+      <div className="py-6">
         <div className="max-w-100 mx-auto sm:px-6 lg:px-8">
-          <div className="overflow-hidden shadow-sm sm:rounded-lg">
+          <div className="flex flex-col gap-4 overflow-hidden shadow-sm sm:rounded-lg">
             <Table
               columns={columns}
               data={users}
@@ -529,10 +597,19 @@ export default function UsersTableView() {
               showStatusBar={true}
               itemsPerPage={10}
               defaultSort={{ column: "created_at", direction: "desc" }}
-              statuses={statuses}
+              statusGroups={statusGroups}
               actions={actions}
               selectedRow={selectedUser}
               setSelectedRow={setSelectedUser}
+              idField="user_id"
+              onFilterChange={handleFilterChange}
+            />
+            <UserDetailsExpanded
+              user={selectedUser}
+              columns={columns}
+              isDetailsExpanded={isDetailsExpanded}
+              onExpand={() => setIsDetailsExpanded(true)}
+              onCollapse={() => setIsDetailsExpanded(false)}
             />
           </div>
         </div>
@@ -687,7 +764,7 @@ export function UserDetailsModal({ showModal, closeModal, user }) {
                     Verification Type
                   </label>
                   <div className="mt-1 !rounded-lg bg-gray-50 p-2 ring-1 ring-gray-300">
-                    {user.verification_type || "-"}
+                    {user.verificationType?.valid_id || "-"}
                   </div>
                 </div>
                 <div className="flex flex-col justify-center">
@@ -773,3 +850,50 @@ export function UserDetailsModal({ showModal, closeModal, user }) {
     </Modal>
   );
 }
+
+const UserDetailsExpanded = ({ user, columns, isDetailsExpanded, onExpand, onCollapse }) => {
+  if (!user) return null;
+
+  return (
+    <div className="rounded-lg bg-white p-2">
+      <div className="flex items-center justify-start gap-2">
+        {isDetailsExpanded ? (
+          <IconButton onClick={onCollapse} className="min-w-[32px]">
+            <i className="fa-solid fa-chevron-down"></i>
+          </IconButton>
+        ) : (
+          <IconButton onClick={onExpand} className="min-w-[32px]">
+            <i className="fa-solid fa-chevron-right"></i>
+          </IconButton>
+        )}
+        <h3 className="text-md font-semibold">{`User Details (${String(user.user_id)})`}</h3>
+      </div>
+      {isDetailsExpanded && (
+        <div className="view-loan-details grid grid-cols-1 gap-5 p-3 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+          {columns
+            .filter((column) => column.id !== "status_action")
+            .map((column) => (
+              <div key={column.id}>
+                {!column.isAction && (
+                  <label className="block text-sm font-medium text-gray-700">{column.label}</label>
+                )}
+                <div>
+                  {column.isAction ? (
+                    <></>
+                  ) : column.render ? (
+                    <div className="mt-1 !rounded-lg bg-gray-50 p-2 ring-1 ring-gray-300">
+                      {column.render(user)}
+                    </div>
+                  ) : (
+                    <div className="mt-1 !rounded-lg bg-gray-50 p-2 ring-1 ring-gray-300">
+                      {user[column.id] || column.defaultValue || "-"}
+                    </div>
+                  )}
+                </div>
+              </div>
+            ))}
+        </div>
+      )}
+    </div>
+  );
+};

@@ -9,17 +9,17 @@ use Illuminate\Support\Facades\Log;
 
 class UserController extends Controller
 {
-    public function updateVerificationStatus(Request $request, $id)
+    public function updateVerificationStatus(Request $request, $user_id)
     {
         Log::info('updateVerificationStatus called', [
-            'user_id' => $id,
+            'user_id' => $user_id,
             'request_data' => $request->all()
         ]);
 
         try {
             // Find user
-            $user = User::findOrFail($id);
-            Log::info('User found', ['user_id' => $user->id, 'current_status' => $user->verification_status]);
+            $user = User::findOrFail($user_id);
+            Log::info('User found', ['user_id' => $user->user_id, 'current_status' => $user->verification_status]);
 
             // Validate request
             $validatedData = $request->validate([
@@ -32,7 +32,7 @@ class UserController extends Controller
             $user->save();
 
             Log::info('Verification status updated successfully', [
-                'user_id' => $user->id,
+                'user_id' => $user->user_id,
                 'new_status' => $user->verification_status
             ]);
 
@@ -51,7 +51,7 @@ class UserController extends Controller
                 'errors' => $e->errors()
             ], 422);
         } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
-            Log::error('User not found', ['user_id' => $id]);
+            Log::error('User not found', ['user_id' => $user_id]);
 
             return response()->json([
                 'message' => 'User not found'
@@ -69,52 +69,52 @@ class UserController extends Controller
         }
     }
 
-    public function updateRole(Request $request, $id)
-{
-    Log::info('updateRole called', [
-        'user_id' => $id,
-        'request_data' => $request->all()
-    ]);
+    public function updateRole(Request $request, $user_id)
+    {
+        Log::info('updateRole called', [
+            'user_id' => $user_id,
+            'request_data' => $request->all()
+        ]);
 
-    try {
-        // Find user
-        $user = User::findOrFail($id);
-        Log::info('User found', ['user_id' => $user->id, 'current_status' => $user->verification_status]);
+        try {
+            // Find user
+            $user = User::findOrFail($user_id);
+            Log::info('User found', ['user_id' => $user->user_id, 'current_status' => $user->verification_status]);
 
-        // Get the new role from request
-        $newRole = $request->input('role');
+            // Get the new role from request
+            $newRole = $request->input('role');
 
-        // Validate role
-        if (!in_array($newRole, ['admin', 'employee', 'member'])) {
+            // Validate role
+            if (!in_array($newRole, ['admin', 'employee', 'member'])) {
+                return response()->json([
+                    'message' => 'Invalid role specified'
+                ], 400);
+            }
+
+            // Remove old roles and assign new role
+            $user->syncRoles([$newRole]);
+
+            // Update the role column in users table
+            $user->update(['role' => $newRole]);
+
+            Log::info('Role updated successfully', [
+                'user_id' => $user->user_id,
+                'new_role' => $user->newRole
+            ]);
             return response()->json([
-                'message' => 'Invalid role specified'
-            ], 400);
+                'message' => 'User role updated successfully',
+                'user' => $user->load('roles')
+            ]);
+
+        } catch (\Exception $e) {
+            Log::error('Error updating user role:', [
+                'error' => $e->getMessage(),
+                'user_id' => $user_id
+            ]);
+
+            return response()->json([
+                'message' => 'Failed to update user role'
+            ], 500);
         }
-
-        // Remove old roles and assign new role
-        $user->syncRoles([$newRole]);
-
-        // Update the role column in users table
-        $user->update(['role' => $newRole]);
-
-        Log::info('Role updated successfully', [
-            'user_id' => $user->id,
-            'new_role' => $user->newRole
-        ]);
-        return response()->json([
-            'message' => 'User role updated successfully',
-            'user' => $user->load('roles')
-        ]);
-
-    } catch (\Exception $e) {
-        Log::error('Error updating user role:', [
-            'error' => $e->getMessage(),
-            'user_id' => $id
-        ]);
-
-        return response()->json([
-            'message' => 'Failed to update user role'
-        ], 500);
     }
-}
 }
