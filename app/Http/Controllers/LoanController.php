@@ -233,7 +233,8 @@ class LoanController extends Controller
                 'loan_term_unit' => 'required|in:days,weeks,months,years',
                 'purpose' => 'required|string|max:500',
                 'loan_files.*' => 'required|file|mimes:jpg,jpeg,png,pdf',
-                'loan_files' => 'max:5'
+                'loan_files' => 'max:5',
+                'payment_frequency' => 'required|in:daily,weekly,bi-weekly,monthly,quarterly,semi-annually,annually,lump-sum',
             ]);
             Log::info('Validation passed');
 
@@ -271,6 +272,7 @@ class LoanController extends Controller
                     'date_status_changed' => now(),
                     'payment_status' => 'unpaid',
                     'outstanding_balance' => $request->loan_amount,
+                    'payment_frequency' => $request->payment_frequency,
                 ]);
                 Log::info('Loan record created', ['loan_id' => $loan->loan_id]);
 
