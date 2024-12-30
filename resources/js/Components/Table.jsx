@@ -132,6 +132,22 @@ const Table = ({
     setCurrentPage(1);
   };
 
+  const convertToDays = (value, unit) => {
+    const period = parseFloat(value) || 0;
+    switch (unit.toLowerCase()) {
+      case "days":
+        return period;
+      case "weeks":
+        return period * 7;
+      case "months":
+        return period * 30; // approximate
+      case "years":
+        return period * 365; // approximate
+      default:
+        return period;
+    }
+  };
+
   const sortData = (data, columnId, order) => {
     return [...data].sort((a, b) => {
       const column = columns.find((col) => col.id === columnId);
@@ -145,33 +161,35 @@ const Table = ({
       bValue = bValue ?? "";
 
       // Handle different data types
-      if (column?.type === "date") {
-        aValue = new Date(aValue).getTime();
-        bValue = new Date(bValue).getTime();
-        return order === "asc" ? aValue - bValue : bValue - aValue;
+      switch (column?.type) {
+        case "timestamp":
+        case "date": {
+          aValue = new Date(aValue).getTime();
+          bValue = new Date(bValue).getTime();
+          break;
+        }
+        case "number": {
+          aValue = parseFloat(aValue) || 0;
+          bValue = parseFloat(bValue) || 0;
+          break;
+        }
+        case "period_unit": {
+          // Use the convertToDays function defined above
+          aValue = convertToDays(a.loan_term_period, a.loan_term_unit);
+          bValue = convertToDays(b.loan_term_period, b.loan_term_unit);
+          break;
+        }
+        default: {
+          // String comparison
+          if (typeof aValue === "string") aValue = aValue.toLowerCase();
+          if (typeof bValue === "string") bValue = bValue.toLowerCase();
+          break;
+        }
       }
-
-      if (column?.type === "number") {
-        aValue = parseFloat(aValue) || 0;
-        bValue = parseFloat(bValue) || 0;
-        return order === "asc" ? aValue - bValue : bValue - aValue;
-      }
-
-      // Default string comparison
-      if (typeof aValue === "string") aValue = aValue.toLowerCase();
-      if (typeof bValue === "string") bValue = bValue.toLowerCase();
-
-      return order === "asc"
-        ? aValue < bValue
-          ? -1
-          : aValue > bValue
-            ? 1
-            : 0
-        : bValue < aValue
-          ? -1
-          : bValue > aValue
-            ? 1
-            : 0;
+      // Compare the values
+      if (aValue === bValue) return 0;
+      const comparison = order === "asc" ? (aValue < bValue ? -1 : 1) : aValue > bValue ? -1 : 1;
+      return comparison;
     });
   };
 
@@ -303,7 +321,7 @@ const Table = ({
                     <span className={`${column.sortable && "mr-2"} flex flex-grow justify-center`}>
                       {column.label}
                     </span>
-                    {column.sortable && !column.isAction && (
+                    {column.sortable && (
                       <button
                         className={`text-gray-500 ${
                           activeSort.column === column.id ? "text-white" : ""
