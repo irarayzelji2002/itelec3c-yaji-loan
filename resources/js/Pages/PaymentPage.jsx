@@ -29,6 +29,15 @@ export default function PaymentPage({ loan }) {
       });
   }, []);
 
+  useEffect(() => {
+    const amount = parseFloat(inputAmount);
+    if (amount > walletBalance) {
+      setWarning("Insufficient Balance");
+    } else {
+      setWarning("");
+    }
+  }, [inputAmount, walletBalance]);
+
   const calculateDueDate = (dateApplied) => {
     const appliedDate = new Date(dateApplied);
     const currentDate = new Date();
@@ -66,7 +75,22 @@ export default function PaymentPage({ loan }) {
     if (amount > walletBalance) {
       setWarning("Insufficient Balance");
     } else {
-      window.location.href = "/success";
+      axios
+        .post(route("payment.store"), {
+          loan_id: loan.loan_id,
+          payment_amount: amount,
+          payment_method: "wallet", // or any other method
+          payment_reference: "N/A", // or any reference if applicable
+        })
+        .then((response) => {
+          console.log("Payment response:", response.data);
+          showToast("success", "Payment recorded successfully");
+          window.location.href = "/success";
+        })
+        .catch((error) => {
+          console.error("Error recording payment:", error);
+          showToast("error", "Failed to record payment. Please try again.");
+        });
     }
   };
 

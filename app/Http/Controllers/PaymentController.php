@@ -23,21 +23,22 @@ class PaymentController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'loan_id' => 'required|exists:main_loan_table,loan_id',
-            'payment_amount' => 'required|numeric',
-            'payment_date' => 'required|date',
-            'image' => 'required|image',
+            'loan_id' => 'required|exists:loans,loan_id',
+            'payment_amount' => 'required|numeric|min:0.01',
+            'payment_method' => 'required|string|max:255',
+            'payment_reference' => 'nullable|string|max:255',
         ]);
 
-        $imagePath = $request->file('image')->store('payments', 'public');
-
-        Payment::create([
+        $payment = Payment::create([
             'loan_id' => $request->loan_id,
             'payment_amount' => $request->payment_amount,
-            'payment_date' => $request->payment_date,
-            'image_path' => $imagePath,
+            'payment_date' => now(),
+            'payment_method' => $request->payment_method,
+            'payment_reference' => $request->payment_reference,
+            'is_confirmed' => false,
+            'confirmed_by' => null,
         ]);
 
-        return redirect()->route('view.loan')->with('success', 'Payment created successfully.');
+        return response()->json(['success' => 'Payment recorded successfully', 'payment' => $payment]);
     }
 }
