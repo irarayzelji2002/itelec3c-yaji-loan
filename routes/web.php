@@ -65,7 +65,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/employee-form', function () {
         return Inertia::render('EmployeeForm');
     })->name('employee.form');
-
+    Route::get('/my-loans', [LoanController::class, 'getUserLoans'])->name('user.loans');
 
     // API routes (starts with /api)
     Route::prefix('api')->group(function () {
@@ -87,11 +87,14 @@ Route::middleware('auth')->group(function () {
             Route::post('/register-employee', [RegisteredUserController::class, 'storeEmployee'])->name('register.employee');
             Route::put('/loans/{loan_id}/status', [LoanController::class, 'updateStatus'])->name('loans.update-status');
         });
+
+        // Add this route to fetch loans
+        Route::get('/my-loans', [LoanController::class, 'index'])->name('myloans.index');
     });
 
     // Role page routes
     // Admin/Employee only page routes
-    Route::middleware(['role:admin,employee'])->group(function () {
+    Route::middleware(['role:admin,employee,member'])->group(function () {
         Route::get('/users-table', function () {
             return Inertia::render('TableViewUsers');
         })->name('view.users-table');

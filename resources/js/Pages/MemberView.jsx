@@ -1,3 +1,4 @@
+import ErrorBoundary from "@/Components/ErrorBoundary";
 import MyLoan from "@/Components/MyLoan";
 import ProgressBar from "@/Components/ProgressBar";
 import Reminders from "@/Components/Reminders";
@@ -5,11 +6,31 @@ import TertiaryButton from "@/Components/TertiaryButton";
 import WalletTabs from "@/Components/WalletTabs";
 import MemberLayout from "@/Layouts/MemberLayout";
 import { Head, usePage } from "@inertiajs/react";
+import { useEffect, useState } from "react";
 
 export default function MemberView() {
   const user = usePage().props.auth.user;
-  console.log("User props:", user);
-  console.log("user?.roles:", user?.roles);
+  const [loans, setLoans] = useState([]);
+
+  useEffect(() => {
+    axios
+      .get(route("user.loans"))
+      .then((response) => {
+        console.log("API response:", response.data);
+        setLoans(response.data.loans);
+        response.data.loans.forEach((loan) => {
+          console.log("Loan ID:", loan.loan_id);
+        });
+      })
+      .catch((error) => {
+        console.error("Error fetching loans:", error);
+      });
+  }, []);
+
+  const totalLoanAmount = loans.reduce(
+    (sum, loan) => sum + (parseFloat(loan.outstanding_balance) || 0),
+    0
+  );
 
   return (
     <MemberLayout>
@@ -28,14 +49,15 @@ export default function MemberView() {
             </TertiaryButton>
           </div>
           <div className="center-column">
-            <WalletTabs />
+            <WalletTabs loans={loans} />
           </div>
-          <ProgressBar percentage={50} label={1} usedAmount={10000} />
-          <MyLoan loanNo={1} />
-          <MyLoan loanNo={2} />
-          <MyLoan loanNo={3} />
+          <ProgressBar percentage={50} label={loans.length} usedAmount={totalLoanAmount} />
+          <ErrorBoundary>
+            {loans.map((loan) => (
+              <MyLoan key={loan.loan_id} loan={loan} />
+            ))}
+          </ErrorBoundary>
           <div className="column-down">
-            {" "}
             <h2>Reminders</h2>
             <div className="reminders-container">
               <Reminders
