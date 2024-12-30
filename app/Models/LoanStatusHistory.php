@@ -26,7 +26,7 @@ class LoanStatusHistory extends Model
         return $this->belongsTo(Loan::class, 'loan_id');
     }
 
-    public function changedByUser()
+    public function changedBy()
     {
         return $this->belongsTo(User::class, 'changed_by');
     }
