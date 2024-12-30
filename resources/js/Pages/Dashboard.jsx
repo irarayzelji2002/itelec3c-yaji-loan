@@ -31,7 +31,7 @@ export default function Dashboard() {
               link="/payments-table"
             />
             <TableContainer table="Members Table" img="/img/member-table.png" link="/users-table" />
-            <TableContainer
+            {/* <TableContainer
               table="Loan Types Table"
               img="/img/loan-type-table.png"
               link="/users-table"
@@ -40,7 +40,7 @@ export default function Dashboard() {
               table="Verification Types Table"
               img="/img/verification-type.png"
               link="/users-table"
-            />
+            /> */}
           </div>
         </div>
       </div>
