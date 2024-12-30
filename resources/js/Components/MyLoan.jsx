@@ -10,7 +10,7 @@ function MyLoan({ loan }) {
 
     if (loan) {
       const loanAmount = Number(loan.loan_amount);
-      const outstandingBalance = Number(loan.outstanding_balance);
+      const outstandingBalance = Number(loan.loan_amount);
       const loanTerm = Number(loan.loan_term_period);
 
       if (loanTerm > 0) {

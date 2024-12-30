@@ -113,7 +113,7 @@ export default function PaymentPage({ loan }) {
     loan.loan_term_period,
     loan.loan_term_unit
   );
-  const monthlyPayment = calculateMonthlyPayment(loan.outstanding_balance, loan.loan_term_period);
+  const monthlyPayment = calculateMonthlyPayment(loan.loan_amount, loan.loan_term_period);
 
   console.log("User props:", user);
   console.log("Loan props:", loan);

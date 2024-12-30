@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Payment;
+use App\Models\Loan;
 use Illuminate\Http\Request;
 
 class PaymentController extends Controller
@@ -33,6 +34,7 @@ class PaymentController extends Controller
         $latestPayment = Payment::latest()->first();
         $referenceNumber = 'P-' . str_pad(($latestPayment ? $latestPayment->payment_id + 1 : 1), 7, '0', STR_PAD_LEFT);
 
+        // Create payment record
         $payment = Payment::create([
             'loan_id' => $request->loan_id,
             'payment_amount' => $request->payment_amount,
@@ -42,6 +44,11 @@ class PaymentController extends Controller
             'is_confirmed' => false,
             'confirmed_by' => null,
         ]);
+
+        // Reduce outstanding balance of the loan
+        $loan = Loan::findOrFail($request->loan_id);
+        $loan->outstanding_balance -= $request->payment_amount;
+        $loan->save();
 
         return response()->json(['success' => 'Payment recorded successfully', 'payment' => $payment]);
     }
