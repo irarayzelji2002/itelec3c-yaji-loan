@@ -1,7 +1,7 @@
 import PrimaryButton from "@/Components/PrimaryButton";
 import SecondaryButton from "@/Components/SecondaryButton";
 import { CheckCircleGradientIcon } from "@/Icons/GeneralIcons";
-import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
+import MemberLayout from "@/Layouts/MemberLayout";
 import { capitalizeFirstLetter, numberWithCommas, showToast } from "@/utils/displayFunctions";
 import { Head } from "@inertiajs/react";
 import html2canvas from "html2canvas";
@@ -175,7 +175,7 @@ export default function LoanApplicationForm() {
   //   }
 
   return (
-    <AuthenticatedLayout>
+    <MemberLayout>
       <Head title="Success Loan" />
       <div className="flex min-h-[100vh] items-center justify-center">
         <div className="m-10 w-full max-w-xl rounded-lg bg-white bg-opacity-60 p-6 shadow-lg">
@@ -319,6 +319,6 @@ export default function LoanApplicationForm() {
           </div>
         </div>
       </div>
-    </AuthenticatedLayout>
+    </MemberLayout>
   );
 }

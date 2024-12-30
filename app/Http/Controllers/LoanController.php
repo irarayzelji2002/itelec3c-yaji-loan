@@ -458,4 +458,16 @@ class LoanController extends Controller
 
         return response()->json($loanFiles);
     }
+
+    public function getUserLoans()
+    {
+        $userId = Auth::id();
+        $loans = Loan::where('borrower_id', $userId)->with([
+            'loanType:loan_type_id,loan_type_name,is_amortized',
+            'statusHistory',
+            'loanFiles'
+        ])->get();
+
+        return response()->json(['loans' => $loans]);
+    }
 }
