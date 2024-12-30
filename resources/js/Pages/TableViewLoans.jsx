@@ -22,6 +22,7 @@ export default function TableViewLoans() {
   const [isStatusHistoryModalOpen, setIsStatusHistoryModalOpen] = useState(false);
   const [isLoanFilesModalOpen, setIsLoanFilesModalOpen] = useState(false);
   const [disableChangeStatusBtn, setDisableChangeStatusBtn] = useState(false);
+  const [isDetailsExpanded, setIsDetailsExpanded] = useState(false);
   const [filters, setFilters] = useState({
     loanStatus: "all_loan",
     paymentStatus: "all_payment",
@@ -116,7 +117,7 @@ export default function TableViewLoans() {
       type: "number",
       minWidth: "130px",
       render: (loan) => (
-        <span className="flex flex-grow justify-end">
+        <span className="is-aligned flex flex-grow justify-end">
           ₱{loan.loan_amount ? numberWithCommas(loan.loan_amount) : ""}
         </span>
       ),
@@ -127,7 +128,7 @@ export default function TableViewLoans() {
       sortable: true,
       minWidth: "120px",
       render: (loan) => (
-        <span className="flex flex-grow justify-center">
+        <span className="is-aligned flex flex-grow justify-center">
           {underscoreToTitleCase(loan.payment_frequency)}
         </span>
       ),
@@ -138,7 +139,9 @@ export default function TableViewLoans() {
       sortable: true,
       type: "number",
       minWidth: "80px",
-      render: (loan) => <span className="flex flex-grow justify-end">{loan.interest_rate}%</span>,
+      render: (loan) => (
+        <span className="is-aligned flex flex-grow justify-end">{loan.interest_rate}%</span>
+      ),
     },
     {
       id: "loan_term",
@@ -165,7 +168,7 @@ export default function TableViewLoans() {
         return convertToDays(loan.loan_term_period, loan.loan_term_unit);
       },
       render: (loan) => (
-        <span className="flex flex-grow justify-end">{`${loan.loan_term_period} ${loan.loan_term_unit}`}</span>
+        <span className="is-aligned flex flex-grow justify-end">{`${loan.loan_term_period} ${loan.loan_term_unit}`}</span>
       ),
     },
     {
@@ -175,7 +178,7 @@ export default function TableViewLoans() {
       type: "date",
       minWidth: "120px",
       render: (loan) => (
-        <span className="flex flex-grow justify-center">
+        <span className="is-aligned flex flex-grow justify-center">
           {loan.date_applied ? new Date(loan.date_applied).toLocaleDateString() : "-"}
         </span>
       ),
@@ -187,7 +190,7 @@ export default function TableViewLoans() {
       type: "date",
       minWidth: "120px",
       render: (loan) => (
-        <span className="flex flex-grow justify-center">
+        <span className="is-aligned flex flex-grow justify-center">
           {loan.date_status_changed ? new Date(loan.date_status_changed).toLocaleDateString() : "-"}
         </span>
       ),
@@ -199,8 +202,8 @@ export default function TableViewLoans() {
       sortable: true,
       minWidth: "100px",
       component: (loan) => (
-        <div className="flex items-center justify-center gap-1">
-          <div className="flex flex-grow items-center justify-center">
+        <div className="is-aligned has-tag flex items-center justify-center gap-1">
+          <div className="is-aligned flex flex-grow items-center justify-center">
             <Tag
               color={getStatusColor(loan.current_status)?.color}
               bgColor={getStatusColor(loan.current_status)?.bgColor}
@@ -301,7 +304,7 @@ export default function TableViewLoans() {
       type: "date",
       minWidth: "120px",
       render: (loan) => (
-        <span className="flex flex-grow justify-center">
+        <span className="is-aligned flex flex-grow justify-center">
           {loan.date_disbursed ? new Date(loan.date_disbursed).toLocaleDateString() : "-"}
         </span>
       ),
@@ -356,16 +359,19 @@ export default function TableViewLoans() {
       sortable: true,
       minWidth: "90px",
       render: (loan) => (
-        <span className="flex flex-grow justify-center">{loan.is_amortized ? "Yes" : "No"}</span>
+        <span className="is-aligned flex flex-grow justify-center">
+          {loan.is_amortized ? "Yes" : "No"}
+        </span>
       ),
     },
     {
       id: "payment_status",
       label: "Payment Status",
+      isAction: true,
       sortable: true,
       minWidth: "120px",
-      render: (loan) => (
-        <div className="flex items-center justify-center">
+      component: (loan) => (
+        <div className="is-aligned has-tag payment-status flex items-center justify-center">
           <Tag
             color={getStatusColor(loan.payment_status)?.color}
             bgColor={getStatusColor(loan.payment_status)?.bgColor}
@@ -416,7 +422,7 @@ export default function TableViewLoans() {
       type: "date",
       minWidth: "120px",
       render: (loan) => (
-        <span className="flex flex-grow justify-center">
+        <span className="is-aligned flex flex-grow justify-center">
           {loan.next_due_date ? new Date(loan.next_due_date).toLocaleDateString() : "-"}
         </span>
       ),
@@ -427,7 +433,7 @@ export default function TableViewLoans() {
       sortable: true,
       minWidth: "150px",
       render: (loan) => (
-        <span className="flex flex-grow justify-end">
+        <span className="is-aligned flex flex-grow justify-end">
           {loan.remaining_time_before_next_due || "-"}
         </span>
       ),
@@ -439,7 +445,7 @@ export default function TableViewLoans() {
       type: "number",
       minWidth: "160px",
       render: (loan) => (
-        <span className="flex flex-grow justify-end">
+        <span className="is-aligned flex flex-grow justify-end">
           {loan.periodic_payment_amount
             ? "₱" + numberWithCommas(loan.periodic_payment_amount)
             : "-"}
@@ -453,7 +459,7 @@ export default function TableViewLoans() {
       type: "date",
       minWidth: "150px",
       render: (loan) => (
-        <span className="flex flex-grow justify-center">
+        <span className="is-aligned flex flex-grow justify-center">
           {loan.final_due_date ? new Date(loan.final_due_date).toLocaleDateString() : "-"}
         </span>
       ),
@@ -464,7 +470,7 @@ export default function TableViewLoans() {
       sortable: true,
       minWidth: "150px",
       render: (loan) => (
-        <span className="flex flex-grow justify-end">
+        <span className="is-aligned flex flex-grow justify-end">
           {loan.remaining_time_before_final_due || "-"}
         </span>
       ),
@@ -862,7 +868,7 @@ export default function TableViewLoans() {
 
       <div className="py-6">
         <div className="max-w-100 mx-auto sm:px-6 lg:px-8">
-          <div className="overflow-hidden shadow-sm sm:rounded-lg">
+          <div className="flex flex-col gap-4 overflow-hidden sm:rounded-lg">
             <Table
               columns={columns}
               data={loans}
@@ -879,6 +885,13 @@ export default function TableViewLoans() {
               is_database_filter={true}
               statusCount={statusCount}
               onFilterChange={handleFilterChange}
+            />
+            <LoanDetailsExpanded
+              loan={selectedLoan}
+              columns={columns}
+              isDetailsExpanded={isDetailsExpanded}
+              onExpand={() => setIsDetailsExpanded(true)}
+              onCollapse={() => setIsDetailsExpanded(false)}
             />
           </div>
         </div>
@@ -1012,3 +1025,65 @@ function LoanFilesModal({ isOpen, onClose, loan, users }) {
     </Modal>
   );
 }
+
+const LoanDetailsExpanded = ({ loan, columns, isDetailsExpanded, onExpand, onCollapse }) => {
+  if (!loan) return null;
+
+  return (
+    <div className="rounded-lg bg-white p-2">
+      <div className="flex items-center justify-start gap-2">
+        {isDetailsExpanded ? (
+          <IconButton onClick={onCollapse} className="min-w-[32px]">
+            <i className="fa-solid fa-chevron-down"></i>
+          </IconButton>
+        ) : (
+          <IconButton onClick={onExpand} className="min-w-[32px]">
+            <i className="fa-solid fa-chevron-right"></i>
+          </IconButton>
+        )}
+        <h3 className="text-md font-semibold">
+          {`Loan Details (L-${String(loan.loan_id).padStart(7, "0")})`}
+        </h3>
+      </div>
+      {isDetailsExpanded && (
+        <div className="view-loan-details grid grid-cols-1 gap-5 p-3 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+          {columns
+            .filter((column) => column.id !== "status_action")
+            .map((column) => (
+              <div key={column.id}>
+                <label className="block text-sm font-medium text-gray-700">{column.label}</label>
+                <div>
+                  {column.isAction ? (
+                    typeof column.component === "function" ? (
+                      // Wrap the component call to include row selection
+                      <div
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleRowClick(loan);
+                          column.component(loan);
+                        }}
+                      >
+                        {column.component(loan)}
+                      </div>
+                    ) : (
+                      <div className="mt-1 !rounded-lg bg-gray-50 p-2 ring-1 ring-gray-300">
+                        {column.component}
+                      </div>
+                    )
+                  ) : column.render ? (
+                    <div className="mt-1 !rounded-lg bg-gray-50 p-2 ring-1 ring-gray-300">
+                      {column.render(loan)}
+                    </div>
+                  ) : (
+                    <div className="mt-1 !rounded-lg bg-gray-50 p-2 ring-1 ring-gray-300">
+                      {loan[column.id] || column.defaultValue || "-"}
+                    </div>
+                  )}
+                </div>
+              </div>
+            ))}
+        </div>
+      )}
+    </div>
+  );
+};

@@ -1,5 +1,6 @@
 // resources/js/Pages/TableView.jsx
 import DangerButton from "@/Components/DangerButton";
+import IconButton from "@/Components/IconButton";
 import Modal from "@/Components/Modal";
 import PrimaryButton from "@/Components/PrimaryButton";
 import Table from "@/Components/Table";
@@ -17,6 +18,7 @@ export default function UsersTableView() {
   const [disableAcceptBtn, setDisableAcceptBtn] = useState(false);
   const [disableDenyBtn, setDisableDenyBtn] = useState(false);
   const [disableRoleBtn, setDisableRoleBtn] = useState(false);
+  const [isDetailsExpanded, setIsDetailsExpanded] = useState(false);
   const [filters, setFilters] = useState({
     verificationStatus: "all_verification",
     role: "all_roles",
@@ -586,7 +588,7 @@ export default function UsersTableView() {
       </div>
       <div className="py-6">
         <div className="max-w-100 mx-auto sm:px-6 lg:px-8">
-          <div className="overflow-hidden shadow-sm sm:rounded-lg">
+          <div className="flex flex-col gap-4 overflow-hidden shadow-sm sm:rounded-lg">
             <Table
               columns={columns}
               data={users}
@@ -601,6 +603,13 @@ export default function UsersTableView() {
               setSelectedRow={setSelectedUser}
               idField="user_id"
               onFilterChange={handleFilterChange}
+            />
+            <UserDetailsExpanded
+              user={selectedUser}
+              columns={columns}
+              isDetailsExpanded={isDetailsExpanded}
+              onExpand={() => setIsDetailsExpanded(true)}
+              onCollapse={() => setIsDetailsExpanded(false)}
             />
           </div>
         </div>
@@ -841,3 +850,50 @@ export function UserDetailsModal({ showModal, closeModal, user }) {
     </Modal>
   );
 }
+
+const UserDetailsExpanded = ({ user, columns, isDetailsExpanded, onExpand, onCollapse }) => {
+  if (!user) return null;
+
+  return (
+    <div className="rounded-lg bg-white p-2">
+      <div className="flex items-center justify-start gap-2">
+        {isDetailsExpanded ? (
+          <IconButton onClick={onCollapse} className="min-w-[32px]">
+            <i className="fa-solid fa-chevron-down"></i>
+          </IconButton>
+        ) : (
+          <IconButton onClick={onExpand} className="min-w-[32px]">
+            <i className="fa-solid fa-chevron-right"></i>
+          </IconButton>
+        )}
+        <h3 className="text-md font-semibold">{`User Details (${String(user.user_id)})`}</h3>
+      </div>
+      {isDetailsExpanded && (
+        <div className="view-loan-details grid grid-cols-1 gap-5 p-3 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+          {columns
+            .filter((column) => column.id !== "status_action")
+            .map((column) => (
+              <div key={column.id}>
+                {!column.isAction && (
+                  <label className="block text-sm font-medium text-gray-700">{column.label}</label>
+                )}
+                <div>
+                  {column.isAction ? (
+                    <></>
+                  ) : column.render ? (
+                    <div className="mt-1 !rounded-lg bg-gray-50 p-2 ring-1 ring-gray-300">
+                      {column.render(user)}
+                    </div>
+                  ) : (
+                    <div className="mt-1 !rounded-lg bg-gray-50 p-2 ring-1 ring-gray-300">
+                      {user[column.id] || column.defaultValue || "-"}
+                    </div>
+                  )}
+                </div>
+              </div>
+            ))}
+        </div>
+      )}
+    </div>
+  );
+};

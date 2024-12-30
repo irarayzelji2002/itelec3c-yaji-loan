@@ -1463,6 +1463,20 @@ option:first {
   text-decoration: underline;
 }
 
+.view-loan-details .is-aligned {
+  display: flex;
+  justify-content: start;
+}
+
+.view-loan-details .has-tag .tag {
+  font-size: 0.875rem;
+  padding: 0.3rem 1rem;
+}
+
+.view-loan-details .has-tag.payment-status .tag {
+  margin-top: 10px;
+}
+
 @media screen and (max-width: 768px) {
   .steps {
     flex-direction: column; /* Stack steps vertically on smaller screens */
