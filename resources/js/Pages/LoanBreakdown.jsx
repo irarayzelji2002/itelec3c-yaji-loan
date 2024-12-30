@@ -4,10 +4,13 @@ import ProgressBar from "@/Components/ProgressBar";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 import { Head, usePage } from "@inertiajs/react";
 
-export default function LoanBreakdown() {
+export default function LoanBreakdown({ loan }) {
   const user = usePage().props.auth.user;
   console.log("User props:", user);
-  console.log("user?.roles:", user?.roles);
+  console.log("Loan props:", loan);
+
+  const loanAmount = parseFloat(loan.loan_amount || 0);
+  const outstandingBalance = parseFloat(loan.outstanding_balance || 0);
 
   return (
     <AuthenticatedLayout>
@@ -17,23 +20,23 @@ export default function LoanBreakdown() {
           <div className="request-body-2">
             <div className="request-row">
               <div className="request-label">Loan ID: </div>
-              <div className="request-value"> &nbsp;Harry Edward Styles</div>
+              <div className="request-value"> &nbsp;{loan.loan_id}</div>
             </div>
 
             <div className="request-row">
               <div className="request-label">Due Date : </div>
-              <div className="request-value">&nbsp;December 30,2024</div>
+              <div className="request-value">&nbsp;{loan.due_date}</div>
             </div>
             <div className="request-row" style={{ marginBottom: "0" }}>
               <div className="request-label">Amount Requested : </div>
-              <div className="request-value">&nbsp;₱ 2,500.00</div>
+              <div className="request-value">&nbsp;₱ {loanAmount.toFixed(2)}</div>
             </div>
           </div>
 
           <div className="content-container">
             <div className="tab-content">
-              <h3>Loan Due on December 3, 2024</h3>
-              <h1>₱ 0.00</h1>
+              <h3>Loan Due on {loan.due_date}</h3>
+              <h1>₱ {outstandingBalance.toFixed(2)}</h1>
               <div style={{ display: "flex", gap: "1rem" }}>
                 <PrimaryButton
                   onClick={() => {

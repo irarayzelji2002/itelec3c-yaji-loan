@@ -53,7 +53,7 @@ function MyLoan({ loan }) {
         <div style={{ gap: "1rem", display: "flex" }}>
           <PrimaryButton
             className="accept-button"
-            onClick={() => (window.location.href = "/loan-breakdown")}
+            onClick={() => (window.location.href = "/loan-breakdown/" + loan.loan_id)}
           >
             Pay Now
           </PrimaryButton>
