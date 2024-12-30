@@ -46,8 +46,9 @@ Route::middleware('auth')->group(function () {
                     ->findOrFail($loan_id);
         return Inertia::render('LoanBreakdown', ['loan' => $loan]);
     })->name('loan.breakdown');
-    Route::get('/payment', function () {
-        return Inertia::render('PaymentPage');
+    Route::get('/payment/{loan_id}', function ($loan_id) {
+        $loan = Loan::findOrFail($loan_id);
+        return Inertia::render('PaymentPage', ['loan' => $loan]);
     })->name('payment.page');
     Route::get('/application-form', function () {
         return Inertia::render('ApplicationForm', [

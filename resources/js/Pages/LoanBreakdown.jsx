@@ -81,7 +81,7 @@ export default function LoanBreakdown({ loan }) {
               <div style={{ display: "flex", gap: "1rem" }}>
                 <PrimaryButton
                   onClick={() => {
-                    window.location.href = route("payment.page");
+                    window.location.href = route("payment.page", { loan_id: loan.loan_id });
                   }}
                   className="accept-button"
                   style={{ marginLeft: "auto" }}
