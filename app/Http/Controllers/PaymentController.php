@@ -12,32 +12,19 @@ class PaymentController extends Controller
     public function index(Request $request)
     {
         try {
+            Log::info('PaymentController@index started', [
+                'request_data' => $request->all()
+            ]);
+
             $query = Payment::with(['loan', 'confirmedBy']);
+            Log::info('Initial query built with relationships');
 
-            // Handle search if provided
-            if ($request->has('search')) {
-                $searchTerm = $request->search;
-                $query->where(function ($q) use ($searchTerm) {
-                    $q->where('payment_id', 'LIKE', "%{$searchTerm}%")
-                        ->orWhere('loan_id', 'LIKE', "%{$searchTerm}%")
-                        ->orWhere('payment_amount', 'LIKE', "%{$searchTerm}%")
-                        ->orWhere('payment_reference', 'LIKE', "%{$searchTerm}%")
-                        ->orWhere('payment_method', 'LIKE', "%{$searchTerm}%");
-                });
-            }
+            // Get all payments
+            $payments = $query->get(); // This line was missing
 
-            // Handle sorting
-            if ($request->has('sort_by') && $request->has('sort_direction')) {
-                $query->orderBy($request->sort_by, $request->sort_direction);
-            } else {
-                $query->orderBy('created_at', 'desc');
-            }
-
-            // Get paginated results
-            $payments = $query->paginate($request->input('per_page', 10));
-
-            // Transform the data using items() instead of getCollection()
-            $transformedData = collect($payments->items())->map(function ($payment) {
+            // Transform data
+            Log::info('Starting data transformation');
+            $transformedData = $payments->map(function ($payment) {
                 return [
                     'payment_id' => $payment->payment_id,
                     'loan_id' => $payment->loan_id,
@@ -58,18 +45,22 @@ class PaymentController extends Controller
                     ] : null,
                 ];
             });
+            Log::info('Data transformation completed', [
+                'transformed_count' => $transformedData->count()
+            ]);
 
-            // Return paginated response with transformed data
             return response()->json([
-                'data' => $transformedData,
-                'current_page' => $payments->currentPage(),
-                'last_page' => $payments->lastPage(),
-                'per_page' => $payments->perPage(),
-                'total' => $payments->total()
+                'payments' => $transformedData,
             ]);
 
         } catch (\Exception $e) {
-            Log::error('Error in PaymentController@index: ' . $e->getMessage());
+            Log::error('Error in PaymentController@index', [
+                'error_message' => $e->getMessage(),
+                'error_line' => $e->getLine(),
+                'error_file' => $e->getFile(),
+                'stack_trace' => $e->getTraceAsString()
+            ]);
+
             return response()->json([
                 'message' => 'An error occurred while fetching payments',
                 'error' => $e->getMessage()
