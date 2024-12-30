@@ -79,6 +79,9 @@ Route::middleware('auth')->group(function () {
         // Admin/Employee only routes (starts with /api/employee)
         Route::middleware(['role:admin,employee'])->prefix('employee')->group(function () {
             Route::get('/loans', [LoanController::class, 'index'])->name('loans.index');
+            Route::get('/users', function () {
+                return User::with(['roles', 'verificationType'])->get();
+            });
             Route::put('/users/{user_id}/verification-status', [UserController::class, 'updateVerificationStatus']);
             Route::put('/users/{user_id}/role', [UserController::class, 'updateRole']);
             Route::post('/register-employee', [RegisteredUserController::class, 'storeEmployee'])->name('register.employee');

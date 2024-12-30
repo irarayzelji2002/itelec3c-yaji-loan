@@ -17,7 +17,8 @@ class LoanController extends Controller
 {
     public function index(Request $request)
     {
-        Log::info('Starting loans index method');
+        Log::info('Starting loans index method', ['filters' => $request->all()]);
+
         $query = Loan::with([
             'borrower:user_id,first_name,middle_name,last_name',
             'loanType:loan_type_id,loan_type_name,is_amortized',
@@ -26,26 +27,79 @@ class LoanController extends Controller
             'statusHistory',
             'loanFiles'
         ]);
-        Log::info('Initial query built', ['query' => $query->toSql()]);
 
-        // Apply filters if provided
-        if ($request->loan_status) {
-            Log::info('Applying loan status filter', ['status' => $request->loan_status]);
+        // Apply loan status filter
+        if ($request->loanStatus && $request->loanStatus !== 'all_loan') {
+            Log::info('Applying loan status filter', ['status' => $request->loanStatus]);
             $query->whereHas('statusHistory', function($q) use ($request) {
-                $q->where('status', $request->loan_status)
-                  ->latest();
+                $q->where('status', $request->loanStatus)
+                ->latest();
             });
         }
 
-        if ($request->payment_status) {
-            Log::info('Applying payment status filter', ['status' => $request->payment_status]);
-            $query->where('payment_status', $request->payment_status);
+        // Apply payment status filter
+        if ($request->paymentStatus && $request->paymentStatus !== 'all_payment') {
+            Log::info('Applying payment status filter', ['status' => $request->paymentStatus]);
+            $query->where('payment_status', $request->paymentStatus);
+        }
+
+        // Apply next due date filter
+        if ($request->nextDueStatus && $request->nextDueStatus !== 'all_next_due') {
+            Log::info('Applying next due date filter', ['status' => $request->nextDueStatus]);
+            $now = now();
+
+            $query->whereHas('statusHistory', function($q) use ($request, $now) {
+                // Filter based on calculated next due date
+                $loans = $q->get()->filter(function($loan) use ($request, $now) {
+                    $nextDueDate = $loan->calculateNextDueDate();
+                    if (!$nextDueDate) return false;
+
+                    switch ($request->nextDueStatus) {
+                        case 'overdue':
+                            return $nextDueDate < $now;
+                        case 'due_today':
+                            return $nextDueDate->isToday();
+                        case 'due_this_week':
+                            return $nextDueDate >= $now && $nextDueDate <= $now->endOfWeek();
+                        default:
+                            return false;
+                    }
+                });
+                return $loans;
+            });
+        }
+
+        // Apply final due date filter
+        if ($request->finalDueStatus && $request->finalDueStatus !== 'all_final_due') {
+            Log::info('Applying final due date filter', ['status' => $request->finalDueStatus]);
+            $now = now();
+
+            $query->whereHas('statusHistory', function($q) use ($request, $now) {
+                // Filter based on calculated final due date
+                $loans = $q->get()->filter(function($loan) use ($request, $now) {
+                    $finalDueDate = $loan->calculateFinalDueDate();
+                    if (!$finalDueDate) return false;
+
+                    switch ($request->finalDueStatus) {
+                        case 'overdue':
+                            return $finalDueDate < $now;
+                        case 'due_this_month':
+                            return $finalDueDate >= $now && $finalDueDate <= $now->endOfMonth();
+                        case 'due_next_month':
+                            return $finalDueDate >= $now->addMonth()->startOfMonth() &&
+                                $finalDueDate <= $now->addMonth()->endOfMonth();
+                        default:
+                            return false;
+                    }
+                });
+                return $loans;
+            });
         }
 
         // Get the loans
-        $formattedLoans = $query->get();
-        Log::info('Retrieved loans count: ' . $formattedLoans->count());
-        $formattedLoans = $formattedLoans->map(function($loan) {
+        $loans = $query->get();
+        Log::info('Retrieved loans count: ' . $loans->count());
+        $formattedLoans = $loans->map(function($loan) {
             Log::info('Formatting loan', ['loan_id' => $loan->loan_id]);
 
             return [
@@ -82,23 +136,68 @@ class LoanController extends Controller
             'sample' => $formattedLoans->first()
         ]);
 
-        // Get status counts
+        // Update status counts to match new structure
         $statusCounts = [
             'loan_status' => [
-                'pending' => Loan::whereHas('statusHistory', function($q) {
-                    $q->where('status', 'pending')->latest();
+                'all_loan' => $loans->count(),
+                'pending' => $loans->filter(function($loan) {
+                    return $loan->statusHistory->last()->status === 'pending';
                 })->count(),
-                'approved' => Loan::whereHas('statusHistory', function($q) {
-                    $q->where('status', 'approved')->latest();
+                'approved' => $loans->filter(function($loan) {
+                    return $loan->statusHistory->last()->status === 'approved';
                 })->count(),
-                // Add other status counts
+                'disapproved' => $loans->filter(function($loan) {
+                    return $loan->statusHistory->last()->status === 'disapproved';
+                })->count(),
+                'discontinued' => $loans->filter(function($loan) {
+                    return $loan->statusHistory->last()->status === 'discontinued';
+                })->count(),
+                'canceled' => $loans->filter(function($loan) {
+                    return $loan->statusHistory->last()->status === 'canceled';
+                })->count(),
             ],
             'payment_status' => [
-                'paid' => Loan::where('payment_status', 'Paid')->count(),
-                'unpaid' => Loan::where('payment_status', 'Unpaid')->count(),
-                'partially_paid' => Loan::where('payment_status', 'Partially Paid')->count(),
+                'all_payment' => $loans->count(),
+                'paid' => $loans->where('payment_status', 'paid')->count(),
+                'unpaid' => $loans->where('payment_status', 'unpaid')->count(),
+                'partially_paid' => $loans->where('payment_status', 'partially_paid')->count(),
             ],
-            // Add due date status counts
+            'next_due_status' => [
+                'all_next_due' => $loans->count(),
+                'overdue' => $loans->filter(function($loan) {
+                    $nextDueDate = $loan->calculateNextDueDate();
+                    return $nextDueDate && $nextDueDate < now();
+                })->count(),
+                'due_today' => $loans->filter(function($loan) {
+                    $nextDueDate = $loan->calculateNextDueDate();
+                    return $nextDueDate && $nextDueDate->isToday();
+                })->count(),
+                'due_this_week' => $loans->filter(function($loan) {
+                    $nextDueDate = $loan->calculateNextDueDate();
+                    return $nextDueDate &&
+                        $nextDueDate >= now() &&
+                        $nextDueDate <= now()->endOfWeek();
+                })->count(),
+            ],
+            'final_due_status' => [
+                'all_final_due' => $loans->count(),
+                'overdue' => $loans->filter(function($loan) {
+                    $finalDueDate = $loan->calculateFinalDueDate();
+                    return $finalDueDate && $finalDueDate < now();
+                })->count(),
+                'due_this_month' => $loans->filter(function($loan) {
+                    $finalDueDate = $loan->calculateFinalDueDate();
+                    return $finalDueDate &&
+                        $finalDueDate >= now() &&
+                        $finalDueDate <= now()->endOfMonth();
+                })->count(),
+                'due_next_month' => $loans->filter(function($loan) {
+                    $finalDueDate = $loan->calculateFinalDueDate();
+                    return $finalDueDate &&
+                        $finalDueDate >= now()->addMonth()->startOfMonth() &&
+                        $finalDueDate <= now()->addMonth()->endOfMonth();
+                })->count(),
+            ],
         ];
 
         return response()->json([

@@ -20,19 +20,19 @@ export default function TableViewLoans() {
   const [selectedLoan, setSelectedLoan] = useState(null);
   const [isStatusHistoryModalOpen, setIsStatusHistoryModalOpen] = useState(false);
   const [isLoanFilesModalOpen, setIsLoanFilesModalOpen] = useState(false);
-  const [filters, setFilters] = useState({
-    loanStatus: null,
-    paymentStatus: null,
-    nextDueStatus: null,
-    finalDueStatus: null,
-  });
   const [disableChangeStatusBtn, setDisableChangeStatusBtn] = useState(false);
+  const [filters, setFilters] = useState({
+    loanStatus: "all_loan",
+    paymentStatus: "all_payment",
+    nextDueStatus: "all_next_due",
+    finalDueStatus: "all_final_due",
+  });
 
   useEffect(() => {
     setLoading(true);
     console.log("Starting fetch request to loans.index");
 
-    fetch("/api/employee/loans")
+    fetch(`/api/employee/loans?${new URLSearchParams(filters)}`)
       .then((res) => {
         console.log("Received response:", {
           status: res.status,
@@ -54,7 +54,7 @@ export default function TableViewLoans() {
       .then((data) => {
         console.log("Successfully parsed JSON:", data);
         setLoans(data.loans);
-        setStatusCount(data.statusCount);
+        setStatusCount(data.statusCounts);
         setLoading(false);
       })
       .catch((err) => {
@@ -65,7 +65,13 @@ export default function TableViewLoans() {
         });
         setLoading(false);
       });
-  }, [statusUpdateCounter]);
+  }, [filters, statusUpdateCounter]);
+
+  useEffect(() => {
+    console.log("loans:", loans);
+    console.log("statusCount:", statusCount);
+    console.log("loanstatus pending count:", statusCount["loanStatus"]?.["pending"]);
+  }, [loans, statusCount]);
 
   const columns = [
     {
@@ -368,140 +374,166 @@ export default function TableViewLoans() {
     },
   ];
 
-  const statuses = [
-    // Loan Status
-    {
-      id: "all_current_status",
-      label: "All",
-      column: "current_status",
-      comparison: "===", // includes pending, approved, disapproved, discontinued, canceled
-      color: "black",
-      bgColor: "#c4c4c4",
+  const statusGroups = {
+    loan_status: {
+      label: "Loan Status",
+      defaultSelected: "all_loan",
+      statuses: [
+        {
+          id: "all_loan",
+          label: "All",
+          column: "current_status",
+          color: "black",
+          bgColor: "#c4c4c4",
+        },
+        {
+          id: "pending",
+          label: "Pending",
+          column: "current_status",
+          comparison: "===",
+          color: "black",
+          bgColor: "#FFD563",
+        },
+        {
+          id: "approved",
+          label: "Approved",
+          column: "current_status",
+          comparison: "===",
+          color: "black",
+          bgColor: "#7FE5B0",
+        },
+        {
+          id: "disapproved",
+          label: "Disapproved",
+          column: "current_status",
+          comparison: "===",
+          color: "black",
+          bgColor: "#FF7D7D",
+        },
+        {
+          id: "discontinued",
+          label: "Discontinued",
+          column: "current_status",
+          comparison: "===",
+          color: "white",
+          bgColor: "#e34e4e",
+        },
+        {
+          id: "canceled",
+          label: "Canceled",
+          column: "current_status",
+          comparison: "===",
+          color: "white",
+          bgColor: "#aa2c2c",
+        },
+      ],
     },
-    {
-      id: "pending",
-      label: "Pending",
-      column: "current_status",
-      comparison: "===",
-      color: "black",
-      bgColor: "#FFD563",
+    payment_status: {
+      label: "Payment Status",
+      defaultSelected: "all_payment",
+      statuses: [
+        {
+          id: "all_payment",
+          label: "All",
+          column: "payment_status",
+          color: "black",
+          bgColor: "#c4c4c4",
+        },
+        {
+          id: "paid",
+          label: "Paid",
+          column: "payment_status",
+          comparison: "===",
+          color: "black",
+          bgColor: "#7FE5B0",
+        },
+        {
+          id: "unpaid",
+          label: "Unpaid",
+          column: "payment_status",
+          comparison: "===",
+          color: "black",
+          bgColor: "#FF7D7D",
+        },
+        {
+          id: "partially_paid",
+          label: "Partially Paid",
+          column: "payment_status",
+          comparison: "===",
+          color: "black",
+          bgColor: "#FFD563",
+        },
+      ],
     },
-    {
-      id: "approved",
-      label: "Approved",
-      column: "current_status",
-      comparison: "===",
-      color: "black",
-      bgColor: "#7FE5B0",
+    next_due_status: {
+      label: "Next Due Status",
+      defaultSelected: "all_next_due",
+      statuses: [
+        {
+          id: "all_next_due",
+          label: "All",
+          column: "next_due_date",
+          color: "black",
+          bgColor: "#c4c4c4",
+        },
+        {
+          id: "overdue",
+          label: "Overdue",
+          column: "next_due_date",
+          color: "black",
+          bgColor: "#FF7D7D",
+        },
+        {
+          id: "due_today",
+          label: "Due Today",
+          column: "next_due_date",
+          color: "black",
+          bgColor: "#FFD563",
+        },
+        {
+          id: "due_this_week",
+          label: "Due This Week",
+          column: "next_due_date",
+          color: "black",
+          bgColor: "#7FE5B0",
+        },
+      ],
     },
-    {
-      id: "disapproved",
-      label: "Disapproved",
-      column: "current_status",
-      comparison: "===",
-      color: "black",
-      bgColor: "#FF7D7D",
+    final_due_status: {
+      label: "Final Due Status",
+      defaultSelected: "all_final_due",
+      statuses: [
+        {
+          id: "all_final_due",
+          label: "All",
+          column: "final_due_date",
+          color: "black",
+          bgColor: "#c4c4c4",
+        },
+        {
+          id: "overdue",
+          label: "Overdue",
+          column: "final_due_date",
+          color: "black",
+          bgColor: "#FF7D7D",
+        },
+        {
+          id: "due_this_month",
+          label: "Due This Month",
+          column: "final_due_date",
+          color: "black",
+          bgColor: "#FFD563",
+        },
+        {
+          id: "due_next_month",
+          label: "Due Next Month",
+          column: "final_due_date",
+          color: "black",
+          bgColor: "#7FE5B0",
+        },
+      ],
     },
-    {
-      id: "discontinued",
-      label: "Discontinued",
-      column: "current_status",
-      comparison: "===",
-      color: "white",
-      bgColor: "#e34e4e",
-    },
-    {
-      id: "canceled",
-      label: "Canceled",
-      column: "current_status",
-      comparison: "===",
-      color: "white",
-      bgColor: "#aa2c2c",
-    },
-    // Payment Status
-    {
-      id: "all_payment_status",
-      label: "All",
-      column: "payment_status",
-      comparison: "===", // includes paid, unpaid, partially_paid
-      color: "black",
-      bgColor: "#c4c4c4",
-    },
-    {
-      id: "paid",
-      label: "Paid",
-      column: "payment_status",
-      comparison: "===",
-      color: "black",
-      bgColor: "#7FE5B0",
-    },
-    {
-      id: "unpaid",
-      label: "Unpaid",
-      column: "payment_status",
-      comparison: "===",
-      color: "black",
-      bgColor: "#FF7D7D",
-    },
-    {
-      id: "partially_paid",
-      label: "Partially Paid",
-      column: "payment_status",
-      comparison: "===",
-      color: "black",
-      bgColor: "#FFD563",
-    },
-    // Next Due Date Status
-    {
-      id: "all_next_due_date",
-      label: "All",
-      column: "next_due_date",
-      comparison: "===", // includes next_not_yet_due, next_past_due
-      color: "black",
-      bgColor: "#c4c4c4",
-    },
-    {
-      id: "next_not_yet_due",
-      label: "Not Yet Due",
-      column: "next_due_date",
-      comparison: "===",
-      color: "black",
-      bgColor: "#7FE5B0",
-    },
-    {
-      id: "next_past_due",
-      label: "Past Due",
-      column: "next_due_date",
-      comparison: "===",
-      color: "black",
-      bgColor: "#FF7D7D",
-    },
-    // Final Due Date Status
-    {
-      id: "all_final_due_date",
-      label: "All",
-      column: "final_due_date",
-      comparison: "===", // includes final_not_yet_due, final_past_due
-      color: "black",
-      bgColor: "#c4c4c4",
-    },
-    {
-      id: "final_not_yet_due",
-      label: "Not Yet Due",
-      column: "final_due_date",
-      comparison: "===",
-      color: "black",
-      bgColor: "#7FE5B0",
-    },
-    {
-      id: "final_past_due",
-      label: "Past Due",
-      column: "final_due_date",
-      comparison: "===",
-      color: "black",
-      bgColor: "#FF7D7D",
-    },
-  ];
+  };
 
   const actions = [
     {
@@ -611,6 +643,10 @@ export default function TableViewLoans() {
     setIsLoanFilesModalOpen(true);
   };
 
+  const handleFilterChange = (newFilters) => {
+    setFilters(newFilters);
+  };
+
   return (
     <AuthenticatedLayout
       header={
@@ -640,11 +676,14 @@ export default function TableViewLoans() {
               showStatusBar={true}
               itemsPerPage={10}
               defaultSort={{ column: "created_at", direction: "desc" }}
-              statuses={statuses}
+              statusGroups={statusGroups}
               actions={actions}
               selectedRow={selectedLoan}
               setSelectedRow={setSelectedLoan}
               idField="loan_id"
+              is_database_filter={true}
+              statusCount={statusCount}
+              onFilterChange={handleFilterChange}
             />
           </div>
         </div>
