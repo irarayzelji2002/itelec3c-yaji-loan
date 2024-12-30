@@ -481,7 +481,9 @@ export default function UsersTableView() {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
-          //   "X-CSRF-TOKEN": csrfToken,
+          Accept: "application/json",
+          "X-CSRF-TOKEN": csrfToken,
+          "X-Requested-With": "XMLHttpRequest",
         },
         body: JSON.stringify({ verification_status: new_verification_status }),
       });
@@ -533,7 +535,7 @@ export default function UsersTableView() {
         headers: {
           "Content-Type": "application/json",
           Accept: "application/json",
-          //   "X-CSRF-TOKEN": csrfToken,
+          "X-CSRF-TOKEN": csrfToken,
           "X-Requested-With": "XMLHttpRequest",
         },
         credentials: "include",
