@@ -17,6 +17,7 @@ class Loan extends Model
         'borrower_id',
         'loan_type_id',
         'loan_amount',
+        'payment_frequency',
         'interest_rate',
         'loan_term_period',
         'loan_term_unit',

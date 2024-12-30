@@ -2,7 +2,7 @@ import PrimaryButton from "@/Components/PrimaryButton";
 import SecondaryButton from "@/Components/SecondaryButton";
 import { CheckCircleGradientIcon } from "@/Icons/GeneralIcons";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
-import { numberWithCommas, showToast } from "@/utils/displayFunctions";
+import { capitalizeFirstLetter, numberWithCommas, showToast } from "@/utils/displayFunctions";
 import { Head } from "@inertiajs/react";
 import html2canvas from "html2canvas";
 import jsPDF from "jspdf";
@@ -17,6 +17,7 @@ export default function LoanApplicationForm() {
     loanAmount: 0,
     interestRate: 0,
     loanTerm: "-",
+    paymentFrequency: "-",
     monthlyPayment: 0,
     numberOfPayments: 0,
     totalPayback: 0,
@@ -43,6 +44,7 @@ export default function LoanApplicationForm() {
         loanAmount: loanData?.loanAmount || 0,
         interestRate: loanData?.interestRate || 0,
         loanTerm: loanData?.loanTerm || "-",
+        paymentFrequency: loanData?.paymentFrequency || "-",
         monthlyPayment: loanData?.monthlyPayment || 0,
         numberOfPayments: loanData?.numberOfPayments || 0,
         totalPayback: loanData?.totalPayback || 0,
@@ -218,12 +220,18 @@ export default function LoanApplicationForm() {
                   </span>
                 </li>
                 <li className="flex justify-between">
-                  <span className="font-medium text-gray-800">Interest Rate</span>
-                  <span className="text-gray-600">{summaryData?.interestRate}%</span>
+                  <span className="font-medium text-gray-800">Payment Frequency</span>
+                  <span className="text-gray-600">
+                    {capitalizeFirstLetter(summaryData?.paymentFrequency)}
+                  </span>
                 </li>
                 <li className="flex justify-between">
                   <span className="font-medium text-gray-800">Loan Term</span>
                   <span className="text-gray-600">{summaryData?.loanTerm}</span>
+                </li>
+                <li className="flex justify-between">
+                  <span className="font-medium text-gray-800">Interest Rate</span>
+                  <span className="text-gray-600">{summaryData?.interestRate}%</span>
                 </li>
                 <li className="flex justify-between">
                   <span className="font-medium text-gray-800">Monthly Payment</span>

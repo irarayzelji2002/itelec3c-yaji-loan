@@ -36,6 +36,7 @@ export default function LoanApplicationForm({ loanTypes }) {
     purpose_details: "",
     loan_files: [],
     agree: false,
+    payment_frequency: "monthly",
   };
 
   const {
@@ -56,6 +57,7 @@ export default function LoanApplicationForm({ loanTypes }) {
       interest_rate: loanType.default_interest_rate,
       loan_term_unit: loanType.default_loan_term_unit,
       loan_term_period: loanType.default_loan_term_period,
+      payment_frequency: loanType.default_payment_frequency,
     });
     setErrors({
       ...errors,
@@ -250,6 +252,7 @@ export default function LoanApplicationForm({ loanTypes }) {
     if (!data.loan_type_id) errors.loan_type_id = "Loan type is required";
     if (!data.loan_amount) errors.loan_amount = "Loan amount is required";
     if (!data.loan_term_period) errors.loan_term_period = "Loan term is required";
+    if (!data.payment_frequency) errors.payment_frequency = "Payment frequency is required";
     if (!data.purpose) errors.purpose = "Purpose is required";
     else if (data.purpose === "Others" && !data.purpose_details)
       errors.purpose = "Please specify purpose";
@@ -311,6 +314,7 @@ export default function LoanApplicationForm({ loanTypes }) {
           loanAmount: parseFloat(data.loan_amount),
           interestRate: estimationData.interestRate,
           loanTerm: `${data.loan_term_period} ${data.loan_term_unit}`,
+          paymentFrequency: data.payment_frequency,
           monthlyPayment: estimationData.monthlyPayment,
           numberOfPayments: parseInt(data.loan_term_period),
           totalPayback: estimationData.totalPayback,
@@ -398,22 +402,54 @@ export default function LoanApplicationForm({ loanTypes }) {
 
             {/* Loan Amount */}
             <div className="mb-4">
-              <InputLabel htmlFor="loan_amount" value="Loan Amount" required={true} />
-              <TextInput
-                id="loan_amount"
-                type="number"
-                className="mt-1 block w-full"
-                value={data.loan_amount}
-                onChange={handleLoanAmountChange}
-                placeholder="Enter amount"
-              />
-              {selectedLoanType && (
-                <p className="mt-1 text-sm text-gray-600">
-                  Range: ₱{numberWithCommas(selectedLoanType.min_loan_amount.toLocaleString())} - ₱
-                  {numberWithCommas(selectedLoanType.max_loan_amount.toLocaleString())}
-                </p>
-              )}
-              <InputError message={errors.loan_amount || serverErrors.loan_amount} />
+              <div className="mt-1 flex flex-col gap-[10px] md:flex-row">
+                <div className="flex-1">
+                  <InputLabel htmlFor="loan_amount" value="Loan Amount" required={true} />
+                  <TextInput
+                    id="loan_amount"
+                    type="number"
+                    className="mt-1 block w-full"
+                    value={data.loan_amount}
+                    onChange={handleLoanAmountChange}
+                    placeholder="Enter amount"
+                  />
+                  {selectedLoanType && (
+                    <p className="mt-1 text-sm text-gray-600">
+                      Range: ₱{numberWithCommas(selectedLoanType.min_loan_amount.toLocaleString())}{" "}
+                      - ₱{numberWithCommas(selectedLoanType.max_loan_amount.toLocaleString())}
+                    </p>
+                  )}
+                  <InputError message={errors.loan_amount || serverErrors.loan_amount} />
+                </div>
+                <div className="flex-1">
+                  <InputLabel
+                    htmlFor="payment_frequency"
+                    value="Payment Frequency"
+                    required={true}
+                  />
+                  <SelectInput
+                    className="block w-full"
+                    value={data.payment_frequency}
+                    onChange={(e) => {
+                      setData("payment_frequency", e.target.value);
+                      setErrors({ ...errors, payment_frequency: "" });
+                      setServerError("payment_frequency", "");
+                    }}
+                  >
+                    <option value="daily">Daily</option>
+                    <option value="weekly">Weekly</option>
+                    <option value="bi-weekly">Bi-weekly</option>
+                    <option value="monthly">Monthly</option>
+                    <option value="quarterly">Quarterly</option>
+                    <option value="semi-annually">Semi-annually</option>
+                    <option value="annually">Annually</option>
+                    <option value="lump-sum">Lump-sum</option>
+                  </SelectInput>
+                  <InputError
+                    message={errors.payment_frequency || serverErrors.payment_frequency}
+                  />
+                </div>
+              </div>
             </div>
 
             {/* Loan Term */}
