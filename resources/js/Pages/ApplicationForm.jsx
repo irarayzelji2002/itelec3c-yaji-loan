@@ -18,7 +18,7 @@ export default function LoanApplicationForm({ loanTypes }) {
   const [selectedLoanType, setSelectedLoanType] = useState(null);
   const [estimationData, setEstimationData] = useState({
     interestRate: 0,
-    monthlyPayment: 0,
+    periodicPayment: 0,
     totalPayback: 0,
     approvalDate: "",
     disbursementDate: "",
@@ -188,6 +188,75 @@ export default function LoanApplicationForm({ loanTypes }) {
     setServerError("purpose", "");
   };
 
+  // CALCULATIONS
+  const addBusinessDays = (date, days) => {
+    let currentDate = new Date(date);
+    let addedDays = 0;
+    while (addedDays < days) {
+      currentDate.setDate(currentDate.getDate() + 1);
+      if (currentDate.getDay() !== 0 && currentDate.getDay() !== 6) {
+        addedDays++;
+      }
+    }
+    return currentDate;
+  };
+
+  const getFinalDueDate = (baseDate, formData) => {
+    const date = new Date(baseDate);
+
+    switch (formData.loan_term_unit) {
+      case "days":
+        return new Date(date.setDate(date.getDate() + parseInt(formData.loan_term_period)));
+      case "weeks":
+        return new Date(date.setDate(date.getDate() + parseInt(formData.loan_term_period) * 7));
+      case "months":
+        return new Date(date.setMonth(date.getMonth() + parseInt(formData.loan_term_period)));
+      case "years":
+        return new Date(date.setFullYear(date.getFullYear() + parseInt(formData.loan_term_period)));
+      default:
+        return new Date(date.setMonth(date.getMonth() + parseInt(formData.loan_term_period)));
+    }
+  };
+
+  const convertTermToMonths = (period, unit) => {
+    switch (unit) {
+      case "days":
+        return Math.ceil(period / 30);
+      case "weeks":
+        return Math.ceil((period * 7) / 30);
+      case "months":
+        return parseInt(period);
+      case "years":
+        return period * 12;
+      default:
+        return parseInt(period);
+    }
+  };
+
+  const getFirstPaymentDate = (disbursementDate, formData) => {
+    const baseDate = new Date(disbursementDate);
+    switch (formData.payment_frequency) {
+      case "daily":
+        return new Date(baseDate.setDate(baseDate.getDate() + 1));
+      case "weekly":
+        return new Date(baseDate.setDate(baseDate.getDate() + 7));
+      case "bi-weekly":
+        return new Date(baseDate.setDate(baseDate.getDate() + 14));
+      case "monthly":
+        return new Date(baseDate.setMonth(baseDate.getMonth() + 1));
+      case "quarterly":
+        return new Date(baseDate.setMonth(baseDate.getMonth() + 3));
+      case "semi-annually":
+        return new Date(baseDate.setMonth(baseDate.getMonth() + 6));
+      case "annually":
+        return new Date(baseDate.setFullYear(baseDate.getFullYear() + 1));
+      case "lump-sum":
+        return getFinalDueDate(baseDate, formData);
+      default:
+        return new Date(baseDate.setMonth(baseDate.getMonth() + 1));
+    }
+  };
+
   // Calculate estimation data
   const calculateEstimation = (formData) => {
     if (
@@ -203,31 +272,83 @@ export default function LoanApplicationForm({ loanTypes }) {
     if (!selectedLoanType) return;
 
     const totalAmount = parseFloat(formData.loan_amount);
-    const interestRate = parseFloat(formData.interest_rate);
-    const monthlyInterest = interestRate / 12 / 100;
-    const numberOfPayments = parseInt(formData.loan_term_period);
+    const annualInterestRate = parseFloat(formData.interest_rate) / 100;
 
-    // Calculate monthly payment using amortization formula
-    const monthlyPayment = selectedLoanType.is_amortized
-      ? (totalAmount * monthlyInterest * Math.pow(1 + monthlyInterest, numberOfPayments)) /
-        (Math.pow(1 + monthlyInterest, numberOfPayments) - 1)
-      : totalAmount * (1 + interestRate / 100);
+    // Calculate number of payments based on frequency
+    const getNumberOfPayments = () => {
+      const termInMonths = convertTermToMonths(formData.loan_term_period, formData.loan_term_unit);
+      switch (formData.payment_frequency) {
+        case "daily":
+          return termInMonths * 30;
+        case "weekly":
+          return termInMonths * 4;
+        case "bi-weekly":
+          return termInMonths * 2;
+        case "monthly":
+          return termInMonths;
+        case "quarterly":
+          return Math.ceil(termInMonths / 3);
+        case "semi-annually":
+          return Math.ceil(termInMonths / 6);
+        case "annually":
+          return Math.ceil(termInMonths / 12);
+        case "lump-sum":
+          return 1;
+        default:
+          return termInMonths;
+      }
+    };
 
-    const totalPayback = selectedLoanType.is_amortized
-      ? monthlyPayment * numberOfPayments
-      : totalAmount * (1 + interestRate / 100);
+    // Get periodic interest rate
+    const getPeriodicRate = () => {
+      switch (formData.payment_frequency) {
+        case "daily":
+          return annualInterestRate / 365;
+        case "weekly":
+          return annualInterestRate / 52;
+        case "bi-weekly":
+          return annualInterestRate / 26;
+        case "monthly":
+          return annualInterestRate / 12;
+        case "quarterly":
+          return annualInterestRate / 4;
+        case "semi-annually":
+          return annualInterestRate / 2;
+        case "annually":
+          return annualInterestRate;
+        case "lump-sum":
+          return annualInterestRate;
+        default:
+          return annualInterestRate / 12;
+      }
+    };
+
+    const numberOfPayments = getNumberOfPayments();
+    const periodicRate = getPeriodicRate();
+
+    // Calculate periodic payment
+    const periodicPayment = selectedLoanType.is_amortized
+      ? (totalAmount * periodicRate * Math.pow(1 + periodicRate, numberOfPayments)) /
+        (Math.pow(1 + periodicRate, numberOfPayments) - 1)
+      : formData.payment_frequency === "lump-sum"
+        ? totalAmount * (1 + annualInterestRate)
+        : (totalAmount * (1 + annualInterestRate)) / numberOfPayments;
+
+    const totalPayback = periodicPayment * numberOfPayments;
 
     // Calculate dates
     const today = new Date();
-    const approvalDate = new Date(today.getTime() + 2 * 24 * 60 * 60 * 1000); // 2 days from now
-    const disbursementDate = new Date(today.getTime() + 3 * 24 * 60 * 60 * 1000); // 3 days from now
-    const firstPaymentDate = new Date(today.getTime() + 30 * 24 * 60 * 60 * 1000); // 30 days from now
-    const finalDueDate = new Date(today.getTime() + numberOfPayments * 30 * 24 * 60 * 60 * 1000);
+    const approvalDate = addBusinessDays(today, 2); // 2 business days from today
+    const disbursementDate = addBusinessDays(approvalDate, 5); // 5 business days after approval
+
+    // Calculate first payment date based on frequency
+    const firstPaymentDate = getFirstPaymentDate(disbursementDate, formData);
+    const finalDueDate = getFinalDueDate(disbursementDate, formData);
 
     setEstimationData({
-      interestRate,
-      monthlyPayment,
-      totalPayback,
+      interestRate: formData.interest_rate,
+      periodicPayment: Math.round(periodicPayment * 100) / 100,
+      totalPayback: Math.round(totalPayback * 100) / 100,
       approvalDate: approvalDate.toLocaleDateString(),
       disbursementDate: disbursementDate.toLocaleDateString(),
       firstPaymentDate: firstPaymentDate.toLocaleDateString(),
@@ -315,7 +436,7 @@ export default function LoanApplicationForm({ loanTypes }) {
           interestRate: estimationData.interestRate,
           loanTerm: `${data.loan_term_period} ${data.loan_term_unit}`,
           paymentFrequency: data.payment_frequency,
-          monthlyPayment: estimationData.monthlyPayment,
+          periodicPayment: estimationData.periodicPayment,
           numberOfPayments: parseInt(data.loan_term_period),
           totalPayback: estimationData.totalPayback,
           estimatedApprovalDate: estimationData.approvalDate,
@@ -678,11 +799,11 @@ export default function LoanApplicationForm({ loanTypes }) {
                   </tr>
                   <tr>
                     <td className="py-2 text-sm font-medium text-black">
-                      Estimated Monthly Payment:
+                      Estimated Periodic Payment:
                     </td>
                     <td className="py-2 pl-4 text-sm text-black">
-                      {estimationData.monthlyPayment
-                        ? `₱${numberWithCommas(estimationData.monthlyPayment.toFixed(2))}`
+                      {estimationData.periodicPayment
+                        ? `₱${numberWithCommas(estimationData.periodicPayment.toFixed(2))}`
                         : "-"}
                     </td>
                   </tr>

@@ -117,6 +117,7 @@ class LoanController extends Controller
                 'loan_id' => $loan->loan_id,
                 'borrower_name' => $loan->borrower->full_name ?? '-',
                 'loan_amount' => $loan->loan_amount,
+                'payment_frequency' => $loan->payment_frequency,
                 'interest_rate' => $loan->interest_rate,
                 'loan_term_unit' => $loan->loan_term_unit,
                 'loan_term_period' => $loan->loan_term_period,
