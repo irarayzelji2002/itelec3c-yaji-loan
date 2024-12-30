@@ -16,8 +16,24 @@ export const capitalizeFirstLetter = (val) => {
   return String(val).charAt(0).toUpperCase() + String(val).slice(1);
 };
 
+export const underscoreToTitleCase = (val) => {
+  return val
+    .replace(/_/g, " ") // Replace all underscores with spaces
+    .replace(/\b\w/g, (char) => char.toUpperCase()); // Capitalize the first letter of each word
+};
+
 export const numberWithCommas = (x) => {
-  return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+  // First convert to float and fix to 2 decimal places
+  const withDecimals = parseFloat(x).toFixed(2);
+
+  // Split the number into whole and decimal parts
+  const [wholePart, decimalPart] = withDecimals.split(".");
+
+  // Add commas to the whole part only
+  const wholeWithCommas = wholePart.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+
+  // Return the formatted number with decimal part
+  return `${wholeWithCommas}.${decimalPart}`;
 };
 
 export const showToast = (

@@ -12,7 +12,7 @@ class LoanStatusHistory extends Model
     protected $primaryKey = 'loan_status_history_id';
     protected $fillable = [
         'loan_id',
-        'status',
+        'status', //pending, approved, disbursed, completed, disapproved, discontinued, canceled
         'changed_by',
         'remarks'
     ];
@@ -26,7 +26,7 @@ class LoanStatusHistory extends Model
         return $this->belongsTo(Loan::class, 'loan_id');
     }
 
-    public function changedByUser()
+    public function changedBy()
     {
         return $this->belongsTo(User::class, 'changed_by');
     }

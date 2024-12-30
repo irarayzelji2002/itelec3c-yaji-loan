@@ -1,6 +1,6 @@
 // resources/js/Components/Table.jsx
 import TextInput from "@/Components/TextInput";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 const Table = ({
   columns,
@@ -10,15 +10,23 @@ const Table = ({
   itemsPerPage = 10,
   loading: externalLoading = false,
   defaultSort = { column: "id", direction: "asc" },
-  statuses = [], // Array of status objects { id, label, column, comparison }
+  statusGroups = [],
   actions = [], // Array of action objects { id, label, render }
   selectedRow,
   setSelectedRow,
   idField = "id",
+  is_database_filter = false,
+  statusCount = {},
+  onFilterChange,
 }) => {
   const [data, setData] = useState([]);
-  const [filteredData, setFilteredData] = useState([]);
-  const [selectedStatus, setSelectedStatus] = useState(null);
+  const [selectedStatuses, setSelectedStatuses] = useState(() => {
+    const initial = {};
+    Object.keys(statusGroups || {}).forEach((groupKey) => {
+      initial[groupKey] = statusGroups[groupKey].defaultSelected;
+    });
+    return initial;
+  });
   const [activeSort, setActiveSort] = useState(defaultSort);
   const [loading, setLoading] = useState(externalLoading);
   const [isSearching, setIsSearching] = useState(false);
@@ -39,28 +47,11 @@ const Table = ({
     if (initialData.length > 0) {
       const sorted = sortData(initialData, defaultSort.column, defaultSort.direction);
       setData(sorted);
-      setFilteredData(sorted);
     }
+    setData(initialData);
   }, [initialData]);
 
-  // Filtering data
-  useEffect(() => {
-    if (!data.length) return;
-
-    setIsSearching(true);
-    const timeoutId = setTimeout(() => {
-      let filtered = filterData(data, searchQuery);
-      // Apply status filter if selected
-      if (selectedStatus) {
-        filtered = filtered.filter((item) => item[selectedStatus.column] === selectedStatus.id);
-      }
-      setFilteredData(filtered);
-      setIsSearching(false);
-    }, 300);
-
-    return () => clearTimeout(timeoutId);
-  }, [searchQuery, data, selectedStatus]);
-
+  // Search filter function
   const filterData = (data, query) => {
     if (!query) return data;
 
@@ -73,17 +64,56 @@ const Table = ({
         })
         .join(" ")
         .toLowerCase();
-
       return searchStr.includes(query.toLowerCase());
     });
   };
 
-  const handleStatusClick = (status) => {
-    setSelectedStatus(selectedStatus?.id === status.id ? null : status);
-    setCurrentPage(1); // Reset to first page when filtering
+  // Filtering with search and status
+  const filteredData = useMemo(() => {
+    if (!data.length) return [];
+    setIsSearching(true);
+
+    // If using database filtering, only apply search
+    if (is_database_filter) {
+      const searchFiltered = filterData(data, searchQuery);
+      setIsSearching(false);
+      return searchFiltered;
+    }
+
+    // First filter by status
+    const statusFiltered = data.filter((item) => {
+      return Object.entries(selectedStatuses).every(([groupKey, selectedStatus]) => {
+        const group = statusGroups[groupKey];
+        const status = group.statuses.find((s) => s.id === selectedStatus);
+        if (!status || status.id.startsWith("all_")) return true;
+        return item[status.column] === status.id;
+      });
+    });
+
+    // Then apply search filter
+    const finalFiltered = filterData(statusFiltered, searchQuery);
+    setIsSearching(false);
+    return finalFiltered;
+  }, [data, selectedStatuses, is_database_filter, searchQuery]);
+
+  const handleStatusClick = (groupKey, status) => {
+    setSelectedStatuses((prev) => ({
+      ...prev,
+      [groupKey]: status.id,
+    }));
+    if (onFilterChange && is_database_filter) {
+      onFilterChange({
+        ...selectedStatuses,
+        [groupKey]: status.id,
+      });
+    }
+    setCurrentPage(1);
   };
 
   const handleSort = (columnId) => {
+    const column = columns.find((col) => col.id === columnId);
+    if (!column?.sortable) return;
+
     let newDirection = sort[columnId];
     if (activeSort.column !== columnId) {
       // Keep the current direction when switching to a new column
@@ -95,35 +125,71 @@ const Table = ({
 
     setSort({ ...sort, [columnId]: newDirection });
     setActiveSort({ column: columnId, direction: newDirection });
-    const sorted = sortData(filteredData, columnId, newDirection);
-    setFilteredData(sorted);
+
+    // Sort the data directly
+    const sorted = sortData(data, columnId, newDirection);
+    setData(sorted);
+    setCurrentPage(1);
   };
+
+  const convertToDays = (value, unit) => {
+    const period = parseFloat(value) || 0;
+    switch (unit.toLowerCase()) {
+      case "days":
+        return period;
+      case "weeks":
+        return period * 7;
+      case "months":
+        return period * 30; // approximate
+      case "years":
+        return period * 365; // approximate
+      default:
+        return period;
+    }
+  };
+
   const sortData = (data, columnId, order) => {
     return [...data].sort((a, b) => {
       const column = columns.find((col) => col.id === columnId);
-      let aValue = column?.getValue ? column.getValue(a) : a[columnId];
-      let bValue = column?.getValue ? column.getValue(b) : b[columnId];
+      const sortKey = column?.sortKey || column?.id;
+
+      let aValue = column?.getValue ? column.getValue(a) : a[sortKey];
+      let bValue = column?.getValue ? column.getValue(b) : b[sortKey];
 
       // Handle null/undefined values
       aValue = aValue ?? "";
       bValue = bValue ?? "";
 
       // Handle different data types
-      if (column?.type === "date") {
-        aValue = new Date(aValue);
-        bValue = new Date(bValue);
-        return order === "asc" ? aValue - bValue : bValue - aValue;
+      switch (column?.type) {
+        case "timestamp":
+        case "date": {
+          aValue = new Date(aValue).getTime();
+          bValue = new Date(bValue).getTime();
+          break;
+        }
+        case "number": {
+          aValue = parseFloat(aValue) || 0;
+          bValue = parseFloat(bValue) || 0;
+          break;
+        }
+        case "period_unit": {
+          // Use the convertToDays function defined above
+          aValue = convertToDays(a.loan_term_period, a.loan_term_unit);
+          bValue = convertToDays(b.loan_term_period, b.loan_term_unit);
+          break;
+        }
+        default: {
+          // String comparison
+          if (typeof aValue === "string") aValue = aValue.toLowerCase();
+          if (typeof bValue === "string") bValue = bValue.toLowerCase();
+          break;
+        }
       }
-
-      if (column?.type === "number") {
-        aValue = Number(aValue);
-        bValue = Number(bValue);
-        return order === "asc" ? aValue - bValue : bValue - aValue;
-      }
-
-      return order === "asc"
-        ? aValue.toString().localeCompare(bValue.toString())
-        : bValue.toString().localeCompare(aValue.toString());
+      // Compare the values
+      if (aValue === bValue) return 0;
+      const comparison = order === "asc" ? (aValue < bValue ? -1 : 1) : aValue > bValue ? -1 : 1;
+      return comparison;
     });
   };
 
@@ -134,19 +200,27 @@ const Table = ({
 
   const totalPages = Math.ceil(filteredData.length / itemsPerPage);
 
-  // Calculate status counts based on the comparison operator
-  const statusCounts = statuses.reduce((acc, status) => {
-    acc[status.id] = initialData.filter((item) => {
-      if (status.comparison === "===") {
-        return item[status.column] === status.id;
-      }
-      console.log(`item[status.column] ${item[status.column]}; status.id ${status.id}`);
-      // Add other comparison operators if needed
-      return false;
-    }).length;
+  useEffect(() => {
+    console.log("Table.jsx - initialData", initialData);
+    console.log("Table.jsx - data", data);
+    console.log("Table.jsx - selectedStatuses", selectedStatuses);
+    console.log("Table.jsx - filteredData", filteredData);
+    console.log("Table.jsx - paginatedData", paginatedData);
+  }, [paginatedData]);
 
-    return acc;
-  }, {});
+  // Calculate status counts based on the comparison operator
+  //   const statusCounts = statuses.reduce((acc, status) => {
+  //     acc[status.id] = initialData.filter((item) => {
+  //       if (status.comparison === "===") {
+  //         return item[status.column] === status.id;
+  //       }
+  //       console.log(`item[status.column] ${item[status.column]}; status.id ${status.id}`);
+  //       // Add other comparison operators if needed
+  //       return false;
+  //     }).length;
+
+  //     return acc;
+  //   }, {});
 
   // Handle row selection
   const handleRowClick = (row) => {
@@ -182,25 +256,37 @@ const Table = ({
           className="flex min-h-[56px] flex-col items-center justify-between gap-2 rounded-t-lg border-gray-300 bg-gray-50 px-4 py-2 sm:flex-row"
           style={{ borderWidth: "1px" }}
         >
-          <div className="flex flex-wrap gap-1">
-            {statuses.map((status) => (
-              <div
-                key={status.id}
-                onClick={() => handleStatusClick(status)}
-                className={`flex cursor-pointer items-center gap-2 p-1 px-2 pt-1.5 font-medium capitalize transition-all ${
-                  selectedStatus?.id === status.id
-                    ? "border-b-2 border-green-800"
-                    : "hover:border-b-2 hover:border-green-800/50"
-                }`}
-              >
-                <span className="text-sm font-medium capitalize">{status.label}</span>
+          <div className="flex flex-wrap gap-2">
+            {/* Map through status groups */}
+            {Object.entries(statusGroups).map(([groupKey, group]) => (
+              <div key={groupKey}>
+                <p className="text-green-850 text-[0.78rem] font-bold capitalize">{group.label}</p>
+                <div className="gap- flex flex-wrap rounded-t-lg border-gray-300 ring-1 ring-gray-400/50">
+                  {group.statuses.map((status) => (
+                    <div
+                      key={status.id}
+                      onClick={() => handleStatusClick(groupKey, status)}
+                      className={`flex cursor-pointer items-center gap-2 p-1 px-2 pt-1.5 font-medium capitalize transition-all ${
+                        selectedStatuses[groupKey] === status.id
+                          ? "border-b-2 border-green-800"
+                          : "hover:border-b-2 hover:border-green-800/50"
+                      }`}
+                    >
+                      <span className="text-sm font-medium capitalize">{status.label}</span>
 
-                <span
-                  className="min-w-[24px] rounded-full bg-gray-200 px-2 py-0.5 text-center text-sm"
-                  style={{ color: status.color, backgroundColor: status.bgColor }}
-                >
-                  {statusCounts[status.id]}
-                </span>
+                      <span
+                        className="min-w-[24px] rounded-full bg-gray-200 px-2 py-0.5 text-center text-sm"
+                        style={{ color: status.color, backgroundColor: status.bgColor }}
+                      >
+                        {is_database_filter
+                          ? statusCount[groupKey]?.[status.id] || 0
+                          : status.id.startsWith("all_")
+                            ? data.length // Use the full dataset for "all_" counts
+                            : data.filter((item) => item[status.column] === status.id).length}
+                      </span>
+                    </div>
+                  ))}
+                </div>
               </div>
             ))}
           </div>
@@ -235,7 +321,7 @@ const Table = ({
                     <span className={`${column.sortable && "mr-2"} flex flex-grow justify-center`}>
                       {column.label}
                     </span>
-                    {column.sortable && !column.isAction && (
+                    {column.sortable && (
                       <button
                         className={`text-gray-500 ${
                           activeSort.column === column.id ? "text-white" : ""

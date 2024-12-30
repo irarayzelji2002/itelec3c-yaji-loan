@@ -4,6 +4,7 @@ use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use App\Models\User;
 use App\Models\LoanType;
+use App\Models\Loan;
 use App\Models\Payment;
 use App\Http\Controllers\ViewTable;
 use App\Http\Controllers\UserController;
@@ -78,6 +79,9 @@ Route::middleware('auth')->group(function () {
         // Admin/Employee only routes (starts with /api/employee)
         Route::middleware(['role:admin,employee'])->prefix('employee')->group(function () {
             Route::get('/loans', [LoanController::class, 'index'])->name('loans.index');
+            Route::get('/users', function () {
+                return User::with(['roles', 'verificationType'])->get();
+            });
             Route::put('/users/{user_id}/verification-status', [UserController::class, 'updateVerificationStatus']);
             Route::put('/users/{user_id}/role', [UserController::class, 'updateRole']);
             Route::post('/register-employee', [RegisteredUserController::class, 'storeEmployee'])->name('register.employee');
@@ -92,7 +96,18 @@ Route::middleware('auth')->group(function () {
             return Inertia::render('TableViewUsers');
         })->name('view.users-table');
         Route::get('/loans-table', function () {
-            return Inertia::render('TableViewLoans');
+            $loans = Loan::with([
+                'borrower:user_id,first_name,middle_name,last_name',
+                'loanType:loan_type_id,loan_type_name,is_amortized',
+                'approvedBy:user_id,first_name,middle_name,last_name',
+                'disbursedBy:user_id,first_name,middle_name,last_name',
+                'statusHistory',
+                'loanFiles'
+            ])->get();
+
+            return Inertia::render('TableViewLoans', [
+                'loans' => $loans
+            ]);
         })->name('view.loans-table');
     });
 });

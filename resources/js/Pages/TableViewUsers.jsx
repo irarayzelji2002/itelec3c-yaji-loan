@@ -17,6 +17,10 @@ export default function UsersTableView() {
   const [disableAcceptBtn, setDisableAcceptBtn] = useState(false);
   const [disableDenyBtn, setDisableDenyBtn] = useState(false);
   const [disableRoleBtn, setDisableRoleBtn] = useState(false);
+  const [filters, setFilters] = useState({
+    verificationStatus: "all_verification",
+    role: "all_roles",
+  });
 
   useEffect(() => {
     setLoading(true);
@@ -31,7 +35,7 @@ export default function UsersTableView() {
         console.error(err);
         setLoading(false);
       });
-  }, []);
+  }, [filters]);
 
   const columns = [
     {
@@ -91,9 +95,23 @@ export default function UsersTableView() {
       id: "created_at",
       label: "Created At",
       sortable: true,
+      type: "timestamp",
       minWidth: "130px",
       render: (user) =>
         new Date(user.created_at).toLocaleString("en-US", {
+          dateStyle: "short",
+          timeStyle: "short",
+          hour12: true,
+        }),
+    },
+    {
+      id: "updated_at",
+      label: "Updated At",
+      sortable: true,
+      type: "timestamp",
+      minWidth: "130px",
+      render: (user) =>
+        new Date(user.updated_at).toLocaleString("en-US", {
           dateStyle: "short",
           timeStyle: "short",
           hour12: true,
@@ -123,6 +141,7 @@ export default function UsersTableView() {
       id: "phone_number",
       label: "Phone",
       sortable: true,
+      type: "number",
       minWidth: "120px",
     },
     {
@@ -306,56 +325,76 @@ export default function UsersTableView() {
     },
   ];
 
-  const statuses = [
-    {
-      id: "pending",
-      label: "Pending",
-      column: "verification_status",
-      comparison: "===",
-      color: "black",
-      bgColor: "#FFD563",
+  const statusGroups = {
+    verificationStatus: {
+      label: "Verification Status",
+      defaultSelected: "all_verification",
+      statuses: [
+        {
+          id: "all_verification",
+          label: "All",
+          column: "verification_status",
+          color: "black",
+          bgColor: "#c4c4c4",
+        },
+        {
+          id: "pending",
+          label: "Pending",
+          column: "verification_status",
+          color: "black",
+          bgColor: "#FFD563",
+        },
+        {
+          id: "verified",
+          label: "Verified",
+          column: "verification_status",
+          color: "black",
+          bgColor: "#7FE5B0",
+        },
+        {
+          id: "denied",
+          label: "Denied",
+          column: "verification_status",
+          color: "black",
+          bgColor: "#FF7D7D",
+        },
+      ],
     },
-    {
-      id: "verified",
-      label: "Verified",
-      column: "verification_status",
-      comparison: "===",
-      color: "black",
-      bgColor: "#7FE5B0",
+    role: {
+      label: "Role",
+      defaultSelected: "all_roles",
+      statuses: [
+        {
+          id: "all_roles",
+          label: "All",
+          column: "role_name",
+          color: "black",
+          bgColor: "#c4c4c4",
+        },
+        {
+          id: "member",
+          label: "Member",
+          column: "role_name",
+          color: "black",
+          bgColor: "#62E19E",
+        },
+        {
+          id: "employee",
+          label: "Employee",
+          column: "role_name",
+          color: "white",
+          bgColor: "#31896b",
+        },
+        {
+          id: "admin",
+          label: "Admin",
+          column: "role_name",
+          color: "white",
+          bgColor: "#043C3C",
+        },
+      ],
     },
-    {
-      id: "denied",
-      label: "Denied",
-      column: "verification_status",
-      comparison: "===",
-      color: "black",
-      bgColor: "#FF7D7D",
-    },
-    {
-      id: "member",
-      label: "Member",
-      column: "role_name",
-      comparison: "===",
-      color: "black",
-      bgColor: "#62E19E",
-    },
-    {
-      id: "employee",
-      label: "Employee",
-      column: "role_name",
-      comparison: "===",
-      color: "white",
-      bgColor: "#31896b",
-    },
-    {
-      id: "admin",
-      label: "Admin",
-      column: "role_name",
-      comparison: "===",
-      color: "white",
-      bgColor: "#043C3C",
-    },
-  ];
+  };
 
   const actions = [
     {
@@ -420,6 +459,10 @@ export default function UsersTableView() {
 
   const closeModal = () => {
     setShowModal(false);
+  };
+
+  const handleFilterChange = (newFilters) => {
+    setFilters(newFilters);
   };
 
   const handleChangeVerificationStatus = async (user, new_verification_status) => {
@@ -552,11 +595,12 @@ export default function UsersTableView() {
               showStatusBar={true}
               itemsPerPage={10}
               defaultSort={{ column: "created_at", direction: "desc" }}
-              statuses={statuses}
+              statusGroups={statusGroups}
               actions={actions}
               selectedRow={selectedUser}
               setSelectedRow={setSelectedUser}
               idField="user_id"
+              onFilterChange={handleFilterChange}
             />
           </div>
         </div>
