@@ -73,6 +73,10 @@ export default function TableViewLoans() {
     console.log("loanstatus pending count:", statusCount["loanStatus"]?.["pending"]);
   }, [loans, statusCount]);
 
+  useEffect(() => {
+    console.log("filters:", filters);
+  }, [filters]);
+
   const columns = [
     {
       id: "loan_id",

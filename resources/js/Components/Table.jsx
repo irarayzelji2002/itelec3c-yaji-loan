@@ -48,6 +48,7 @@ const Table = ({
       const sorted = sortData(initialData, defaultSort.column, defaultSort.direction);
       setData(sorted);
     }
+    setData(initialData);
   }, [initialData]);
 
   // Search filter function
@@ -161,6 +162,14 @@ const Table = ({
   );
 
   const totalPages = Math.ceil(filteredData.length / itemsPerPage);
+
+  useEffect(() => {
+    console.log("Table.jsx - initialData", initialData);
+    console.log("Table.jsx - data", data);
+    console.log("Table.jsx - selectedStatuses", selectedStatuses);
+    console.log("Table.jsx - filteredData", filteredData);
+    console.log("Table.jsx - paginatedData", paginatedData);
+  }, [paginatedData]);
 
   // Calculate status counts based on the comparison operator
   //   const statusCounts = statuses.reduce((acc, status) => {
