@@ -802,7 +802,7 @@ export default function TableViewLoans() {
           headers: {
             "Content-Type": "application/json",
             Accept: "application/json",
-            "X-CSRF-TOKEN": csrfToken,
+            // "X-CSRF-TOKEN": csrfToken,
             "X-Requested-With": "XMLHttpRequest",
           },
           withCredentials: true,
