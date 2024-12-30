@@ -41,11 +41,14 @@ Route::middleware('auth')->group(function () {
     Route::get('/member-dashboard', function () {
         return Inertia::render('MemberView');
     })->name('member.dashboard');
-    Route::get('/loan-breakdown', function () {
-        return Inertia::render('LoanBreakdown');
+    Route::get('/loan-breakdown/{loan_id}', function ($loan_id) {
+        $loan = Loan::with(['borrower', 'loanType', 'statusHistory', 'loanFiles'])
+                    ->findOrFail($loan_id);
+        return Inertia::render('LoanBreakdown', ['loan' => $loan]);
     })->name('loan.breakdown');
-    Route::get('/payment', function () {
-        return Inertia::render('PaymentPage');
+    Route::get('/payment/{loan_id}', function ($loan_id) {
+        $loan = Loan::findOrFail($loan_id);
+        return Inertia::render('PaymentPage', ['loan' => $loan]);
     })->name('payment.page');
     Route::get('/application-form', function () {
         return Inertia::render('ApplicationForm', [
