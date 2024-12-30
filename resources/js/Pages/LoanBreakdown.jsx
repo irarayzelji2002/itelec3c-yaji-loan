@@ -10,7 +10,12 @@ export default function LoanBreakdown({ loan }) {
   console.log("Loan props:", loan);
 
   const loanAmount = parseFloat(loan.loan_amount || 0);
-  const outstandingBalance = parseFloat(loan.loan_amount || 0);
+  const InitoutstandingBalance =
+    parseFloat(loan.loan_amount) +
+    parseFloat(loan.loan_amount) * (parseFloat(loan.interest_rate) / 100);
+  const outstandingBalance =
+    parseFloat(loan.outstanding_balance) +
+    parseFloat(loan.loan_amount) * (parseFloat(loan.interest_rate) / 100);
 
   const numberWithCommas = (x) => {
     return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
@@ -66,7 +71,7 @@ export default function LoanBreakdown({ loan }) {
     loan.loan_term_period,
     loan.loan_term_unit
   );
-  const monthlyPayment = calculateMonthlyPayment(outstandingBalance, loan.loan_term_period);
+  const monthlyPayment = calculateMonthlyPayment(InitoutstandingBalance, loan.loan_term_period);
 
   return (
     <MemberLayout>
@@ -150,7 +155,7 @@ export default function LoanBreakdown({ loan }) {
             <ProgressBar
               percentage={percentageToPay}
               label="Amount Paid"
-              usedAmount={loan.outstanding_balance}
+              usedAmount={outstandingBalance}
             />
           </DropdownInfo>
           <DropdownInfo title="Transaction History">

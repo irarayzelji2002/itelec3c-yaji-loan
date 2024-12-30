@@ -4,6 +4,10 @@ const WalletTabs = ({ loans }) => {
   const [activeTab, setActiveTab] = useState("loan");
 
   const totalLoanAmount = loans.reduce((sum, loan) => sum + (parseFloat(loan.loan_amount) || 0), 0);
+  const totalWallet = loans.reduce(
+    (sum, loan) => sum + (parseFloat(loan.outstanding_balance) || 0),
+    0
+  );
   const usedAmount = loans.length;
 
   const renderContent = () => {
@@ -18,7 +22,9 @@ const WalletTabs = ({ loans }) => {
     } else if (activeTab === "wallet") {
       return (
         <div className="tab-content">
-          <p>Fully pay your loans to borrow again!</p>
+          <h3>Your Wallet Amount is</h3>
+          <h1>₱ {totalWallet.toFixed(2)}</h1>
+          <h2>Fully pay your loans to borrow again!</h2>
         </div>
       );
     }

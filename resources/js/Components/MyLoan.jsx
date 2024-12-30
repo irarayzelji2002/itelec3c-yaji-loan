@@ -10,11 +10,13 @@ function MyLoan({ loan }) {
 
     if (loan) {
       const loanAmount = Number(loan.loan_amount);
-      const outstandingBalance = Number(loan.loan_amount);
+      const InitoutstandingBalance =
+        Number(loan.loan_amount) + Number(loan.loan_amount) * (Number(loan.interest_rate) / 100);
+
       const loanTerm = Number(loan.loan_term_period);
 
       if (loanTerm > 0) {
-        const calculatedMonthlyPayment = outstandingBalance / loanTerm;
+        const calculatedMonthlyPayment = InitoutstandingBalance / loanTerm;
         setMonthlyPayment(calculatedMonthlyPayment);
       } else {
         console.error("Invalid loan term:", loan.loan_term_period);
@@ -44,7 +46,9 @@ function MyLoan({ loan }) {
   }
 
   const loanAmount = Number(loan.loan_amount);
-  const outstandingBalance = Number(loan.outstanding_balance);
+  const outstandingBalance =
+    Number(loan.outstanding_balance) +
+    Number(loan.loan_amount) * (Number(loan.interest_rate) / 100);
 
   return (
     <>
