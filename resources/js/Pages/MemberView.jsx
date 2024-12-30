@@ -27,6 +27,11 @@ export default function MemberView() {
       });
   }, []);
 
+  const totalLoanAmount = loans.reduce(
+    (sum, loan) => sum + (parseFloat(loan.outstanding_balance) || 0),
+    0
+  );
+
   return (
     <MemberLayout>
       <Head title="Dashboard" />
@@ -44,9 +49,9 @@ export default function MemberView() {
             </TertiaryButton>
           </div>
           <div className="center-column">
-            <WalletTabs />
+            <WalletTabs loans={loans} />
           </div>
-          <ProgressBar percentage={50} label={1} usedAmount={10000} />
+          <ProgressBar percentage={50} label={loans.length} usedAmount={totalLoanAmount} />
           <ErrorBoundary>
             {loans.map((loan) => (
               <MyLoan key={loan.loan_id} loan={loan} />
