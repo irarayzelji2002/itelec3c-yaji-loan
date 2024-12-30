@@ -26,6 +26,20 @@ export default function LoanBreakdown({ loan }) {
     return loanAmount - outstandingBalance;
   };
 
+  const calculateDueDate = (dateApplied) => {
+    const appliedDate = new Date(dateApplied);
+    const currentDate = new Date();
+    let dueDate = new Date(appliedDate);
+    dueDate.setDate(appliedDate.getDate() + 30);
+
+    while (dueDate < currentDate) {
+      dueDate.setDate(dueDate.getDate() + 30);
+    }
+
+    const options = { year: "numeric", month: "long", day: "numeric" };
+    return dueDate.toLocaleDateString(undefined, options);
+  };
+
   const calculateFinalDueDate = (dateApplied, term, termUnit) => {
     const appliedDate = new Date(dateApplied);
     const finalDate = new Date(appliedDate);
@@ -46,6 +60,7 @@ export default function LoanBreakdown({ loan }) {
 
   const percentageToPay = calculatePercentageToPay(loanAmount, outstandingBalance);
   const amountStillNeededToPay = calculateAmountStillNeededToPay(loanAmount, outstandingBalance);
+  const dueDate = calculateDueDate(loan.date_applied);
   const finalDueDate = calculateFinalDueDate(
     loan.date_applied,
     loan.loan_term_period,
@@ -76,7 +91,9 @@ export default function LoanBreakdown({ loan }) {
 
           <div className="content-container">
             <div className="tab-content">
-              <h3>Amount to pay {loan.due_date}</h3>
+              <h3>
+                Amount to pay {loan.due_date} on <strong>{dueDate}</strong>
+              </h3>
               <h1> {monthlyPayment ? `₱${numberWithCommas(monthlyPayment.toFixed(2))}` : "-"}</h1>
               <div style={{ display: "flex", gap: "1rem" }}>
                 <PrimaryButton

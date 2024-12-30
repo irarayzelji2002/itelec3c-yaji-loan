@@ -22,12 +22,12 @@ function MyLoan({ loan }) {
 
       const calculateDueDate = (dateApplied) => {
         const appliedDate = new Date(dateApplied);
-        const dueDate = new Date(appliedDate);
-        dueDate.setMonth(appliedDate.getMonth() + 1);
+        const currentDate = new Date();
+        let dueDate = new Date(appliedDate);
+        dueDate.setDate(appliedDate.getDate() + 30);
 
-        const today = new Date();
-        if (dueDate < today) {
-          dueDate.setMonth(dueDate.getMonth() + 1);
+        while (dueDate < currentDate) {
+          dueDate.setDate(dueDate.getDate() + 30);
         }
 
         const options = { year: "numeric", month: "long", day: "numeric" };
@@ -61,7 +61,7 @@ function MyLoan({ loan }) {
       </div>
       <div className="request-body">
         <div className="request-row">
-          <div className="request-label">Due Date : </div>
+          <div className="request-label">Next Due Date : </div>
           <div className="request-value">&nbsp;{formattedDueDate}</div>
         </div>
         <div className="request-row">
