@@ -54,7 +54,7 @@ export default function AuthenticatedLayout({ header, children }) {
                   >
                     Dashboard
                   </NavLink>
-                  <NavLink
+                  {/* <NavLink
                     style={{ color: "aliceblue", whiteSpace: "nowrap" }}
                     href={route("loan.requests")}
                     active={route().current("loan.requests")}
@@ -67,7 +67,7 @@ export default function AuthenticatedLayout({ header, children }) {
                     active={route().current("member.dashboard")}
                   >
                     Member View
-                  </NavLink>
+                  </NavLink> */}
                 </div>
               </div>
 
