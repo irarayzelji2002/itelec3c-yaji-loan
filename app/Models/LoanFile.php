@@ -22,7 +22,7 @@ class LoanFile extends Model
         return $this->belongsTo(Loan::class, 'loan_id');
     }
 
-    public function uploadedByUser()
+    public function uploadedBy()
     {
         return $this->belongsTo(User::class, 'uploaded_by');
     }

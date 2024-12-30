@@ -9,11 +9,12 @@ import Tag from "@/Components/Tag";
 import TertiaryButton from "@/Components/TertiaryButton";
 import Tooltip from "@/Components/Tooltip";
 import { HistoryIcon, VisibilityIcon } from "@/Icons/GeneralIcons";
-import { numberWithCommas, underscoreToTitleCase } from "@/utils/displayFunctions";
+import { numberWithCommas, showToast, underscoreToTitleCase } from "@/utils/displayFunctions";
 import { useEffect, useState } from "react";
 
 export default function TableViewLoans() {
   const [loans, setLoans] = useState([]);
+  const [users, setUsers] = useState([]);
   const [statusCount, setStatusCount] = useState({});
   const [statusUpdateCounter, setStatusUpdateCounter] = useState(0);
   const [loading, setLoading] = useState(false);
@@ -66,6 +67,19 @@ export default function TableViewLoans() {
         setLoading(false);
       });
   }, [filters, statusUpdateCounter]);
+
+  useEffect(() => {
+    setLoading(true);
+    fetch("/api/users")
+      .then((res) => res.json())
+      .then((data) => {
+        setUsers(data);
+        console.log("Users:", data);
+      })
+      .catch((err) => {
+        console.error(err);
+      });
+  }, []);
 
   useEffect(() => {
     console.log("loans:", loans);
@@ -162,6 +176,7 @@ export default function TableViewLoans() {
             <IconButton
               onClick={(e) => {
                 e.stopPropagation();
+                e.preventDefault();
                 showStatusHistory(loan);
               }}
             >
@@ -186,7 +201,7 @@ export default function TableViewLoans() {
       component: (loan) => (
         <div className="flex justify-center">
           <select
-            className="rounded-lg border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:border-green-700 focus:outline-none focus:ring-2 focus:ring-green-600 focus:ring-offset-2"
+            className="min-w-[140px] rounded-lg border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:border-green-700 focus:outline-none focus:ring-2 focus:ring-green-600 focus:ring-offset-2"
             onChange={(e) => handleChangeStatus(loan, e.target.value)}
             onClick={(e) => e.stopPropagation()}
             disabled={disableChangeStatusBtn}
@@ -195,9 +210,35 @@ export default function TableViewLoans() {
             <option value="" disabled>
               Change Status
             </option>
-            <option value="pending">Pending</option>
-            <option value="approved">Approved</option>
-            <option value="disapproved">Disapproved</option>
+            {loan.current_status === "pending" && (
+              <option value="pending" disabled>
+                Pending
+              </option>
+            )}
+            {(loan.current_status === "pending" ||
+              loan.current_status === "disapproved" ||
+              loan.current_status === "approved") && (
+              <option value="approved" disabled={loan.current_status === "approved"}>
+                Approved
+              </option>
+            )}
+            {(loan.current_status === "pending" ||
+              loan.current_status === "approved" ||
+              loan.current_status === "disapproved") && (
+              <option value="disapproved" disabled={loan.current_status === "disapproved"}>
+                Disapproved
+              </option>
+            )}
+            {(loan.current_status === "approved" || loan.current_status === "discontinued") && (
+              <option value="discontinued" disabled={loan.current_status === "discontinued"}>
+                Discontinued
+              </option>
+            )}
+            {(loan.current_status === "pending" || loan.current_status === "canceled") && (
+              <option value="canceled" disabled={loan.current_status === "canceled"}>
+                Canceled
+              </option>
+            )}
           </select>
         </div>
       ),
@@ -301,8 +342,9 @@ export default function TableViewLoans() {
       component: (loan) => (
         <Tooltip content="View Loan Files">
           <IconButton
-            onClick={() => {
+            onClick={(e) => {
               e.stopPropagation();
+              e.preventDefault();
               handleViewFiles(loan);
             }}
           >
@@ -541,6 +583,23 @@ export default function TableViewLoans() {
 
   const actions = [
     {
+      id: "view_loan_files",
+      label: "View Loan Files",
+      render: (loan) => (
+        <Tooltip content="View Loan Files">
+          <IconButton
+            onClick={(e) => {
+              e.stopPropagation();
+              e.preventDefault();
+              handleViewFiles(loan);
+            }}
+          >
+            <VisibilityIcon />
+          </IconButton>
+        </Tooltip>
+      ),
+    },
+    {
       id: "view_status_history",
       label: "View Status History",
       render: (loan) => (
@@ -549,6 +608,7 @@ export default function TableViewLoans() {
             <IconButton
               onClick={(e) => {
                 e.stopPropagation();
+                e.preventDefault();
                 showStatusHistory(loan);
               }}
             >
@@ -565,7 +625,7 @@ export default function TableViewLoans() {
         <Tooltip content="Change Loan Status">
           <div className="flex justify-center">
             <select
-              className="rounded-lg border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:border-green-700 focus:outline-none focus:ring-2 focus:ring-green-600 focus:ring-offset-2"
+              className="min-w-[140px] rounded-lg border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:border-green-700 focus:outline-none focus:ring-2 focus:ring-green-600 focus:ring-offset-2"
               onChange={(e) => handleChangeStatus(loan, e.target.value)}
               onClick={(e) => e.stopPropagation()}
               disabled={disableChangeStatusBtn}
@@ -574,27 +634,37 @@ export default function TableViewLoans() {
               <option value="" disabled>
                 Change Status
               </option>
-              <option value="pending">Pending</option>
-              <option value="approved">Approved</option>
-              <option value="disapproved">Disapproved</option>
+              {loan.current_status === "pending" && (
+                <option value="pending" disabled>
+                  Pending
+                </option>
+              )}
+              {(loan.current_status === "pending" ||
+                loan.current_status === "disapproved" ||
+                loan.current_status === "approved") && (
+                <option value="approved" disabled={loan.current_status === "approved"}>
+                  Approved
+                </option>
+              )}
+              {(loan.current_status === "pending" ||
+                loan.current_status === "approved" ||
+                loan.current_status === "disapproved") && (
+                <option value="disapproved" disabled={loan.current_status === "disapproved"}>
+                  Disapproved
+                </option>
+              )}
+              {(loan.current_status === "approved" || loan.current_status === "discontinued") && (
+                <option value="discontinued" disabled={loan.current_status === "discontinued"}>
+                  Discontinued
+                </option>
+              )}
+              {(loan.current_status === "pending" || loan.current_status === "canceled") && (
+                <option value="canceled" disabled={loan.current_status === "canceled"}>
+                  Canceled
+                </option>
+              )}
             </select>
           </div>
-        </Tooltip>
-      ),
-    },
-    {
-      id: "view_loan_files",
-      label: "View Loan Files",
-      render: (loan) => (
-        <Tooltip content="View Loan Files">
-          <IconButton
-            onClick={(e) => {
-              e.stopPropagation();
-              handleViewFiles(loan);
-            }}
-          >
-            <VisibilityIcon />
-          </IconButton>
         </Tooltip>
       ),
     },
@@ -624,21 +694,42 @@ export default function TableViewLoans() {
 
   const showStatusHistory = (loan) => {
     setSelectedLoan(loan);
-    setShowStatusHistoryModal(true);
+    setIsStatusHistoryModalOpen(true);
   };
 
   const handleChangeStatus = (loan, newStatus) => {
-    // Implement status change API call
+    const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute("content");
+
     axios
-      .post(route("loans.updateStatus"), {
-        loan_id: loan.id,
-        status: newStatus,
-      })
+      .put(
+        `/api/employee/loans/${loan.loan_id}/status`,
+        {
+          status: newStatus,
+          remarks: `Loan ${newStatus}`,
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Accept: "application/json",
+            "X-CSRF-TOKEN": csrfToken,
+            "X-Requested-With": "XMLHttpRequest",
+          },
+          withCredentials: true,
+        }
+      )
       .then((response) => {
+        console.log("Status updated successfully:", response.data);
+        setLoans((prevLoans) =>
+          prevLoans.map((l) =>
+            l.loan_id === loan.loan_id ? { ...l, current_status: newStatus } : l
+          )
+        );
+        showToast("success", `Loan status changed to ${newStatus}`);
         setStatusUpdateCounter((prev) => prev + 1);
       })
       .catch((error) => {
         console.error("Error updating status:", error);
+        showToast("error", error.response?.data?.error || "Failed to update loan status");
       });
   };
 
@@ -696,48 +787,104 @@ export default function TableViewLoans() {
         isOpen={isStatusHistoryModalOpen}
         onClose={() => setIsStatusHistoryModalOpen(false)}
         loan={selectedLoan}
+        users={users}
       />
       <LoanFilesModal
         isOpen={isLoanFilesModalOpen}
         onClose={() => setIsLoanFilesModalOpen(false)}
         loan={selectedLoan}
+        users={users}
       />
     </AuthenticatedLayout>
   );
 }
 
-export function StatusHistoryModal({ showModal, closeModal, loan }) {
+function StatusHistoryModal({ isOpen, onClose, loan, users }) {
+  const getStatusColor = (status) => {
+    const colors = {
+      // Loan Status
+      pending: { color: "black", bgColor: "#FFD563" },
+      approved: { color: "black", bgColor: "#7FE5B0" },
+      disapproved: { color: "black", bgColor: "#FF7D7D" },
+      discontinued: { color: "white", bgColor: "#e34e4e" },
+      canceled: { color: "white", bgColor: "#aa2c2c" },
+      // Payment Status
+      paid: { color: "black", bgColor: "#7FE5B0" },
+      unpaid: { color: "black", bgColor: "#FF7D7D" },
+      partially_paid: { color: "black", bgColor: "#FFD563" },
+      // Next Due Date Status
+      next_not_yet_due: "#7FE5B0",
+      next_past_due: { color: "black", bgColor: "#FF7D7D" },
+      // Final Due Date Status
+      final_not_yet_due: "#7FE5B0",
+      final_past_due: { color: "black", bgColor: "#FF7D7D" },
+    };
+    return colors[status.toLowerCase()] || "#c4c4c4";
+  };
+
+  useEffect(() => {
+    if (isOpen) {
+      console.log("Status history modal opened");
+      console.log("Selected loan:", loan);
+    }
+    return () => {
+      console.log("Status history modal closed");
+    };
+  }, [isOpen]);
+
   return (
-    <Modal show={showModal} onClose={closeModal} maxWidth="2xl">
+    <Modal show={isOpen} onClose={onClose} maxWidth="2xl" title="Status History">
       <div className="p-6">
-        <h2 className="mb-4 text-lg font-medium">Status History</h2>
         <div className="space-y-4">
           {loan?.status_history?.map((history, index) => (
             <div key={index} className="border-b pb-2">
               <div className="flex justify-between">
-                <span className="font-medium">{history.status}</span>
-                <span className="text-gray-500">
+                <span
+                  className="rounded-lg px-2 font-medium"
+                  style={{
+                    color: getStatusColor(history.status)?.color,
+                    backgroundColor: getStatusColor(history.status)?.bgColor,
+                  }}
+                >
+                  {underscoreToTitleCase(history.status)}
+                </span>
+                <span className="text-md text-black">
                   {new Date(history.created_at).toLocaleDateString()}
                 </span>
               </div>
-              <p className="text-sm text-gray-600">{history.remarks}</p>
-              <p className="text-sm text-gray-500">By: {history.changed_by_user?.name}</p>
+              <p className="mt-1 flex items-center gap-2 text-sm">
+                <span className="text-xs text-gray-500">Changed By:</span>
+                <span>{users.find((user) => user.user_id === history.changed_by)?.full_name}</span>
+              </p>
+              <p className="mt-1 flex items-center gap-2 text-sm">
+                <span className="text-xs text-gray-500">Remarks:</span>
+                <span className="">{history.remarks}</span>
+              </p>
             </div>
           ))}
         </div>
         <div className="mt-6 flex justify-center">
-          <PrimaryButton onClick={closeModal}>Close</PrimaryButton>
+          <PrimaryButton onClick={onClose}>Close</PrimaryButton>
         </div>
       </div>
     </Modal>
   );
 }
 
-function LoanFilesModal({ isOpen, onClose, loan }) {
+function LoanFilesModal({ isOpen, onClose, loan, users }) {
+  useEffect(() => {
+    if (isOpen) {
+      console.log("Loan files modal opened");
+      console.log("Selected loan:", loan);
+    }
+    return () => {
+      console.log("Loan files modal closed");
+    };
+  }, [isOpen]);
+
   return (
-    <Modal show={isOpen} onClose={onClose} maxWidth="2xl">
+    <Modal show={isOpen} onClose={onClose} maxWidth="2xl" title="Loan Files">
       <div className="p-6">
-        <h2 className="mb-4 text-lg font-medium">Loan Files</h2>
         <div className="space-y-4">
           {loan?.loan_files?.map((file, index) => (
             <div key={index} className="flex items-center justify-between border-b pb-2">
@@ -746,14 +893,12 @@ function LoanFilesModal({ isOpen, onClose, loan }) {
                 <p className="text-sm text-gray-500">
                   Uploaded: {new Date(file.created_at).toLocaleDateString()}
                 </p>
+                <p className="text-sm text-gray-500">
+                  By: {users.find((user) => user.user_id === file.uploaded_by)?.full_name}
+                </p>
               </div>
-              <a
-                href={file.file_path}
-                className="rounded bg-blue-500 px-4 py-2 text-white hover:bg-blue-600"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                Download
+              <a href={`/storage/${file.file_path}`} target="_blank" rel="noopener noreferrer">
+                <PrimaryButton>Download</PrimaryButton>
               </a>
             </div>
           ))}

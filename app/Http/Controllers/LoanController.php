@@ -134,6 +134,7 @@ class LoanController extends Controller
                 'approved_by' => $loan->approvedBy?->full_name ?? '-',
                 'disbursed_by' => $loan->disbursedBy?->full_name ?? '-',
                 'loan_files' => $loan->loanFiles,
+                'status_history' => $loan->statusHistory,
                 'next_due_date' => $loan->calculateNextDueDate(),
                 'remaining_time_before_next_due' => $loan->calculateRemainingTimeBeforeNextDue(),
                 'periodic_payment_amount' => $loan->calculatePeriodicPayment(),
@@ -225,7 +226,7 @@ class LoanController extends Controller
                 'loan_term_period' => 'required|numeric|min:1',
                 'loan_term_unit' => 'required|in:days,weeks,months,years',
                 'purpose' => 'required|string|max:500',
-                'loan_files.*' => 'required|file|mimes:jpg,jpeg,png,pdf|max:2048',
+                'loan_files.*' => 'required|file|mimes:jpg,jpeg,png,pdf',
                 'loan_files' => 'max:5'
             ]);
             Log::info('Validation passed');
@@ -271,7 +272,7 @@ class LoanController extends Controller
                 LoanStatusHistory::create([
                     'loan_id' => $loan->loan_id,
                     'status' => 'pending',
-                    'remarks' => 'Loan application submitted',
+                    'remarks' => 'Loan pending appoval',
                     'changed_by' => $user->user_id
                 ]);
 
@@ -332,26 +333,67 @@ class LoanController extends Controller
 
     public function updateStatus(Request $request, $loanId)
     {
-        $request->validate([
-            'status' => 'required|string',
-            'remarks' => 'required|string'
-        ]);
-
-        $loan = Loan::findOrFail($loanId);
-        $user = Auth::user();
-
-        LoanStatusHistory::create([
+        Log::info('Starting loan status update', [
             'loan_id' => $loanId,
-            'status' => $request->status,
-            'remarks' => $request->remarks,
-            'changed_by' => $user->user_id
+            'requested_status' => $request->status,
+            'user_id' => Auth::id()
         ]);
 
-        $loan->update([
-            'date_status_changed' => now()
-        ]);
+        try {
+            $request->validate([
+                'status' => 'required|string',
+                'remarks' => 'nullable|string'
+            ]);
 
-        return redirect()->back()->with('success', 'Loan status updated successfully');
+            $loan = Loan::findOrFail($loanId);
+            $user = Auth::user();
+
+            Log::info('Found loan for status update', [
+                'loan_id' => $loan->loan_id,
+                'current_status' => $loan->statusHistory()->latest()->first()?->status,
+                'new_status' => $request->status
+            ]);
+
+            $statusHistory = LoanStatusHistory::create([
+                'loan_id' => $loanId,
+                'status' => $request->status,
+                'remarks' => $request->remarks,
+                'changed_by' => $user->user_id
+            ]);
+
+            Log::info('Created status history record', [
+                'status_history_id' => $statusHistory->loan_status_history_id,
+                'changed_by' => $user->user_id
+            ]);
+
+            $loan->update([
+                'date_status_changed' => now()
+            ]);
+
+            Log::info('Successfully updated loan status', [
+                'loan_id' => $loanId,
+                'status' => $request->status,
+                'changed_by' => $user->user_id
+            ]);
+
+            return response()->json([
+                'success' => 'Loan status updated successfully',
+                'status' => $request->status
+            ]);
+
+        } catch (\Exception $e) {
+            Log::error('Error updating loan status', [
+                'loan_id' => $loanId,
+                'error' => $e->getMessage(),
+                'trace' => $e->getTraceAsString()
+            ]);
+
+            return response()->json([
+                'error' => $e->getMessage(),
+                'loan_id' => $loanId,
+                'status' => $request->status
+            ]);
+        }
     }
 
     public function getStatusHistory($loanId)
@@ -367,14 +409,14 @@ class LoanController extends Controller
     public function getLoanFiles($loanId)
     {
         $loanFiles = LoanFile::where('loan_id', $loanId)
-            ->with('uploadedByUser:user_id,first_name,middle_name,last_name')
+            ->with('uploadedBy:user_id,first_name,middle_name,last_name')
             ->get()
             ->map(function($file) {
                 return [
                     'loan_file_id' => $file->loan_file_id,
                     'file_type' => $file->file_type,
                     'file_path' => $file->file_path,
-                    'uploaded_by' => $file->uploadedByUser->full_name,
+                    'uploaded_by' => $file->uploadedBy->full_name,
                     'uploaded_at' => $file->created_at,
                 ];
             });
