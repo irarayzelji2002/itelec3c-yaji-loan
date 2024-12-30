@@ -1,5 +1,6 @@
 import PrimaryButton from "@/Components/PrimaryButton";
 import MemberLayout from "@/Layouts/MemberLayout";
+import { showToast } from "@/utils/displayFunctions"; // Add this import
 import { Head, usePage } from "@inertiajs/react";
 import axios from "axios";
 import { useEffect, useState } from "react";
@@ -28,6 +29,15 @@ export default function PaymentPage({ loan }) {
         console.error("Error fetching loans:", error);
       });
   }, []);
+
+  useEffect(() => {
+    const amount = parseFloat(inputAmount);
+    if (amount > walletBalance) {
+      setWarning("Insufficient Balance");
+    } else {
+      setWarning("");
+    }
+  }, [inputAmount, walletBalance]);
 
   const calculateDueDate = (dateApplied) => {
     const appliedDate = new Date(dateApplied);
@@ -66,7 +76,34 @@ export default function PaymentPage({ loan }) {
     if (amount > walletBalance) {
       setWarning("Insufficient Balance");
     } else {
-      window.location.href = "/success";
+      axios
+        .post(route("payment.store"), {
+          loan_id: loan.loan_id,
+          payment_amount: amount,
+          payment_method: "wallet", // or any other method
+          payment_reference: "N/A", // or any reference if applicable
+        })
+        .then((response) => {
+          console.log("Payment response:", response.data);
+          showToast("success", "Payment recorded successfully");
+
+          // Store payment data in localStorage before redirect
+          const payment = response.data.payment;
+          const paymentData = {
+            loan_id: payment.loan_id,
+            payment_amount: payment.payment_amount,
+            payment_date: payment.payment_date,
+            payment_method: payment.payment_method,
+            payment_reference: payment.payment_reference,
+          };
+          localStorage.setItem("paymentData", JSON.stringify(paymentData));
+
+          window.location.href = "/success";
+        })
+        .catch((error) => {
+          console.error("Error recording payment:", error);
+          showToast("error", "Failed to record payment. Please try again.");
+        });
     }
   };
 
@@ -76,7 +113,7 @@ export default function PaymentPage({ loan }) {
     loan.loan_term_period,
     loan.loan_term_unit
   );
-  const monthlyPayment = calculateMonthlyPayment(loan.outstanding_balance, loan.loan_term_period);
+  const monthlyPayment = calculateMonthlyPayment(loan.loan_amount, loan.loan_term_period);
 
   console.log("User props:", user);
   console.log("Loan props:", loan);
