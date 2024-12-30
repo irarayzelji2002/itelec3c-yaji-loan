@@ -53,7 +53,6 @@ const Welcome = ({ auth }) => {
                     onClick={() => {
                       window.location.href = route("login");
                     }}
-                    className="compare-btn"
                   >
                     Login
                   </SecondaryButton>
@@ -113,69 +112,57 @@ const Welcome = ({ auth }) => {
           </div>
           <div className="transfer-right">
             <div className="transaction">
-              <div className="transaction-icon">
-                <img src="apple-icon.png" alt="Apple" />
-              </div>
+              <div className="transaction-icon">{/* <img src=" " alt="Apple" /> */}</div>
               <div className="transaction-details">
                 <h4>Apple</h4>
                 <p>Macbook</p>
               </div>
-              <div className="transaction-amount">-999€</div>
+              <div className="transaction-amount">-₱999</div>
             </div>
             <div className="transaction">
-              <div className="transaction-icon">
-                <img src="amazon-icon.png" alt="Amazon" />
-              </div>
+              <div className="transaction-icon">{/* <img src=" " alt="Amazon" /> */}</div>
               <div className="transaction-details">
                 <h4>Amazon</h4>
                 <p>Electronics</p>
               </div>
-              <div className="transaction-amount">-49€</div>
+              <div className="transaction-amount">-₱49</div>
             </div>
             <div className="transaction">
-              <div className="transaction-icon">
-                <img src="twitter-icon.png" alt="Twitter" />
-              </div>
+              <div className="transaction-icon">{/* <img src=" " alt="Twitter" /> */}</div>
               <div className="transaction-details">
                 <h4>Twitter</h4>
                 <p>Ads</p>
               </div>
-              <div className="transaction-amount">-29€</div>
+              <div className="transaction-amount">-₱29</div>
             </div>
             <div className="transaction">
-              <div className="transaction-icon">
-                <img src="microsoft-icon.png" alt="Microsoft" />
-              </div>
+              <div className="transaction-icon">{/* <img src=" " alt="Microsoft" /> */}</div>
               <div className="transaction-details">
                 <h4>Microsoft</h4>
                 <p>Office Suite</p>
               </div>
-              <div className="transaction-amount">-149€</div>
+              <div className="transaction-amount">-₱149</div>
             </div>
             <div className="transaction">
-              <div className="transaction-icon">
-                <img src="dropbox-icon.png" alt="Dropbox" />
-              </div>
+              <div className="transaction-icon">{/* <img src=" " alt="Dropbox" /> */}</div>
               <div className="transaction-details">
                 <h4>Dropbox</h4>
                 <p>Cloud</p>
               </div>
-              <div className="transaction-amount">-14€</div>
+              <div className="transaction-amount">-₱14</div>
             </div>
             <div className="transaction">
-              <div className="transaction-icon">
-                <img src="paypal-icon.png" alt="Paypal" />
-              </div>
+              <div className="transaction-icon">{/* <img src=" " alt="Paypal" /> */}</div>
               <div className="transaction-details">
                 <h4>Paypal</h4>
                 <p>Shopping</p>
               </div>
-              <div className="transaction-amount">-200€</div>
+              <div className=" ">-₱200</div>
             </div>
           </div>
         </div>
         <div className="card-section">
-          {/* Support Bar */}
+          {/* Support Bar
           <div className="support-bar">
             <div className="support-info">
               <p className="support-heading">Still have questions?</p>
@@ -198,7 +185,7 @@ const Welcome = ({ auth }) => {
               </div>
             </div>
             <button className="chat-button">Chat with us</button>
-          </div>
+          </div> */}
 
           {/* Main Content */}
           <div className="main-content">
@@ -206,8 +193,8 @@ const Welcome = ({ auth }) => {
             <h1>One Solution for All Your Loan Needs.</h1>
             <p>Simplify your borrowing experience with features designed for you.</p>
             <div className="buttons">
-              <button className="primary-button">Open Account</button>
-              <button className="secondary-button">Login →</button>
+              <PrimaryButton>Open Account</PrimaryButton>
+              <SecondaryButton>Login →</SecondaryButton>
             </div>
 
             {/* Cards Section
