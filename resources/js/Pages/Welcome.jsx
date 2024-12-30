@@ -1,5 +1,7 @@
 import Navbar from "@/Components/Navbar";
-import { Head, Link } from "@inertiajs/react";
+import PrimaryButton from "@/Components/PrimaryButton";
+import SecondaryButton from "@/Components/SecondaryButton";
+import { Head } from "@inertiajs/react";
 
 const Welcome = ({ auth }) => {
   return (
@@ -29,17 +31,32 @@ const Welcome = ({ auth }) => {
             {/* Buttons */}
             <div className="buttons">
               {auth.user ? (
-                <Link href={route("dashboard")} className="open-account-btn">
+                <PrimaryButton
+                  className="open-account-btn"
+                  onClick={() => {
+                    window.location.href = route("dashboard");
+                  }}
+                >
                   Dashboard
-                </Link>
+                </PrimaryButton>
               ) : (
                 <>
-                  <Link href={route("register")} className="open-account-btn">
+                  <PrimaryButton
+                    onClick={() => {
+                      window.location.href = route("register");
+                    }}
+                    className="open-account-btn"
+                  >
                     Apply Now
-                  </Link>
-                  <Link href={route("login")} className="compare-btn">
+                  </PrimaryButton>
+                  <SecondaryButton
+                    onClick={() => {
+                      window.location.href = route("login");
+                    }}
+                    className="compare-btn"
+                  >
                     Login
-                  </Link>
+                  </SecondaryButton>
                 </>
               )}
             </div>
