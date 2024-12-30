@@ -69,6 +69,7 @@ Route::middleware('auth')->group(function () {
         return Inertia::render('EmployeeForm');
     })->name('employee.form');
     Route::get('/my-loans', [LoanController::class, 'getUserLoans'])->name('user.loans');
+    Route::post('/payment', [PaymentController::class, 'store'])->name('payment.store');
 
     // API routes (starts with /api)
     Route::prefix('api')->group(function () {

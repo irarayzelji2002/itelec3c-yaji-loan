@@ -10,7 +10,7 @@ export default function LoanBreakdown({ loan }) {
   console.log("Loan props:", loan);
 
   const loanAmount = parseFloat(loan.loan_amount || 0);
-  const outstandingBalance = parseFloat(loan.outstanding_balance || 0);
+  const outstandingBalance = parseFloat(loan.loan_amount || 0);
 
   const numberWithCommas = (x) => {
     return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
@@ -92,7 +92,7 @@ export default function LoanBreakdown({ loan }) {
           <div className="content-container">
             <div className="tab-content">
               <h3>
-                Amount to pay {loan.due_date} on <strong>{dueDate}</strong>
+                Amount to pay on <strong>{dueDate}</strong>
               </h3>
               <h1> {monthlyPayment ? `₱${numberWithCommas(monthlyPayment.toFixed(2))}` : "-"}</h1>
               <div style={{ display: "flex", gap: "1rem" }}>
