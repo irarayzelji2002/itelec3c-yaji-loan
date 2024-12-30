@@ -55,12 +55,18 @@ function MyLoan({ loan }) {
       <div className="request-header">
         Loan Request #{loan.loan_id}
         <div style={{ gap: "1rem", display: "flex" }}>
-          <PrimaryButton
-            className="accept-button"
-            onClick={() => (window.location.href = "/loan-breakdown/" + loan.loan_id)}
-          >
-            Pay Now
-          </PrimaryButton>
+          {outstandingBalance > 0 ? (
+            <PrimaryButton
+              className="accept-button"
+              onClick={() => (window.location.href = "/loan-breakdown/" + loan.loan_id)}
+            >
+              Pay Now
+            </PrimaryButton>
+          ) : outstandingBalance === 0 ? (
+            <span className="font-bold text-green-600">Fully Paid</span>
+          ) : (
+            <span className="font-bold text-red-600">Error: Negative Balance</span>
+          )}
         </div>
       </div>
       <div className="request-body">
@@ -73,7 +79,7 @@ function MyLoan({ loan }) {
           <div className="request-value">&nbsp;₱ {loanAmount.toFixed(2)}</div>
         </div>
         <div className="request-row">
-          <div className="request-label">Outstanding Balance : </div>
+          <div className="request-label">Outstanding Balance : {outstandingBalance} </div>
           <div className="request-value">&nbsp;₱ {outstandingBalance.toFixed(2)}</div>
         </div>
         <div className="request-row">
