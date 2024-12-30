@@ -1,3 +1,4 @@
+import ErrorBoundary from "@/Components/ErrorBoundary";
 import MyLoan from "@/Components/MyLoan";
 import ProgressBar from "@/Components/ProgressBar";
 import Reminders from "@/Components/Reminders";
@@ -5,11 +6,32 @@ import TertiaryButton from "@/Components/TertiaryButton";
 import WalletTabs from "@/Components/WalletTabs";
 import MemberLayout from "@/Layouts/MemberLayout";
 import { Head, usePage } from "@inertiajs/react";
+// import axios from "axios";
+// import { useEffect } from "react";
+import { useState } from "react";
 
 export default function MemberView() {
   const user = usePage().props.auth.user;
-  console.log("User props:", user);
-  console.log("user?.roles:", user?.roles);
+  const [loans, setLoans] = useState([
+    {
+      loan_id: 1,
+      final_due_date: "2024-12-30",
+      loan_amount: 2500.0,
+      outstanding_balance: 1500.0,
+    },
+  ]);
+
+  // useEffect(() => {
+  //   axios
+  //     .get(route("myloans.index"))
+  //     .then((response) => {
+  //       console.log("API response:", response.data);
+  //       setLoans(response.data.loans);
+  //     })
+  //     .catch((error) => {
+  //       console.error("Error fetching loans:", error);
+  //     });
+  // }, []);
 
   return (
     <MemberLayout>
@@ -31,11 +53,12 @@ export default function MemberView() {
             <WalletTabs />
           </div>
           <ProgressBar percentage={50} label={1} usedAmount={10000} />
-          <MyLoan loanNo={1} />
-          <MyLoan loanNo={2} />
-          <MyLoan loanNo={3} />
+          <ErrorBoundary>
+            {loans.map((loan) => (
+              <MyLoan key={loan.loan_id} loan={loan} />
+            ))}
+          </ErrorBoundary>
           <div className="column-down">
-            {" "}
             <h2>Reminders</h2>
             <div className="reminders-container">
               <Reminders

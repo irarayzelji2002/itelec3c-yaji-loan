@@ -87,6 +87,9 @@ Route::middleware('auth')->group(function () {
             Route::post('/register-employee', [RegisteredUserController::class, 'storeEmployee'])->name('register.employee');
             Route::put('/loans/{loan_id}/status', [LoanController::class, 'updateStatus'])->name('loans.update-status');
         });
+
+        // Add this route to fetch loans
+        Route::get('/my-loans', [LoanController::class, 'index'])->name('myloans.index');
     });
 
     // Role page routes
