@@ -425,13 +425,10 @@ export default function TableViewLoans() {
       id: "remaining_time_before_next_due",
       label: "Remaining Time Before Next Due",
       sortable: true,
-      type: "date",
       minWidth: "150px",
       render: (loan) => (
         <span className="flex flex-grow justify-end">
-          {loan.remaining_time_before_next_due
-            ? new Date(loan.remaining_time_before_next_due).toLocaleDateString()
-            : "-"}
+          {loan.remaining_time_before_next_due || "-"}
         </span>
       ),
     },
@@ -465,13 +462,10 @@ export default function TableViewLoans() {
       id: "remaining_time_before_final_due",
       label: "Remaining Time Before Final Due",
       sortable: true,
-      type: "date",
       minWidth: "150px",
       render: (loan) => (
         <span className="flex flex-grow justify-end">
-          {loan.remaining_time_before_final_due
-            ? new Date(loan.remaining_time_before_final_due).toLocaleDateString()
-            : "-"}
+          {loan.remaining_time_before_final_due || "-"}
         </span>
       ),
     },

@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Log;
 use App\Models\User;
 use App\Models\LoanType;
 use App\Models\LoanStatusHistory;
@@ -69,6 +70,10 @@ class Loan extends Model
         return $this->hasMany(LoanFile::class, 'loan_id');
     }
 
+    private function pluralize($word, $count) {
+        return $count === 1 ? $word : $word . 's';
+    }
+
     public function calculateNextDueDate()
     {
         if (!$this->date_disbursed) {
@@ -105,22 +110,42 @@ class Loan extends Model
 
     public function calculateRemainingTimeBeforeNextDue()
     {
+        Log::info('Calculating remaining time before next due');
+        Log::info('Current date: ' . Carbon::now());
+
         $nextDueDate = $this->calculateNextDueDate();
+        Log::info('Next due date: ' . ($nextDueDate ? $nextDueDate->toDateTimeString() : 'null'));
+
         if (!$nextDueDate) {
+            Log::warning('Next due date is null for loan ID: ' . $this->loan_id);
             return null;
         }
 
         $now = Carbon::now();
         if ($now->gt($nextDueDate)) {
+            Log::info('Loan is past due');
             return 'Past due';
         }
 
-        return $now->diffForHumans($nextDueDate, [
-            'parts' => 2,
-            'join' => true,
-            'syntax' => true
+        // Get difference components
+        $diff = $now->diff($nextDueDate);
+        Log::info('Time difference components:', [
+            'years' => $diff->y,
+            'months' => $diff->m,
+            'days' => $diff->d
         ]);
 
+        // Build human-readable string
+        $parts = [];
+        if ($diff->y > 0) $parts[] = $diff->y . ' ' . $this->pluralize('yr', $diff->y);
+        if ($diff->m > 0) $parts[] = $diff->m . ' ' . $this->pluralize('month', $diff->m);
+        if ($diff->d > 0) $parts[] = $diff->d . ' ' . $this->pluralize('day', $diff->d);
+
+
+        $timeRemaining = !empty($parts) ? implode(', ', $parts) : 'Less than a day';
+        Log::info('Calculated time remaining: ' . $timeRemaining);
+
+        return $timeRemaining;
     }
 
     public function calculatePeriodicPayment()
@@ -185,21 +210,41 @@ class Loan extends Model
 
     public function calculateRemainingTimeBeforeFinalDue()
     {
+        Log::info('Calculating remaining time before final due');
+        Log::info('Current date: ' . Carbon::now());
+
         $finalDueDate = $this->calculateFinalDueDate();
+        Log::info('Final due date: ' . ($finalDueDate ? $finalDueDate->toDateTimeString() : 'null'));
+
         if (!$finalDueDate) {
+            Log::warning('Final due date is null for loan ID: ' . $this->loan_id);
             return null;
         }
 
         $now = Carbon::now();
         if ($now->gt($finalDueDate)) {
+            Log::info('Loan is past final due date');
             return 'Past due';
         }
 
-        return $now->diffForHumans($finalDueDate, [
-            'parts' => 2,
-            'join' => true,
-            'syntax' => true
+        // Get difference components
+        $diff = $now->diff($finalDueDate);
+        Log::info('Time difference components:', [
+            'years' => $diff->y,
+            'months' => $diff->m,
+            'days' => $diff->d
         ]);
+
+        // Build human-readable string
+        $parts = [];
+       if ($diff->y > 0) $parts[] = $diff->y . ' ' . $this->pluralize('yr', $diff->y);
+        if ($diff->m > 0) $parts[] = $diff->m . ' ' . $this->pluralize('month', $diff->m);
+        if ($diff->d > 0) $parts[] = $diff->d . ' ' . $this->pluralize('day', $diff->d);
+
+        $timeRemaining = !empty($parts) ? implode(', ', $parts) : 'Less than a day';
+        Log::info('Calculated time remaining: ' . $timeRemaining);
+
+        return $timeRemaining;
     }
 
     private function getNumberOfPayments()
