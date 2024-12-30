@@ -1047,10 +1047,6 @@ const LoanDetailsExpanded = ({ loan, columns, isDetailsExpanded, onExpand, onCol
       </div>
       {isDetailsExpanded && (
         <div className="view-loan-details grid grid-cols-1 gap-5 p-3 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
-          <div>
-            <label className="block text-sm font-medium text-gray-700">Full Name</label>
-            <div className="mt-1 !rounded-lg bg-gray-50 p-2 ring-1 ring-gray-300">Test</div>
-          </div>
           {columns
             .filter((column) => column.id !== "status_action")
             .map((column) => (
