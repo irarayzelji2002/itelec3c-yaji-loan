@@ -29,12 +29,16 @@ class PaymentController extends Controller
             'payment_reference' => 'nullable|string|max:255',
         ]);
 
+        // Generate reference number
+        $latestPayment = Payment::latest()->first();
+        $referenceNumber = 'P-' . str_pad(($latestPayment ? $latestPayment->payment_id + 1 : 1), 7, '0', STR_PAD_LEFT);
+
         $payment = Payment::create([
             'loan_id' => $request->loan_id,
             'payment_amount' => $request->payment_amount,
             'payment_date' => now(),
             'payment_method' => $request->payment_method,
-            'payment_reference' => $request->payment_reference,
+            'payment_reference' => $referenceNumber,
             'is_confirmed' => false,
             'confirmed_by' => null,
         ]);
