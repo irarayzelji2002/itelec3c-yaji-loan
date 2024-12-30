@@ -857,7 +857,7 @@ export default function TableViewLoans() {
             <Link href={route("loan-types.index")}>
               <TertiaryButton>View Loan Types Table</TertiaryButton>
             </Link>
-            <Link href={route("payments.index")}>
+            <Link href={route("view.payments-table")}>
               <TertiaryButton>View Payments Table</TertiaryButton>
             </Link>
           </div>
