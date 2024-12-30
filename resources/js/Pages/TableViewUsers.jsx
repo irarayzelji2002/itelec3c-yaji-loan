@@ -95,9 +95,23 @@ export default function UsersTableView() {
       id: "created_at",
       label: "Created At",
       sortable: true,
+      type: "timestamp",
       minWidth: "130px",
       render: (user) =>
         new Date(user.created_at).toLocaleString("en-US", {
+          dateStyle: "short",
+          timeStyle: "short",
+          hour12: true,
+        }),
+    },
+    {
+      id: "updated_at",
+      label: "Updated At",
+      sortable: true,
+      type: "timestamp",
+      minWidth: "130px",
+      render: (user) =>
+        new Date(user.updated_at).toLocaleString("en-US", {
           dateStyle: "short",
           timeStyle: "short",
           hour12: true,
@@ -127,6 +141,7 @@ export default function UsersTableView() {
       id: "phone_number",
       label: "Phone",
       sortable: true,
+      type: "number",
       minWidth: "120px",
     },
     {

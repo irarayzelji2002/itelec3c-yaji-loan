@@ -111,6 +111,9 @@ const Table = ({
   };
 
   const handleSort = (columnId) => {
+    const column = columns.find((col) => col.id === columnId);
+    if (!column?.sortable) return;
+
     let newDirection = sort[columnId];
     if (activeSort.column !== columnId) {
       // Keep the current direction when switching to a new column
@@ -122,16 +125,20 @@ const Table = ({
 
     setSort({ ...sort, [columnId]: newDirection });
     setActiveSort({ column: columnId, direction: newDirection });
-    const sorted = sortData(filteredData, columnId, newDirection);
-    setFilteredData(sorted);
+
+    // Sort the data directly
+    const sorted = sortData(data, columnId, newDirection);
+    setData(sorted);
     setCurrentPage(1);
   };
 
   const sortData = (data, columnId, order) => {
     return [...data].sort((a, b) => {
       const column = columns.find((col) => col.id === columnId);
-      let aValue = column?.getValue ? column.getValue(a) : a[columnId];
-      let bValue = column?.getValue ? column.getValue(b) : b[columnId];
+      const sortKey = column?.sortKey || column?.id;
+
+      let aValue = column?.getValue ? column.getValue(a) : a[sortKey];
+      let bValue = column?.getValue ? column.getValue(b) : b[sortKey];
 
       // Handle null/undefined values
       aValue = aValue ?? "";
@@ -139,20 +146,32 @@ const Table = ({
 
       // Handle different data types
       if (column?.type === "date") {
-        aValue = new Date(aValue);
-        bValue = new Date(bValue);
+        aValue = new Date(aValue).getTime();
+        bValue = new Date(bValue).getTime();
         return order === "asc" ? aValue - bValue : bValue - aValue;
       }
 
       if (column?.type === "number") {
-        aValue = Number(aValue);
-        bValue = Number(bValue);
+        aValue = parseFloat(aValue) || 0;
+        bValue = parseFloat(bValue) || 0;
         return order === "asc" ? aValue - bValue : bValue - aValue;
       }
 
+      // Default string comparison
+      if (typeof aValue === "string") aValue = aValue.toLowerCase();
+      if (typeof bValue === "string") bValue = bValue.toLowerCase();
+
       return order === "asc"
-        ? aValue.toString().localeCompare(bValue.toString())
-        : bValue.toString().localeCompare(aValue.toString());
+        ? aValue < bValue
+          ? -1
+          : aValue > bValue
+            ? 1
+            : 0
+        : bValue < aValue
+          ? -1
+          : bValue > aValue
+            ? 1
+            : 0;
     });
   };
 

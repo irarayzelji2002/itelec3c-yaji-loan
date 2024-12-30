@@ -96,6 +96,8 @@ export default function TableViewLoans() {
       id: "loan_id",
       label: "Reference No.",
       sortable: true,
+      type: "number",
+      sortKey: "loan_id",
       minWidth: "120px",
       render: (loan) => (
         <span className="flex flex-grow">{`L-${String(loan.loan_id).padStart(7, "0")}`}</span>
@@ -111,6 +113,7 @@ export default function TableViewLoans() {
       id: "loan_amount",
       label: "Loan Amount",
       sortable: true,
+      type: "number",
       minWidth: "130px",
       render: (loan) => (
         <span className="flex flex-grow justify-end">
@@ -122,6 +125,7 @@ export default function TableViewLoans() {
       id: "interest_rate",
       label: "Interest Rate",
       sortable: true,
+      type: "number",
       minWidth: "80px",
       render: (loan) => <span className="flex flex-grow justify-end">{loan.interest_rate}%</span>,
     },
@@ -129,6 +133,7 @@ export default function TableViewLoans() {
       id: "loan_term",
       label: "Loan Term",
       sortable: true,
+      type: "period_unit",
       minWidth: "90px",
       render: (loan) => (
         <span className="flex flex-grow justify-end">{`${loan.loan_term_period} ${loan.loan_term_unit}`}</span>
@@ -259,6 +264,7 @@ export default function TableViewLoans() {
       id: "outstanding_balance",
       label: "Outstanding Balance",
       sortable: true,
+      type: "number",
       minWidth: "130px",
       render: (loan) => (
         <span className="flex flex-grow">
@@ -270,6 +276,7 @@ export default function TableViewLoans() {
       id: "created_at",
       label: "Created At",
       sortable: true,
+      type: "timestamp",
       minWidth: "130px",
       render: (user) =>
         new Date(user.created_at).toLocaleString("en-US", {
@@ -282,6 +289,7 @@ export default function TableViewLoans() {
       id: "updated_at",
       label: "Updated At",
       sortable: true,
+      type: "timestamp",
       minWidth: "120px",
       render: (user) =>
         new Date(user.updated_at).toLocaleString("en-US", {
@@ -340,17 +348,19 @@ export default function TableViewLoans() {
       sortable: false,
       minWidth: "80px",
       component: (loan) => (
-        <Tooltip content="View Loan Files">
-          <IconButton
-            onClick={(e) => {
-              e.stopPropagation();
-              e.preventDefault();
-              handleViewFiles(loan);
-            }}
-          >
-            <VisibilityIcon />
-          </IconButton>
-        </Tooltip>
+        <div className="flex items-center justify-center gap-2">
+          <Tooltip content="View Loan Files">
+            <IconButton
+              onClick={(e) => {
+                e.stopPropagation();
+                e.preventDefault();
+                handleViewFiles(loan);
+              }}
+            >
+              <VisibilityIcon />
+            </IconButton>
+          </Tooltip>
+        </div>
       ),
     },
     {
@@ -383,6 +393,7 @@ export default function TableViewLoans() {
       id: "periodic_payment_amount",
       label: "Periodic Payment Amount",
       sortable: true,
+      type: "number",
       minWidth: "160px",
       render: (loan) => (
         <span className="flex flex-grow justify-end">
@@ -719,11 +730,19 @@ export default function TableViewLoans() {
       )
       .then((response) => {
         console.log("Status updated successfully:", response.data);
+        // Update the local loans state
         setLoans((prevLoans) =>
           prevLoans.map((l) =>
             l.loan_id === loan.loan_id ? { ...l, current_status: newStatus } : l
           )
         );
+        // Update the selected row if it exists
+        if (selectedLoan?.loan_id === loan.loan_id) {
+          setSelectedLoan((prev) => ({
+            ...prev,
+            current_status: newStatus,
+          }));
+        }
         showToast("success", `Loan status changed to ${newStatus}`);
         setStatusUpdateCounter((prev) => prev + 1);
       })
