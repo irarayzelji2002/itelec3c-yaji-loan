@@ -1,5 +1,6 @@
 import IconButton from "@/Components/IconButton";
 import Modal from "@/Components/Modal";
+import PrimaryButton from "@/Components/PrimaryButton";
 import Table from "@/Components/Table";
 import Tag from "@/Components/Tag";
 import TertiaryButton from "@/Components/TertiaryButton";
@@ -15,7 +16,7 @@ const TableViewPayments = ({ auth }) => {
   // States
   const [payments, setPayments] = useState([]);
   const [users, setUsers] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [selectedPayment, setSelectedPayment] = useState(null);
   const [showPaymentModal, setShowPaymentModal] = useState(false);
   const [showLoanModal, setShowLoanModal] = useState(false);
@@ -139,10 +140,29 @@ const TableViewPayments = ({ auth }) => {
     },
     {
       id: "payment_method",
-      label: "Method",
-      isAction: true,
-      sortable: true,
-      minWidth: "120px",
+      label: "Payment Method",
+      sortable: false,
+      searchable: false,
+      minWidth: "60px",
+      render: (payment) => (
+        <div className="flex justify-center">
+          {payment.payment_method ? (
+            <div className="relative h-10 w-10">
+              <img
+                src={
+                  payment.payment_method
+                    ? `/storage/${payment.payment_method}`
+                    : "/img/transparent-image.png"
+                }
+                alt=""
+                className="h-full w-full rounded-md bg-gray-300 object-cover"
+              />
+            </div>
+          ) : (
+            <span>-</span>
+          )}
+        </div>
+      ),
     },
     {
       id: "is_confirmed",
@@ -220,6 +240,18 @@ const TableViewPayments = ({ auth }) => {
         </div>
       ),
     },
+    {
+      id: "confirm_payment",
+      label: "Confirm Payment",
+      isAction: true,
+      sortable: false,
+      minWidth: "80px",
+      component: (user) => (
+        <div className="flex justify-center">
+          <PrimaryButton onClick={() => handleViewDetails(user)}>Confirm</PrimaryButton>
+        </div>
+      ),
+    },
   ];
 
   const statusGroups = {
@@ -283,6 +315,15 @@ const TableViewPayments = ({ auth }) => {
         </TertiaryButton>
       ),
     },
+    {
+      id: "confirm_payment",
+      label: "Confirm Payment",
+      render: (user) => (
+        <div className="flex justify-center">
+          <PrimaryButton onClick={() => handleViewDetails(user)}>Confirm</PrimaryButton>
+        </div>
+      ),
+    },
   ];
 
   // Action handlers
@@ -336,7 +377,7 @@ const TableViewPayments = ({ auth }) => {
             <Table
               columns={columns}
               data={payments}
-              loading={loading}
+              loading={false}
               showSearch={true}
               showStatusBar={true}
               itemsPerPage={10}
@@ -401,7 +442,7 @@ const PaymentDetailsModal = ({ isOpen, onClose, payment }) => {
               <div>{new Date(payment.payment_date).toLocaleDateString()}</div>
             </div>
             <div>
-              <label className="text-sm font-medium text-gray-500">Method</label>
+              <label className="text-sm font-medium text-gray-500">Payment Method</label>
               <div>{payment.payment_method}</div>
             </div>
             <div>
