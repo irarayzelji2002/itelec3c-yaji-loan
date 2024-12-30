@@ -31,7 +31,7 @@ class Payment extends Model
         return $this->belongsTo(Loan::class, 'loan_id');
     }
 
-    public function confirmedByUser()
+    public function confirmedBy()
     {
         return $this->belongsTo(User::class, 'confirmed_by', 'user_id');
     }

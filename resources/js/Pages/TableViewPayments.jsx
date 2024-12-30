@@ -51,7 +51,7 @@ const TableViewPayments = ({ auth }) => {
       })
       .then((data) => {
         console.log("Successfully parsed JSON:", data);
-        setPayments(data);
+        setPayments(response.data);
         setLoading(false);
       })
       .catch((err) => {
@@ -160,7 +160,7 @@ const TableViewPayments = ({ auth }) => {
       label: "Confirmed By",
       sortable: true,
       minWidth: "130px",
-      render: (payment) => payment.confirmer?.full_name || "-",
+      render: (payment) => payment.confirmedBy?.full_name || "-",
     },
     {
       id: "created_at",
