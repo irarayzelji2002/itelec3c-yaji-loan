@@ -19,7 +19,8 @@ class LoanController extends Controller
     {
         Log::info('Starting loans index method', ['filters' => $request->all()]);
 
-        $query = Loan::with([
+        // Base query with relationships for all loans (unfiltered)
+        $baseQuery = Loan::with([
             'borrower:user_id,first_name,middle_name,last_name',
             'loanType:loan_type_id,loan_type_name,is_amortized',
             'approvedBy:user_id,first_name,middle_name,last_name',
@@ -27,6 +28,12 @@ class LoanController extends Controller
             'statusHistory',
             'loanFiles'
         ]);
+
+        // Get all loans for status counts before applying any filters
+        $allLoans = $baseQuery->get();
+
+        // Create a new query for filtered results
+        $query = clone $baseQuery;
 
         // Apply loan status filter
         if ($request->loan_status && $request->loan_status !== 'all_loan') {
@@ -99,10 +106,6 @@ class LoanController extends Controller
             });
         }
 
-        // Get all loans for status counts
-        $allLoans = clone $query;
-        $allLoans = $allLoans->get();
-
         // Get filtered loans
         $loans = $query->get();
         Log::info('Retrieved loans count: ' . $loans->count());
@@ -139,7 +142,7 @@ class LoanController extends Controller
             ];
         });
 
-        // Calculate status counts from all loans
+        // Calculate status counts from unfiltered loans ($allLoans)
         $statusCounts = [
             'loan_status' => [
                 'all_loan' => $allLoans->count(),

@@ -222,34 +222,34 @@ const Table = ({
           <div className="flex flex-wrap gap-2">
             {/* Map through status groups */}
             {Object.entries(statusGroups).map(([groupKey, group]) => (
-              <div
-                key={groupKey}
-                className="gap- flex flex-wrap rounded-t-lg border-gray-300 ring-1 ring-gray-400/50"
-              >
-                {group.statuses.map((status) => (
-                  <div
-                    key={status.id}
-                    onClick={() => handleStatusClick(groupKey, status)}
-                    className={`flex cursor-pointer items-center gap-2 p-1 px-2 pt-1.5 font-medium capitalize transition-all ${
-                      selectedStatuses[groupKey] === status.id
-                        ? "border-b-2 border-green-800"
-                        : "hover:border-b-2 hover:border-green-800/50"
-                    }`}
-                  >
-                    <span className="text-sm font-medium capitalize">{status.label}</span>
-
-                    <span
-                      className="min-w-[24px] rounded-full bg-gray-200 px-2 py-0.5 text-center text-sm"
-                      style={{ color: status.color, backgroundColor: status.bgColor }}
+              <div key={groupKey}>
+                <p className="text-green-850 text-[0.78rem] font-bold capitalize">{group.label}</p>
+                <div className="gap- flex flex-wrap rounded-t-lg border-gray-300 ring-1 ring-gray-400/50">
+                  {group.statuses.map((status) => (
+                    <div
+                      key={status.id}
+                      onClick={() => handleStatusClick(groupKey, status)}
+                      className={`flex cursor-pointer items-center gap-2 p-1 px-2 pt-1.5 font-medium capitalize transition-all ${
+                        selectedStatuses[groupKey] === status.id
+                          ? "border-b-2 border-green-800"
+                          : "hover:border-b-2 hover:border-green-800/50"
+                      }`}
                     >
-                      {is_database_filter
-                        ? statusCount[groupKey]?.[status.id] || 0
-                        : status.id.startsWith("all_")
-                          ? data.length // Use the full dataset for "all_" counts
-                          : data.filter((item) => item[status.column] === status.id).length}
-                    </span>
-                  </div>
-                ))}
+                      <span className="text-sm font-medium capitalize">{status.label}</span>
+
+                      <span
+                        className="min-w-[24px] rounded-full bg-gray-200 px-2 py-0.5 text-center text-sm"
+                        style={{ color: status.color, backgroundColor: status.bgColor }}
+                      >
+                        {is_database_filter
+                          ? statusCount[groupKey]?.[status.id] || 0
+                          : status.id.startsWith("all_")
+                            ? data.length // Use the full dataset for "all_" counts
+                            : data.filter((item) => item[status.column] === status.id).length}
+                      </span>
+                    </div>
+                  ))}
+                </div>
               </div>
             ))}
           </div>
