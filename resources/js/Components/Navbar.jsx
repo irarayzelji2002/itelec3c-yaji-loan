@@ -13,10 +13,10 @@ const Navbar = () => {
           Home
         </a>
         <a href="#" className="link">
-          Terms & Condition
+          Terms of Service
         </a>
         <a href="#" className="link">
-          About Us
+          Privacy Policy
         </a>
 
         {/* <div>
