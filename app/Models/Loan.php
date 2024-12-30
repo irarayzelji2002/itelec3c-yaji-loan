@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Log;
 use App\Models\User;
 use App\Models\LoanType;
 use App\Models\LoanStatusHistory;
@@ -69,50 +70,122 @@ class Loan extends Model
         return $this->hasMany(LoanFile::class, 'loan_id');
     }
 
+    private function pluralize($word, $count) {
+        return $count === 1 ? $word : $word . 's';
+    }
+
     public function calculateNextDueDate()
     {
         if (!$this->date_disbursed) {
             return null;
         }
 
-        $disbursedDate = \Carbon\Carbon::parse($this->date_disbursed);
+        // Get the last payment date or use disbursement date if no payments yet
+        $lastDueDate = $this->last_payment_date ?? Carbon::parse($this->date_disbursed);
 
-        switch ($this->loan_term_unit) {
-            case 'days':
-                return $disbursedDate->addDays($this->loan_term_period);
-            case 'weeks':
-                return $disbursedDate->addWeeks($this->loan_term_period);
-            case 'months':
-                return $disbursedDate->addMonths($this->loan_term_period);
-            case 'years':
-                return $disbursedDate->addYears($this->loan_term_period);
+        // For lump-sum, only return final due date
+        if ($this->payment_frequency === 'lump-sum') {
+            return $this->calculateFinalDueDate();
+        }
+
+        switch($this->payment_frequency) {
+            case 'daily':
+                return $lastDueDate->copy()->addDay();
+            case 'weekly':
+                return $lastDueDate->copy()->addWeek();
+            case 'bi-weekly':
+                return $lastDueDate->copy()->addWeeks(2);
+            case 'monthly':
+                return $lastDueDate->copy()->addMonth();
+            case 'quarterly':
+                return $lastDueDate->copy()->addMonths(3);
+            case 'semi-annually':
+                return $lastDueDate->copy()->addMonths(6);
+            case 'annually':
+                return $lastDueDate->copy()->addYear();
             default:
-                return null;
+                return $lastDueDate->copy()->addMonth();
         }
     }
 
     public function calculateRemainingTimeBeforeNextDue()
     {
+        Log::info('Calculating remaining time before next due');
+        Log::info('Current date: ' . Carbon::now());
+
         $nextDueDate = $this->calculateNextDueDate();
+        Log::info('Next due date: ' . ($nextDueDate ? $nextDueDate->toDateTimeString() : 'null'));
+
         if (!$nextDueDate) {
+            Log::warning('Next due date is null for loan ID: ' . $this->loan_id);
             return null;
         }
 
-        return now()->diffForHumans($nextDueDate, ['syntax' => true]);
+        $now = Carbon::now();
+        if ($now->gt($nextDueDate)) {
+            Log::info('Loan is past due');
+            return 'Past due';
+        }
+
+        // Get difference components
+        $diff = $now->diff($nextDueDate);
+        Log::info('Time difference components:', [
+            'years' => $diff->y,
+            'months' => $diff->m,
+            'days' => $diff->d
+        ]);
+
+        // Build human-readable string
+        $parts = [];
+        if ($diff->y > 0) $parts[] = $diff->y . ' ' . $this->pluralize('yr', $diff->y);
+        if ($diff->m > 0) $parts[] = $diff->m . ' ' . $this->pluralize('month', $diff->m);
+        if ($diff->d > 0) $parts[] = $diff->d . ' ' . $this->pluralize('day', $diff->d);
+
+
+        $timeRemaining = !empty($parts) ? implode(', ', $parts) : 'Less than a day';
+        Log::info('Calculated time remaining: ' . $timeRemaining);
+
+        return $timeRemaining;
     }
 
     public function calculatePeriodicPayment()
     {
-        if (!$this->loan_amount || !$this->interest_rate || !$this->loan_term_period) {
+        if (!$this->loan_amount || !$this->interest_rate || !$this->date_disbursed) {
             return null;
         }
 
-        // Simple interest calculation
         $principal = $this->loan_amount;
-        $rate = $this->interest_rate / 100; // Convert percentage to decimal
-        $totalAmount = $principal * (1 + $rate);
+        $annualRate = $this->interest_rate / 100;
+        $numberOfPayments = $this->getNumberOfPayments();
 
-        return $totalAmount / $this->loan_term_period;
+        // Return 0 if loan is fully paid
+        if ($this->outstanding_balance <= 0) {
+            return 0;
+        }
+
+        if ($this->loanType->is_amortized) {
+            $periodicRate = $this->getPeriodicRate($annualRate);
+
+            // Handle edge case where rate is 0
+            if ($periodicRate == 0) {
+                return $principal / $numberOfPayments;
+            }
+
+            // Standard amortization formula
+            $periodicPayment = $principal *
+                ($periodicRate * pow(1 + $periodicRate, $numberOfPayments)) /
+                (pow(1 + $periodicRate, $numberOfPayments) - 1);
+        } else {
+            // Simple interest calculation
+            $totalInterest = $principal * $annualRate;
+            $totalAmount = $principal + $totalInterest;
+
+            $periodicPayment = $this->payment_frequency === 'lump-sum'
+                ? $totalAmount
+                : $totalAmount / $numberOfPayments;
+        }
+
+        return round($periodicPayment, 2);
     }
 
     public function calculateFinalDueDate()
@@ -121,29 +194,171 @@ class Loan extends Model
             return null;
         }
 
-        $disbursedDate = \Carbon\Carbon::parse($this->date_disbursed);
+        $disbursedDate = Carbon::parse($this->date_disbursed);
 
-        switch ($this->loan_term_unit) {
-            case 'days':
-                return $disbursedDate->addDays($this->loan_term_period);
-            case 'weeks':
-                return $disbursedDate->addWeeks($this->loan_term_period);
-            case 'months':
-                return $disbursedDate->addMonths($this->loan_term_period);
-            case 'years':
-                return $disbursedDate->addYears($this->loan_term_period);
-            default:
-                return null;
-        }
+        // Convert loan term to days for consistent calculation
+        $totalDays = match($this->loan_term_unit) {
+            'days' => $this->loan_term_period,
+            'weeks' => $this->loan_term_period * 7,
+            'months' => $this->loan_term_period * 30,
+            'years' => $this->loan_term_period * 365,
+            default => $this->loan_term_period * 30
+        };
+
+        return $disbursedDate->copy()->addDays($totalDays);
     }
 
     public function calculateRemainingTimeBeforeFinalDue()
     {
+        Log::info('Calculating remaining time before final due');
+        Log::info('Current date: ' . Carbon::now());
+
         $finalDueDate = $this->calculateFinalDueDate();
+        Log::info('Final due date: ' . ($finalDueDate ? $finalDueDate->toDateTimeString() : 'null'));
+
         if (!$finalDueDate) {
+            Log::warning('Final due date is null for loan ID: ' . $this->loan_id);
             return null;
         }
 
-        return now()->diffForHumans($finalDueDate, ['syntax' => true]);
+        $now = Carbon::now();
+        if ($now->gt($finalDueDate)) {
+            Log::info('Loan is past final due date');
+            return 'Past due';
+        }
+
+        // Get difference components
+        $diff = $now->diff($finalDueDate);
+        Log::info('Time difference components:', [
+            'years' => $diff->y,
+            'months' => $diff->m,
+            'days' => $diff->d
+        ]);
+
+        // Build human-readable string
+        $parts = [];
+       if ($diff->y > 0) $parts[] = $diff->y . ' ' . $this->pluralize('yr', $diff->y);
+        if ($diff->m > 0) $parts[] = $diff->m . ' ' . $this->pluralize('month', $diff->m);
+        if ($diff->d > 0) $parts[] = $diff->d . ' ' . $this->pluralize('day', $diff->d);
+
+        $timeRemaining = !empty($parts) ? implode(', ', $parts) : 'Less than a day';
+        Log::info('Calculated time remaining: ' . $timeRemaining);
+
+        return $timeRemaining;
+    }
+
+    private function getNumberOfPayments()
+    {
+        $termInMonths = $this->convertTermToMonths();
+
+        switch($this->payment_frequency) {
+            case 'daily':
+                return $termInMonths * 30;
+            case 'weekly':
+                return $termInMonths * 4;
+            case 'bi-weekly':
+                return $termInMonths * 2;
+            case 'monthly':
+                return $termInMonths;
+            case 'quarterly':
+                return ceil($termInMonths / 3);
+            case 'semi-annually':
+                return ceil($termInMonths / 6);
+            case 'annually':
+                return ceil($termInMonths / 12);
+            case 'lump-sum':
+                return 1;
+            default:
+                return $termInMonths;
+        }
+    }
+
+    private function getPeriodicRate($annualRate)
+    {
+        switch($this->payment_frequency) {
+            case 'daily':
+                return $annualRate / 365;
+            case 'weekly':
+                return $annualRate / 52;
+            case 'bi-weekly':
+                return $annualRate / 26;
+            case 'monthly':
+                return $annualRate / 12;
+            case 'quarterly':
+                return $annualRate / 4;
+            case 'semi-annually':
+                return $annualRate / 2;
+            case 'annually':
+                return $annualRate;
+            case 'lump-sum':
+                return $annualRate;
+            default:
+                return $annualRate / 12;
+        }
+    }
+
+    private function convertTermToMonths()
+    {
+        switch($this->loan_term_unit) {
+            case 'days':
+                return ceil($this->loan_term_period / 30);
+            case 'weeks':
+                return ceil($this->loan_term_period * 7 / 30);
+            case 'months':
+                return $this->loan_term_period;
+            case 'years':
+                return $this->loan_term_period * 12;
+            default:
+                return $this->loan_term_period;
+        }
+    }
+
+    protected function validateLoanParameters()
+    {
+        if ($this->loan_amount <= 0) {
+            throw new \InvalidArgumentException('Loan amount must be positive');
+        }
+        if ($this->interest_rate < 0) {
+            throw new \InvalidArgumentException('Interest rate cannot be negative');
+        }
+        if ($this->loan_term_period <= 0) {
+            throw new \InvalidArgumentException('Loan term must be positive');
+        }
+    }
+
+    public function calculateTotalInterest()
+    {
+        if ($this->loanType->is_amortized) {
+            $totalPayments = $this->calculatePeriodicPayment() * $this->getNumberOfPayments();
+            return round($totalPayments - $this->loan_amount, 2);
+        } else {
+            return round($this->loan_amount * ($this->interest_rate / 100), 2);
+        }
+    }
+
+    public function getPaymentSchedule()
+    {
+        $schedule = [];
+        $remainingBalance = $this->loan_amount;
+        $payment = $this->calculatePeriodicPayment();
+        $nextDueDate = Carbon::parse($this->date_disbursed);
+
+        for ($i = 1; $i <= $this->getNumberOfPayments(); $i++) {
+            $nextDueDate = $this->getNextPaymentDate($nextDueDate);
+            $interestPayment = $remainingBalance * $this->getPeriodicRate($this->interest_rate / 100);
+            $principalPayment = $payment - $interestPayment;
+            $remainingBalance -= $principalPayment;
+
+            $schedule[] = [
+                'payment_number' => $i,
+                'due_date' => $nextDueDate,
+                'payment_amount' => round($payment, 2),
+                'principal' => round($principalPayment, 2),
+                'interest' => round($interestPayment, 2),
+                'remaining_balance' => max(0, round($remainingBalance, 2))
+            ];
+        }
+
+        return $schedule;
     }
 }
