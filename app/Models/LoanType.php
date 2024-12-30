@@ -15,6 +15,7 @@ class LoanType extends Model
         'image_path',
         'min_loan_amount',
         'max_loan_amount',
+        'default_payment_frequency',
         'default_interest_rate',
         'default_loan_term_unit',
         'default_loan_term_period',

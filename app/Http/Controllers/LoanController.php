@@ -153,6 +153,12 @@ class LoanController extends Controller
                 'approved' => $allLoans->filter(function($loan) {
                     return $loan->statusHistory->last()->status === 'approved';
                 })->count(),
+                'disbursed' => $allLoans->filter(function($loan) {
+                    return $loan->statusHistory->last()->status === 'disbursed';
+                })->count(),
+                'completed' => $allLoans->filter(function($loan) {
+                    return $loan->statusHistory->last()->status === 'completed';
+                })->count(),
                 'disapproved' => $allLoans->filter(function($loan) {
                     return $loan->statusHistory->last()->status === 'disapproved';
                 })->count(),
@@ -227,7 +233,8 @@ class LoanController extends Controller
                 'loan_term_unit' => 'required|in:days,weeks,months,years',
                 'purpose' => 'required|string|max:500',
                 'loan_files.*' => 'required|file|mimes:jpg,jpeg,png,pdf',
-                'loan_files' => 'max:5'
+                'loan_files' => 'max:5',
+                'payment_frequency' => 'required|in:daily,weekly,bi-weekly,monthly,quarterly,semi-annually,annually,lump-sum',
             ]);
             Log::info('Validation passed');
 
@@ -265,6 +272,7 @@ class LoanController extends Controller
                     'date_status_changed' => now(),
                     'payment_status' => 'unpaid',
                     'outstanding_balance' => $request->loan_amount,
+                    'payment_frequency' => $request->payment_frequency,
                 ]);
                 Log::info('Loan record created', ['loan_id' => $loan->loan_id]);
 
@@ -354,6 +362,7 @@ class LoanController extends Controller
                 'new_status' => $request->status
             ]);
 
+            // Create status history record
             $statusHistory = LoanStatusHistory::create([
                 'loan_id' => $loanId,
                 'status' => $request->status,
@@ -366,19 +375,45 @@ class LoanController extends Controller
                 'changed_by' => $user->user_id
             ]);
 
-            $loan->update([
+            // Prepare update data
+            $updateData = [
                 'date_status_changed' => now()
-            ]);
+            ];
+
+            // Handle approved status
+            if ($request->status === 'approved') {
+                $updateData['approved_by'] = $user->user_id;
+                Log::info('Setting approved_by', [
+                    'user_id' => $user->user_id
+                ]);
+            }
+
+            // Handle disbursed status
+            if ($request->status === 'disbursed') {
+                $updateData['date_disbursed'] = now();
+                $updateData['disbursed_by'] = $user->user_id;
+                Log::info('Setting disbursement details', [
+                    'date_disbursed' => $updateData['date_disbursed'],
+                    'disbursed_by' => $user->user_id
+                ]);
+            }
+
+            // Update the loan
+            $loan->update($updateData);
 
             Log::info('Successfully updated loan status', [
                 'loan_id' => $loanId,
                 'status' => $request->status,
-                'changed_by' => $user->user_id
+                'changed_by' => $user->user_id,
+                'update_data' => $updateData
             ]);
 
             return response()->json([
                 'success' => 'Loan status updated successfully',
-                'status' => $request->status
+                'status' => $request->status,
+                'approved_by' => $request->status === 'approved' ? $user->user_id : null,
+                'date_disbursed' => $request->status === 'disbursed' ? now() : null,
+                'disbursed_by' => $request->status === 'disbursed' ? $user->user_id : null
             ]);
 
         } catch (\Exception $e) {
@@ -392,7 +427,7 @@ class LoanController extends Controller
                 'error' => $e->getMessage(),
                 'loan_id' => $loanId,
                 'status' => $request->status
-            ]);
+            ], 500);
         }
     }
 

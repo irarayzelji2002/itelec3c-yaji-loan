@@ -94,7 +94,8 @@ class DatabaseSeeder extends Seeder
                 'default_loan_term_period' => 12,
                 'default_loan_term_unit' => 'months',
                 'is_amortized' => true,
-                'status' => 'active'
+                'status' => 'active',
+                'default_payment_frequency' => 'monthly'
             ],
             [
                 'loan_type_name' => 'Home Loan',
@@ -106,7 +107,8 @@ class DatabaseSeeder extends Seeder
                 'default_loan_term_period' => 36,
                 'default_loan_term_unit' => 'months',
                 'is_amortized' => true,
-                'status' => 'active'
+                'status' => 'active',
+                'default_payment_frequency' => 'monthly'
             ],
             [
                 'loan_type_name' => 'Car Loan',
@@ -118,7 +120,8 @@ class DatabaseSeeder extends Seeder
                 'default_loan_term_period' => 24,
                 'default_loan_term_unit' => 'months',
                 'is_amortized' => true,
-                'status' => 'active'
+                'status' => 'active',
+                'default_payment_frequency' => 'monthly'
             ],
             [
                 'loan_type_name' => 'Education Loan',
@@ -130,7 +133,8 @@ class DatabaseSeeder extends Seeder
                 'default_loan_term_period' => 48,
                 'default_loan_term_unit' => 'months',
                 'is_amortized' => true,
-                'status' => 'active'
+                'status' => 'active',
+                'default_payment_frequency' => 'quarterly'
             ],
             [
                 'loan_type_name' => 'Business Loan',
@@ -142,7 +146,8 @@ class DatabaseSeeder extends Seeder
                 'default_loan_term_period' => 60,
                 'default_loan_term_unit' => 'months',
                 'is_amortized' => true,
-                'status' => 'active'
+                'status' => 'active',
+                'default_payment_frequency' => 'semi-annually'
             ],
             [
                 'loan_type_name' => 'Short-term Business Loan',
@@ -154,7 +159,8 @@ class DatabaseSeeder extends Seeder
                 'default_loan_term_period' => 6,
                 'default_loan_term_unit' => 'months',
                 'is_amortized' => false,
-                'status' => 'active'
+                'status' => 'active',
+                'default_payment_frequency' => 'lump-sum'
             ]
         ];
 
@@ -177,6 +183,7 @@ class DatabaseSeeder extends Seeder
                 'date_status_changed' => now(),
                 'outstanding_balance' => 20000,
                 'payment_status' => 'unpaid',
+                'payment_frequency' => 'monthly'
             ]
         ];
 
