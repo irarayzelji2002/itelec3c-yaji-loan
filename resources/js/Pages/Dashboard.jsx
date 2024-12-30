@@ -28,7 +28,7 @@ export default function Dashboard() {
             <TableContainer
               table="Payments Table"
               img="/img/payment-table.png"
-              link="/users-table"
+              link="/payments-table"
             />
             <TableContainer table="Members Table" img="/img/member-table.png" link="/users-table" />
             <TableContainer
