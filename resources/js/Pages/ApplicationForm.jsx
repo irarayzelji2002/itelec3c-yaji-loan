@@ -6,7 +6,7 @@ import SecondaryButton from "@/Components/SecondaryButton";
 import SelectInput from "@/Components/SelectInput";
 import TertiaryButton from "@/Components/TertiaryButton";
 import TextInput from "@/Components/TextInput";
-import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
+import MemberLayout from "@/Layouts/MemberLayout";
 import { numberWithCommas, showToast } from "@/utils/displayFunctions";
 import { Head, Link, useForm } from "@inertiajs/react";
 import { useEffect, useState } from "react";
@@ -335,7 +335,7 @@ export default function LoanApplicationForm({ loanTypes }) {
   };
 
   return (
-    <AuthenticatedLayout
+    <MemberLayout
       header={
         <div className="flex items-center justify-between gap-2 sm:flex-row">
           <h2>Loan Application Form</h2>
@@ -672,6 +672,6 @@ export default function LoanApplicationForm({ loanTypes }) {
           </div>
         </div>
       </div>
-    </AuthenticatedLayout>
+    </MemberLayout>
   );
 }

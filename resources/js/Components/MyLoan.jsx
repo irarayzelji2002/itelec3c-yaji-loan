@@ -1,6 +1,19 @@
 import PrimaryButton from "@/Components/PrimaryButton";
+import { useEffect } from "react";
 
 function MyLoan({ loan }) {
+  useEffect(() => {
+    console.log("Rendering MyLoan component with loan:", loan);
+  }, [loan]);
+
+  if (!loan) {
+    console.error("Loan data is missing");
+    return <div>Error: Loan data is missing</div>;
+  }
+
+  const loanAmount = Number(loan.loan_amount);
+  const outstandingBalance = Number(loan.outstanding_balance);
+
   return (
     <>
       <div className="request-header">
@@ -21,11 +34,11 @@ function MyLoan({ loan }) {
         </div>
         <div className="request-row">
           <div className="request-label">Amount Loaned : </div>
-          <div className="request-value">&nbsp;₱ {loan.loan_amount.toFixed(2)}</div>
+          <div className="request-value">&nbsp;₱ {loanAmount.toFixed(2)}</div>
         </div>
         <div className="request-row">
           <div className="request-label">Outstanding Balance : </div>
-          <div className="request-value">&nbsp;₱ {loan.outstanding_balance.toFixed(2)}</div>
+          <div className="request-value">&nbsp;₱ {outstandingBalance.toFixed(2)}</div>
         </div>
       </div>
     </>

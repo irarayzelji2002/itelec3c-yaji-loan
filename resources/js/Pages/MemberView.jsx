@@ -6,32 +6,26 @@ import TertiaryButton from "@/Components/TertiaryButton";
 import WalletTabs from "@/Components/WalletTabs";
 import MemberLayout from "@/Layouts/MemberLayout";
 import { Head, usePage } from "@inertiajs/react";
-// import axios from "axios";
-// import { useEffect } from "react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 export default function MemberView() {
   const user = usePage().props.auth.user;
-  const [loans, setLoans] = useState([
-    {
-      loan_id: 1,
-      final_due_date: "2024-12-30",
-      loan_amount: 2500.0,
-      outstanding_balance: 1500.0,
-    },
-  ]);
+  const [loans, setLoans] = useState([]);
 
-  // useEffect(() => {
-  //   axios
-  //     .get(route("myloans.index"))
-  //     .then((response) => {
-  //       console.log("API response:", response.data);
-  //       setLoans(response.data.loans);
-  //     })
-  //     .catch((error) => {
-  //       console.error("Error fetching loans:", error);
-  //     });
-  // }, []);
+  useEffect(() => {
+    axios
+      .get(route("user.loans"))
+      .then((response) => {
+        console.log("API response:", response.data);
+        setLoans(response.data.loans);
+        response.data.loans.forEach((loan) => {
+          console.log("Loan ID:", loan.loan_id);
+        });
+      })
+      .catch((error) => {
+        console.error("Error fetching loans:", error);
+      });
+  }, []);
 
   return (
     <MemberLayout>
