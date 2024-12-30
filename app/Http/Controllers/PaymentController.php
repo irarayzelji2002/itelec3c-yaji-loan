@@ -12,7 +12,7 @@ class PaymentController extends Controller
     public function index(Request $request)
     {
         try {
-            $query = Payment::with(['loan', 'confirmer']); // confirmer is the user who confirmed the payment
+            $query = Payment::with(['loan', 'confirmedBy']);
 
             // Handle search if provided
             if ($request->has('search')) {
@@ -36,8 +36,8 @@ class PaymentController extends Controller
             // Get paginated results
             $payments = $query->paginate($request->input('per_page', 10));
 
-            // Transform the data to include formatted values
-            $payments->getCollection()->transform(function ($payment) {
+            // Transform the data using items() instead of getCollection()
+            $transformedData = collect($payments->items())->map(function ($payment) {
                 return [
                     'payment_id' => $payment->payment_id,
                     'loan_id' => $payment->loan_id,
@@ -46,22 +46,27 @@ class PaymentController extends Controller
                     'payment_method' => $payment->payment_method,
                     'payment_reference' => $payment->payment_reference,
                     'is_confirmed' => $payment->is_confirmed,
-                    'confirmed_by' => $payment->confirmed_by,
                     'proof_of_payment' => $payment->proof_of_payment ? asset('storage/' . $payment->proof_of_payment) : null,
                     'created_at' => $payment->created_at,
                     'updated_at' => $payment->updated_at,
                     'loan' => $payment->loan ? [
                         'loan_id' => $payment->loan->loan_id,
-                        // Add other needed loan details
                     ] : null,
-                    'confirmer' => $payment->confirmer ? [
-                        'user_id' => $payment->confirmer->user_id,
-                        'full_name' => $payment->confirmer->full_name,
+                    'confirmed_by' => $payment->confirmedBy ? [
+                        'user_id' => $payment->confirmedBy->user_id,
+                        'full_name' => $payment->confirmedBy->full_name,
                     ] : null,
                 ];
             });
 
-            return response()->json($payments);
+            // Return paginated response with transformed data
+            return response()->json([
+                'data' => $transformedData,
+                'current_page' => $payments->currentPage(),
+                'last_page' => $payments->lastPage(),
+                'per_page' => $payments->perPage(),
+                'total' => $payments->total()
+            ]);
 
         } catch (\Exception $e) {
             Log::error('Error in PaymentController@index: ' . $e->getMessage());
